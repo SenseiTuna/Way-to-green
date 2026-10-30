@@ -30,7 +30,7 @@ namespace KiyiDongusu.Editor
         [MenuItem("Kiyi Dongusu/Run Domain Checks")]
         public static void Run()
         {
-            var report = new Report { environment = "Unity " + Application.unityVersion + " batchmode; real C# domain + filesystem; no UI/tempo playtest", utc = DateTime.UtcNow.ToString("o"), version = "V1.0.2.0-source" };
+            var report = new Report { environment = "Unity " + Application.unityVersion + (Application.isBatchMode ? " batchmode" : " Editor") + "; real C# domain + filesystem; no UI/tempo playtest", utc = DateTime.UtcNow.ToString("o"), version = "V" + BuildGame.ArtVersion + "-source" };
             Test(report, "E02-E03 token identity / last pile unit", () =>
             {
                 var g = New(); int generation = g.State.materials[0].tokenGeneration;
@@ -97,10 +97,15 @@ namespace KiyiDongusu.Editor
             Test(report, "S snapshot / no offline / atomic backup / corruption", () =>
             {
                 var g = New(); Earn(g, 100); g.Purchase(PurchaseKind.Collector); g.Tick(.31);
+                g.State.muted = true; g.State.reduceMotion = true;
                 string directory = Path.GetFullPath("../Evidence/save-check-" + Guid.NewGuid().ToString("N"));
                 var save = new SaveService(directory, g.Definitions, false); Assert(save.Load() == null, "Fresh save");
                 Assert(save.Save(g), "First write failed"); string snapshot = JsonUtility.ToJson(g.State);
                 var loaded = save.Load(); Assert(snapshot == JsonUtility.ToJson(loaded), "Snapshot not exact");
+                Assert(loaded.muted && loaded.reduceMotion, "Audio/motion settings lost");
+                var legacy = JsonUtility.FromJson<GameState>(snapshot.Replace(",\"reduceMotion\":true", ""));
+                new GameSession(g.Definitions, false, legacy).Validate();
+                Assert(legacy.muted && !legacy.reduceMotion, "Previous save compatibility failed");
                 File.SetLastWriteTimeUtc(save.Path, DateTime.UtcNow.AddDays(-3));
                 Assert(snapshot == JsonUtility.ToJson(save.Load()), "Offline time added");
                 g.Tick(.4); Assert(save.Save(g), "Atomic replacement failed");
@@ -146,7 +151,7 @@ namespace KiyiDongusu.Editor
                 var restored = new GameSession(g.Definitions, false, JsonUtility.FromJson<GameState>(JsonUtility.ToJson(g.State))); restored.Tick(100); restored.Validate();
                 Assert(restored.State.resultCount == 1 && restored.State.money == money, "Completed reload paid again");
             });
-            string path = Path.GetFullPath("../Evidence/domain-checks.json"); File.WriteAllText(path, JsonUtility.ToJson(report, true));
+            string path = Path.GetFullPath("../Evidence/domain-checks.json"); Directory.CreateDirectory(Path.GetDirectoryName(path)); File.WriteAllText(path, JsonUtility.ToJson(report, true));
             int failures = report.results.FindAll(r => r.status != "PASS").Count;
             Debug.Log("KIYI_CHECKS tests=" + report.results.Count + " failures=" + failures + " report=" + path);
             if (failures > 0) throw new Exception("Domain checks failed: " + failures);

@@ -12,6 +12,7 @@ namespace KiyiDongusu
         public ProcessingSystem Processing { get; }
         public event Action Changed;
         public event Action ImportantChange;
+        public event Action<long> BatchRewarded;
         readonly Queue<(double time, long amount)> rewards = new Queue<(double, long)>();
         public int TotalUnits { get; }
         public int Processed { get { int n = 0; foreach (var m in State.materials) n += m.processed; return n; } }
@@ -34,7 +35,7 @@ namespace KiyiDongusu
             if (restored == null) { UpdateProgress(); Supply.SpawnPile(); Supply.RefreshTokens(); }
             Validate();
         }
-        public void RecordReward(long reward) { rewards.Enqueue((State.elapsed, reward)); }
+        public void RecordReward(long reward) { rewards.Enqueue((State.elapsed, reward)); BatchRewarded?.Invoke(reward); }
         public double RecentIncome()
         {
             while (rewards.Count > 0 && State.elapsed - rewards.Peek().time > 10) rewards.Dequeue();

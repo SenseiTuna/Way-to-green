@@ -10,6 +10,7 @@ namespace KiyiDongusu
         public GameSession Game { get; private set; }
         public SaveService Saves { get; private set; }
         public GameView View { get; private set; }
+        public GameFeedback Feedback { get; private set; }
         public bool Paused { get; set; }
         public bool HasLoadedSave { get; private set; }
         public bool ValidationRun { get; private set; }
@@ -31,6 +32,8 @@ namespace KiyiDongusu
                 var restored = Saves.Load();
                 HasLoadedSave = restored != null;
                 SetSession(new GameSession(definitions, corePrototype, restored));
+                Feedback = gameObject.AddComponent<GameFeedback>();
+                Feedback.Initialize(this);
                 View = gameObject.AddComponent<GameView>();
                 View.Initialize(this);
                 Paused = HasLoadedSave || Saves.NeedsRecovery;
@@ -51,9 +54,12 @@ namespace KiyiDongusu
         void OnChanged() { if (View != null) View.MarkDirty(); }
         public void NewGameConfirmed()
         {
+            bool muted = Game.State.muted, reduced = Game.State.reduceMotion;
             Saves.ConfirmNewGame();
             Game.Changed -= OnChanged;
             SetSession(new GameSession(Game.Definitions, corePrototype));
+            Game.State.muted = muted; Game.State.reduceMotion = reduced;
+            Feedback.BindSession(Game);
             Paused = false; needsSave = true; saveTimer = 0;
             View.MarkDirty();
         }
@@ -67,13 +73,36 @@ namespace KiyiDongusu
                 // OS sleep/resume gaps do not become production; ordinary frames retain their time.
                 double dt = Time.unscaledDeltaTime;
                 if (dt <= 5) { Game.Tick(dt); saveTimer += dt; }
-                if (Input.GetKeyDown(KeyCode.Space) || (Input.GetKeyDown(KeyCode.Return) && (EventSystem.current == null || EventSystem.current.currentSelectedGameObject == null))) Game.CenterAction();
+                if (Input.GetKeyDown(KeyCode.Space) || (Input.GetKeyDown(KeyCode.Return) && (EventSystem.current == null || EventSystem.current.currentSelectedGameObject == null))) CenterAction();
             }
             if ((needsSave || saveTimer >= 10) && Saves.CanWrite)
             {
                 Saves.Save(Game); needsSave = false; saveTimer = 0; View.MarkDirty();
             }
         }
+        public void CenterAction()
+        {
+            if (Paused || Game.State.complete) return;
+            int before = Game.Collected, material = Game.State.pileMaterial;
+            bool active = false; foreach (var m in Game.State.materials) active |= m.batch > 0;
+            if (!Game.CenterAction()) return;
+            if (Game.Collected > before) Feedback.Collection(material, Game.Collected - before);
+            else if (Game.State.pileRemaining == 0 && active) Feedback.Assist();
+        }
+        public void TokenAction(int material, int generation)
+        {
+            if (!Paused && Game.TokenAction(material, generation)) Feedback.Collection(material, 1);
+        }
+        public void Purchase(PurchaseKind kind, int facility)
+        {
+            if (!Paused && Game.Purchase(kind, facility))
+            {
+                Feedback.Purchase(kind, facility);
+                Debug.Log("KIYI_PURCHASE " + kind + " rank=" + Game.Rank(kind, facility) + " money=" + Game.State.money);
+            }
+        }
+        public void SetMuted(bool muted) { Game.State.muted = muted; Feedback.ApplyMute(); needsSave = true; View.MarkDirty(); }
+        public void SetReducedMotion(bool reduced) { Game.State.reduceMotion = reduced; needsSave = true; View.MarkDirty(); }
         void OnApplicationQuit() { if (Game != null && Saves != null && Saves.CanWrite) Saves.Save(Game); }
     }
 }

@@ -19,6 +19,8 @@ Windows Build Support modülü kuruluyken Editor'deki **Kiyi Dongusu → Build A
 
 Betikteki Editor yolu yerel Unity Hub kurulumuna göre değiştirilebilir. Çıktı **Builds/** altına yazılır. Oyunu çalıştırırken exe ve bütün yan dosyaları birlikte tut.
 
+Development ve hızlandırılmış test kodunu içermeyen aday için **Build Release Candidate Windows** menüsü veya `-Profile Release` kullanılır. Aday çıktısı `-ReleaseCandidate` klasörüne yazılır; final kabulü ayrıca yapılır.
+
 ## Kontroller
 
 Sol tık / Space: merkez etkileşimi. Tab / Enter: düğmeler. Esc: duraklatma.

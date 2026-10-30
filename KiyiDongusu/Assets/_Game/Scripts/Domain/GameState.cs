@@ -14,7 +14,7 @@ namespace KiyiDongusu
     {
         public int schemaVersion = 1;
         public string balanceId;
-        public bool corePrototype, complete, finalPhase, muted;
+        public bool corePrototype, complete, finalPhase, muted, reduceMotion;
         public long money, earned, spent;
         public MaterialState[] materials;
         public FacilityState[] facilities;

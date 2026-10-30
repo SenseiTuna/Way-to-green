@@ -1,4 +1,4 @@
-Kıyı Döngüsü / KiyiDongusu — V1.0.3.2 geliştirme prototipi
+Kıyı Döngüsü / KiyiDongusu — V1.0.4.0 geliştirme prototipi
 
 Windows x64. KiyiDongusu.exe dosyasını bu klasördeki diğer dosyalarla birlikte tutun.
 Tıkla / Space: merkez. Tab / Enter: düğmeler. ESC: duraklatma.
@@ -6,7 +6,8 @@ Toplamak ham stok verir; işlem tamamlanınca kredi ödenir. Ekip alındıktan s
 Tek sahilde 6 malzeme / 4 tesis vardır. Ortak tesislerin hatları paraleldir.
 Kayıt otomatik; oyun kapalıyken üretim yok. Yeni Oyun mevcut ilerlemeyi değiştirmeden önce onay ister.
 
-Bu bir final teslim değildir. Normal tempolu 15–25 dakika oyuncu denemesi, ses ve son görsel/UI düzeltmeleri sürmektedir.
+Bu bir final teslim değildir. Normal tempolu 15–25 dakika oyuncu denemesi ve son görsel/UI düzeltmeleri sürmektedir.
+Toplama, işlem, satın alma ve açılım sesleri vardır. Duraklatma menüsünden ses kapatılabilir ve Az Hareket açılabilir.
 Development Build ibaresi beklenir. Normal açılışta test otomasyonu etkin değildir.
 
 Varsayılan kayıt Windows kullanıcısının LocalLow/KiyiDongusuLocal/KiyiDongusu alanındadır.
@@ -14,4 +15,7 @@ Full ve görsel önizleme sürümleri aynı ilerlemeyi devam ettirir. İki norma
 Eski sürüm açıkken yenisini başlatmak yerine eskisini normal kapatıp sonra yenisini açın.
 Bu prototip klasöründe oyuncu kaydı veya test bakiyesi dağıtılmaz.
 
-Gerçek test kapsamı ve bilinen sınırlamalar proje kökündeki STATE.md ve TEST_PLAN.md içindedir.
+Bilinen sınır: tam deneyimin 15–25 dakika dengesi henüz insan oyuncuyla ölçülmedi.
+Otomatik hızlandırılmış doğrulama, normal tempolu oyuncu denemesinin yerine geçmez.
+Bilinen sorun: bu makinede normal kapanışın sonunda UnityPlayer.dll native hata kodu verebiliyor.
+İlerleme kapanıştan önce kaydediliyor; temiz kapanış/final teslim kabulü henüz geçmedi.
