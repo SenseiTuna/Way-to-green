@@ -1,0 +1,10 @@
+KiyiDongusu / Kıyı Döngüsü — çalışma adı
+Oyun tasarımı: kullanıcı tarafından onaylanan hackathon tasarımı.
+Uygulama desteği: Codex; Unity 6000.5.0f1.
+Görsel konseptler ve oyun görselleri: yerleşik OpenAI image_gen ile AI üretimi.
+Seçilen görsel yön: A — sade renkli 2D.
+Üretim referansları, promptlar ve iç kaynak kayıtları proje sahibinde yerel olarak tutulur.
+Font: Unity built-in LegacyRuntime.ttf; harici font indirilmedi.
+Bu sürümde ses yoktur.
+Gösterilen miktar ve işlem süreleri kurmaca oyun dengesi değerleridir.
+Resmî etkinlik/kurum logoları ve üçüncü taraf internet görselleri kullanılmadı.

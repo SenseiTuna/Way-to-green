@@ -1,0 +1,1502 @@
+{
+  "schema_version": 1,
+  "balance_id": "beach_demo_v1_0_0_0",
+  "status": "proposed_mathematically_simulated_not_playtested",
+  "unit_note_tr": "Bütün atık miktarları kurmaca oyun birimidir; kg, ton veya CO2 değildir. Süreler oyun içi işlem süresidir, doğada çözünme süresi değildir.",
+  "total_units": 6000,
+  "total_reward_cents": 1056000,
+  "currency": {
+    "id": "recovery_credit",
+    "display_name_tr": "Geri kazanım kredisi",
+    "minor_units_per_credit": 100,
+    "initial_balance_minor": 0,
+    "reward_moment": "completed_processing_batch_only",
+    "recommended_ui_decimals": 1
+  },
+  "tempo": {
+    "profile": "hackathon_demo",
+    "multiplier": 1.0,
+    "active_target_minutes": [
+      15,
+      25
+    ],
+    "center_click_power_multiplier": true,
+    "collector_rate_multiplier": true,
+    "processing_rate_multiplier": true,
+    "pile_refill_divided_by_multiplier": true,
+    "note": "Yalnız1.0 profili bu raporda ölçüldü. Aynı verileri ayarla; ikinci bir ekonomi kopyası üretme."
+  },
+  "materials": [
+    {
+      "id": "paper",
+      "display_name_tr": "Kâğıt",
+      "detail_card_tr": "Uygun kuru kâğıt",
+      "facility_id": "paper_center",
+      "reserve_units": 600,
+      "center_reserve_units": 540,
+      "scattered_reserve_units": 60,
+      "unlock_processed_total_units": 0,
+      "unlock_cost_credits": 0,
+      "baseline_lane_operational_on_unlock": true,
+      "full_base_batch_seconds": 8,
+      "base_batch_units": 10,
+      "reward_cents_per_unit": 100,
+      "full_base_batch_reward_credits": 10.0,
+      "parallel_lane_id": "paper_lane"
+    },
+    {
+      "id": "cardboard",
+      "display_name_tr": "Karton",
+      "detail_card_tr": "Uygun kuru karton",
+      "facility_id": "paper_center",
+      "reserve_units": 800,
+      "center_reserve_units": 720,
+      "scattered_reserve_units": 80,
+      "unlock_processed_total_units": 50,
+      "unlock_cost_credits": 0,
+      "baseline_lane_operational_on_unlock": true,
+      "full_base_batch_seconds": 12,
+      "base_batch_units": 10,
+      "reward_cents_per_unit": 120,
+      "full_base_batch_reward_credits": 12.0,
+      "parallel_lane_id": "cardboard_lane"
+    },
+    {
+      "id": "pet",
+      "display_name_tr": "Plastik şişe",
+      "detail_card_tr": "PET içecek şişesi; diğer polimerlerle karıştırılmaz",
+      "facility_id": "plastics_center",
+      "reserve_units": 1000,
+      "center_reserve_units": 900,
+      "scattered_reserve_units": 100,
+      "unlock_processed_total_units": 250,
+      "unlock_cost_credits": 0,
+      "baseline_lane_operational_on_unlock": true,
+      "full_base_batch_seconds": 16,
+      "base_batch_units": 10,
+      "reward_cents_per_unit": 150,
+      "full_base_batch_reward_credits": 15.0,
+      "parallel_lane_id": "pet_lane"
+    },
+    {
+      "id": "hdpe",
+      "display_name_tr": "Sert plastik ambalaj",
+      "detail_card_tr": "HDPE sert ambalaj; PET ile karıştırılmaz",
+      "facility_id": "plastics_center",
+      "reserve_units": 1100,
+      "center_reserve_units": 990,
+      "scattered_reserve_units": 110,
+      "unlock_processed_total_units": 600,
+      "unlock_cost_credits": 0,
+      "baseline_lane_operational_on_unlock": true,
+      "full_base_batch_seconds": 20,
+      "base_batch_units": 10,
+      "reward_cents_per_unit": 180,
+      "full_base_batch_reward_credits": 18.0,
+      "parallel_lane_id": "hdpe_lane"
+    },
+    {
+      "id": "aluminum",
+      "display_name_tr": "Metal kutu",
+      "detail_card_tr": "Alüminyum içecek kutusu; her metal aynı kabul edilmez",
+      "facility_id": "metal_center",
+      "reserve_units": 1200,
+      "center_reserve_units": 1080,
+      "scattered_reserve_units": 120,
+      "unlock_processed_total_units": 1100,
+      "unlock_cost_credits": 0,
+      "baseline_lane_operational_on_unlock": true,
+      "full_base_batch_seconds": 24,
+      "base_batch_units": 10,
+      "reward_cents_per_unit": 200,
+      "full_base_batch_reward_credits": 20.0,
+      "parallel_lane_id": "aluminum_lane"
+    },
+    {
+      "id": "glass",
+      "display_name_tr": "Cam şişe / kavanoz",
+      "detail_card_tr": "Soda-kireç esaslı ambalaj camı; seramik/ısıya dayanıklı cam hariç",
+      "facility_id": "glass_center",
+      "reserve_units": 1300,
+      "center_reserve_units": 1170,
+      "scattered_reserve_units": 130,
+      "unlock_processed_total_units": 1800,
+      "unlock_cost_credits": 0,
+      "baseline_lane_operational_on_unlock": true,
+      "full_base_batch_seconds": 30,
+      "base_batch_units": 10,
+      "reward_cents_per_unit": 240,
+      "full_base_batch_reward_credits": 24.0,
+      "parallel_lane_id": "glass_lane"
+    }
+  ],
+  "facilities": [
+    {
+      "id": "paper_center",
+      "lane_ids": [
+        "paper_lane",
+        "cardboard_lane"
+      ],
+      "unlocks_when_first_matching_material_unlocks": true,
+      "baseline_cost_credits": 0,
+      "shared_speed_base_cost_credits": 40,
+      "shared_speed_costs_by_rank_credits": [
+        40,
+        88,
+        194,
+        426
+      ],
+      "shared_capacity_base_cost_credits": 70,
+      "shared_capacity_costs_by_rank_credits": [
+        70,
+        154,
+        339
+      ],
+      "upgrades_apply_to_each_matching_lane_independently": true
+    },
+    {
+      "id": "plastics_center",
+      "lane_ids": [
+        "pet_lane",
+        "hdpe_lane"
+      ],
+      "unlocks_when_first_matching_material_unlocks": true,
+      "baseline_cost_credits": 0,
+      "shared_speed_base_cost_credits": 90,
+      "shared_speed_costs_by_rank_credits": [
+        90,
+        198,
+        436,
+        959
+      ],
+      "shared_capacity_base_cost_credits": 150,
+      "shared_capacity_costs_by_rank_credits": [
+        150,
+        330,
+        726
+      ],
+      "upgrades_apply_to_each_matching_lane_independently": true
+    },
+    {
+      "id": "metal_center",
+      "lane_ids": [
+        "aluminum_lane"
+      ],
+      "unlocks_when_first_matching_material_unlocks": true,
+      "baseline_cost_credits": 0,
+      "shared_speed_base_cost_credits": 120,
+      "shared_speed_costs_by_rank_credits": [
+        120,
+        264,
+        581,
+        1278
+      ],
+      "shared_capacity_base_cost_credits": 200,
+      "shared_capacity_costs_by_rank_credits": [
+        200,
+        440,
+        968
+      ],
+      "upgrades_apply_to_each_matching_lane_independently": true
+    },
+    {
+      "id": "glass_center",
+      "lane_ids": [
+        "glass_lane"
+      ],
+      "unlocks_when_first_matching_material_unlocks": true,
+      "baseline_cost_credits": 0,
+      "shared_speed_base_cost_credits": 160,
+      "shared_speed_costs_by_rank_credits": [
+        160,
+        352,
+        775,
+        1704
+      ],
+      "shared_capacity_base_cost_credits": 260,
+      "shared_capacity_costs_by_rank_credits": [
+        260,
+        572,
+        1259
+      ],
+      "upgrades_apply_to_each_matching_lane_independently": true
+    }
+  ],
+  "sources": {
+    "central_units": 5400,
+    "scattered_units": 600,
+    "pile_units": 24,
+    "pile_refill_seconds": 1.2,
+    "pile_material_policy": "round_robin_unlocked_nonempty_center_reserves",
+    "pile_homogeneous_material": true,
+    "base_click_work_units": 1.0,
+    "work_per_collected_unit": 1.0,
+    "click_state_boundary": "Bir tıklama yalnız başlangıç durumuna uygulanır; artan iş yeni partiye veya işlem desteğine sıçramaz.",
+    "scattered_units_per_click": 1,
+    "scattered_click_uses_center_power_upgrade": false,
+    "locked_sources_can_spawn_or_be_collected": false,
+    "raw_stock_hard_cap": null
+  },
+  "collector": {
+    "rank_cap": 5,
+    "purchase_cost_credits": [
+      100,
+      180,
+      324,
+      584,
+      1050
+    ],
+    "cost_base_credits": 100,
+    "cost_growth": 1.8,
+    "rounding": "ceil_final_price_not_previous_price",
+    "base_units_per_second": 1.5,
+    "rate_growth": 1.5,
+    "nominal_units_per_second_by_rank": [
+      0,
+      1.5,
+      2.25,
+      3.375,
+      5.0625,
+      7.59375
+    ],
+    "scattered_priority_every_nth_completed_unit": 5,
+    "fallback_to_other_available_source": true,
+    "fractional_work_carry_cap_if_blocked": 1.0,
+    "sources": "both_central_and_scattered",
+    "nominal_rate_is_not_effective_rate_during_refill": true
+  },
+  "manual_collection_upgrade": {
+    "id": "center_collection_power",
+    "rank_cap": 3,
+    "purchase_cost_credits": [
+      90,
+      225,
+      563
+    ],
+    "cost_base_credits": 90,
+    "cost_growth": 2.5,
+    "work_per_click_by_rank": [
+      1.0,
+      1.25,
+      1.5,
+      1.75
+    ],
+    "does_not_change_processing_assist": true
+  },
+  "processing": {
+    "base_batch_capacity_per_lane": 10,
+    "capacity_per_facility_rank": 5,
+    "capacity_rank_cap": 3,
+    "speed_multiplier_per_rank": 0.3,
+    "speed_rank_cap": 4,
+    "upgrade_cost_growth": 2.2,
+    "same_facility_lanes_are_parallel": true,
+    "capacity_is_per_lane_not_shared": "Her lane ayrı10/15/20/25 birim kapasiteye sahiptir; iki lane arasında bölüştürülmez.",
+    "batch_start": "Idle lane with raw stock starts min(raw_units,current_capacity).",
+    "partial_batch_duration": "quantity/current_effective_units_per_second",
+    "progress_state": "immutable_batch_quantity_and_completed_work_units",
+    "apply_upgrade": "Preserve batch quantity and completed work; update rate immediately. Capacity applies to current rate and next batch size.",
+    "normal_tick_excess_time": "carry_to_next_batch_within_same_tick",
+    "reward": "batch_quantity_times_material_reward_cents_exactly_once",
+    "no_batch_fill_wait": true,
+    "price_arithmetic": "Exact decimal or rational growth; then ROUND_CEILING. Do not ceil binary-float artifacts. 90x2.2=198,150x2.2^2=726,200x2.2=440."
+  },
+  "assist": {
+    "accepted_input_max_per_second": 5,
+    "minimum_accepted_input_interval_seconds": 0.2,
+    "global_cap_covers": "center_collection_center_assist_and_scattered_collection",
+    "enabled_when": "central_pile_empty_and_at_least_one_lane_has_active_batch",
+    "equivalent_processing_seconds_per_active_lane_per_click": 0.15,
+    "max_active_material_lanes": 6,
+    "max_total_lane_seconds_per_click": 0.9,
+    "max_extra_rate_per_lane_fraction": 0.75,
+    "unused_support_work": "discard; no bank; no spill to next batch on same click",
+    "rate_basis": "current_lane_rate_including_upgrade_tempo_and_final_phase_multipliers"
+  },
+  "final_phase": {
+    "trigger": "all6000units_collected_from_both_world_sources",
+    "display_title_tr": "Son partileri tamamla",
+    "display_explanation_tr": "Sahil toplandı; tesisler son partilere odaklandı. İşlem hızı×4.",
+    "automatic_processing_multiplier": 4.0,
+    "requires_paid_collector": false,
+    "creates_currency_or_new_material": false,
+    "normal_assist_remains_available": true,
+    "win_requires": "all6000units_processed_and_all_world_raw_and_in_process_counts_zero"
+  },
+  "save": {
+    "enabled": true,
+    "offline_progress_enabled": false,
+    "resume_same_state": true,
+    "restore_current_batch_quantity_work_pile_remaining_refill_remaining_collector_fraction_and_upgrade_ranks": true,
+    "do_not_use_wall_clock_for_income": true,
+    "balance_id_required": true,
+    "additional_deterministic_snapshot_fields": [
+      "center_material_round_robin_cursor",
+      "collector_completed_unit_source_priority_counter",
+      "scattered_source_selection_cursor",
+      "accepted_action_cooldown_remaining_seconds"
+    ],
+    "normal_window_close": "Attempt final consistent snapshot before normal quit; periodic saves cover crash/forced termination with up to interval loss."
+  },
+  "visual_thresholds_collected_fraction": [
+    0.1,
+    0.25,
+    0.5,
+    0.75,
+    0.9,
+    1.0
+  ],
+  "validation": {
+    "method": "Deterministic Python fixed-step model; no Unity build or human playtest.",
+    "step_seconds": 0.05,
+    "all5runs_conserved6000units_every_step": true,
+    "all5runs_total_gross_credits": 10560,
+    "purchase_policy": "First100credits reserved for collector. Afterward scan purchase_wishlist in listed order; buy first affordable unlocked item whose target rank=current+1, at most one purchase per50ms step. No purchase-click cost or decision delay. Collection/tap buys stop below900uncollected units; facility buys stop below150unprocessed matching units. Idle manager skips tap purchases; unattended stops all purchases after collector1.",
+    "click_policy": "Active3cps or light1cps; every tenth accepted action attempts a loose unit; otherwise central collection, then assist when empty; no click error/animation delay.",
+    "caveats": [
+      "Scheduled purchasing is an analysis assumption, not an auto-buy game feature.",
+      "Idle manager still purchases; unattended stops both action clicks and purchases after first collector.",
+      "Time outputs are model results, not predicted guarantees for human players.",
+      "First reward is recorded at the50ms tick boundary; do not treat0.75s as a perceptual specification."
+    ],
+    "runs": [
+      {
+        "mode": "active3",
+        "complete": true,
+        "duration_seconds": 1128.0,
+        "duration_minutes": 18.8,
+        "first_income_seconds": 0.75,
+        "first_auto_seconds": 67.65,
+        "collected_seconds": 1044.3500000000001,
+        "unlock_times": {
+          "paper": 0.0,
+          "cardboard": 44.6,
+          "pet": 121.1,
+          "hdpe": 185.4,
+          "aluminum": 285.6,
+          "glass": 419.95
+        },
+        "collection_milestones": {
+          "600": 165.7,
+          "1500": 348.35,
+          "3000": 594.0,
+          "4500": 830.05,
+          "5400": 958.05,
+          "6000": 1044.35
+        },
+        "final_processing_multiplier": 4.0,
+        "terminal_phase_seconds": 83.65,
+        "earned": 10560.0,
+        "spent": 9767.0,
+        "wallet": 793.0,
+        "ranks": {
+          "collector": 4,
+          "tap": 3,
+          "speed": {
+            "paper_center": 3,
+            "plastics_center": 3,
+            "metal_center": 3,
+            "glass_center": 3
+          },
+          "capacity": {
+            "paper_center": 2,
+            "plastics_center": 2,
+            "metal_center": 3,
+            "glass_center": 3
+          }
+        },
+        "clicks": 3385,
+        "boost_clicks": 967,
+        "processed_by_material": {
+          "paper": 600,
+          "cardboard": 800,
+          "pet": 1000,
+          "hdpe": 1100,
+          "aluminum": 1200,
+          "glass": 1300
+        }
+      },
+      {
+        "mode": "light1",
+        "complete": true,
+        "duration_seconds": 1673.75,
+        "duration_minutes": 27.9,
+        "first_income_seconds": 0.75,
+        "first_auto_seconds": 95.75,
+        "collected_seconds": 1611.15,
+        "unlock_times": {
+          "paper": 0.0,
+          "cardboard": 49.8,
+          "pet": 167.5,
+          "hdpe": 303.35,
+          "aluminum": 472.5,
+          "glass": 683.65
+        },
+        "collection_milestones": {
+          "600": 296.0,
+          "1500": 588.35,
+          "3000": 969.55,
+          "4500": 1321.85,
+          "5400": 1495.0,
+          "6000": 1611.15
+        },
+        "final_processing_multiplier": 4.0,
+        "terminal_phase_seconds": 62.6,
+        "earned": 10560.0,
+        "spent": 9864.0,
+        "wallet": 696.0,
+        "ranks": {
+          "collector": 4,
+          "tap": 3,
+          "speed": {
+            "paper_center": 3,
+            "plastics_center": 3,
+            "metal_center": 3,
+            "glass_center": 3
+          },
+          "capacity": {
+            "paper_center": 3,
+            "plastics_center": 3,
+            "metal_center": 2,
+            "glass_center": 3
+          }
+        },
+        "clicks": 1674,
+        "boost_clicks": 317,
+        "processed_by_material": {
+          "paper": 600,
+          "cardboard": 800,
+          "pet": 1000,
+          "hdpe": 1100,
+          "aluminum": 1200,
+          "glass": 1300
+        }
+      },
+      {
+        "mode": "idle_manager",
+        "complete": true,
+        "duration_seconds": 2064.3,
+        "duration_minutes": 34.41,
+        "first_income_seconds": 0.75,
+        "first_auto_seconds": 67.65,
+        "collected_seconds": 2027.15,
+        "unlock_times": {
+          "paper": 0.0,
+          "cardboard": 44.6,
+          "pet": 122.2,
+          "hdpe": 344.75,
+          "aluminum": 596.15,
+          "glass": 884.3
+        },
+        "collection_milestones": {
+          "600": 344.35,
+          "1500": 773.6,
+          "3000": 1253.35,
+          "4500": 1666.55,
+          "5400": 1882.55,
+          "6000": 2027.15
+        },
+        "final_processing_multiplier": 4.0,
+        "terminal_phase_seconds": 37.15,
+        "earned": 10560.0,
+        "spent": 9954.0,
+        "wallet": 606.0,
+        "ranks": {
+          "collector": 4,
+          "tap": 0,
+          "speed": {
+            "paper_center": 3,
+            "plastics_center": 3,
+            "metal_center": 3,
+            "glass_center": 3
+          },
+          "capacity": {
+            "paper_center": 3,
+            "plastics_center": 3,
+            "metal_center": 3,
+            "glass_center": 3
+          }
+        },
+        "clicks": 203,
+        "boost_clicks": 18,
+        "processed_by_material": {
+          "paper": 600,
+          "cardboard": 800,
+          "pet": 1000,
+          "hdpe": 1100,
+          "aluminum": 1200,
+          "glass": 1300
+        }
+      },
+      {
+        "mode": "unattended",
+        "complete": true,
+        "duration_seconds": 4290.05,
+        "duration_minutes": 71.5,
+        "first_income_seconds": 0.75,
+        "first_auto_seconds": 67.65,
+        "collected_seconds": 4005.8500000000004,
+        "unlock_times": {
+          "paper": 0.0,
+          "cardboard": 44.6,
+          "pet": 139.7,
+          "hdpe": 354.5,
+          "aluminum": 685.55,
+          "glass": 1159.7
+        },
+        "collection_milestones": {
+          "600": 344.35,
+          "1500": 944.35,
+          "3000": 1944.35,
+          "4500": 2973.85,
+          "5400": 3592.85,
+          "6000": 4005.85
+        },
+        "final_processing_multiplier": 4.0,
+        "terminal_phase_seconds": 284.2,
+        "earned": 10560.0,
+        "spent": 100.0,
+        "wallet": 10460.0,
+        "ranks": {
+          "collector": 1,
+          "tap": 0,
+          "speed": {
+            "paper_center": 0,
+            "plastics_center": 0,
+            "metal_center": 0,
+            "glass_center": 0
+          },
+          "capacity": {
+            "paper_center": 0,
+            "plastics_center": 0,
+            "metal_center": 0,
+            "glass_center": 0
+          }
+        },
+        "clicks": 203,
+        "boost_clicks": 18,
+        "processed_by_material": {
+          "paper": 600,
+          "cardboard": 800,
+          "pet": 1000,
+          "hdpe": 1100,
+          "aluminum": 1200,
+          "glass": 1300
+        }
+      },
+      {
+        "mode": "manual_baseline",
+        "complete": true,
+        "duration_seconds": 2628.7,
+        "duration_minutes": 43.81,
+        "first_income_seconds": 0.75,
+        "first_auto_seconds": null,
+        "collected_seconds": 2224.7000000000003,
+        "unlock_times": {
+          "paper": 0.0,
+          "cardboard": 44.6,
+          "pet": 136.55,
+          "hdpe": 266.85,
+          "aluminum": 453.65,
+          "glass": 718.45
+        },
+        "collection_milestones": {
+          "600": 221.7,
+          "1500": 554.7,
+          "3000": 1110.7,
+          "4500": 1666.7,
+          "5400": 1999.7,
+          "6000": 2224.7
+        },
+        "final_processing_multiplier": 4.0,
+        "terminal_phase_seconds": 404.0,
+        "earned": 10560.0,
+        "spent": 0.0,
+        "wallet": 10560.0,
+        "ranks": {
+          "collector": 0,
+          "tap": 0,
+          "speed": {
+            "paper_center": 0,
+            "plastics_center": 0,
+            "metal_center": 0,
+            "glass_center": 0
+          },
+          "capacity": {
+            "paper_center": 0,
+            "plastics_center": 0,
+            "metal_center": 0,
+            "glass_center": 0
+          }
+        },
+        "clicks": 7887,
+        "boost_clicks": 1884,
+        "processed_by_material": {
+          "paper": 600,
+          "cardboard": 800,
+          "pet": 1000,
+          "hdpe": 1100,
+          "aluminum": 1200,
+          "glass": 1300
+        }
+      }
+    ],
+    "purchase_wishlist": [
+      {
+        "order": 1,
+        "kind": "tap",
+        "facility_id": null,
+        "target_rank": 1
+      },
+      {
+        "order": 2,
+        "kind": "capacity",
+        "facility_id": "paper_center",
+        "target_rank": 1
+      },
+      {
+        "order": 3,
+        "kind": "speed",
+        "facility_id": "paper_center",
+        "target_rank": 1
+      },
+      {
+        "order": 4,
+        "kind": "collector",
+        "facility_id": null,
+        "target_rank": 2
+      },
+      {
+        "order": 5,
+        "kind": "capacity",
+        "facility_id": "plastics_center",
+        "target_rank": 1
+      },
+      {
+        "order": 6,
+        "kind": "speed",
+        "facility_id": "plastics_center",
+        "target_rank": 1
+      },
+      {
+        "order": 7,
+        "kind": "tap",
+        "facility_id": null,
+        "target_rank": 2
+      },
+      {
+        "order": 8,
+        "kind": "collector",
+        "facility_id": null,
+        "target_rank": 3
+      },
+      {
+        "order": 9,
+        "kind": "capacity",
+        "facility_id": "metal_center",
+        "target_rank": 1
+      },
+      {
+        "order": 10,
+        "kind": "speed",
+        "facility_id": "metal_center",
+        "target_rank": 1
+      },
+      {
+        "order": 11,
+        "kind": "capacity",
+        "facility_id": "glass_center",
+        "target_rank": 1
+      },
+      {
+        "order": 12,
+        "kind": "speed",
+        "facility_id": "glass_center",
+        "target_rank": 1
+      },
+      {
+        "order": 13,
+        "kind": "collector",
+        "facility_id": null,
+        "target_rank": 4
+      },
+      {
+        "order": 14,
+        "kind": "speed",
+        "facility_id": "plastics_center",
+        "target_rank": 2
+      },
+      {
+        "order": 15,
+        "kind": "capacity",
+        "facility_id": "plastics_center",
+        "target_rank": 2
+      },
+      {
+        "order": 16,
+        "kind": "capacity",
+        "facility_id": "metal_center",
+        "target_rank": 2
+      },
+      {
+        "order": 17,
+        "kind": "speed",
+        "facility_id": "metal_center",
+        "target_rank": 2
+      },
+      {
+        "order": 18,
+        "kind": "capacity",
+        "facility_id": "glass_center",
+        "target_rank": 2
+      },
+      {
+        "order": 19,
+        "kind": "speed",
+        "facility_id": "glass_center",
+        "target_rank": 2
+      },
+      {
+        "order": 20,
+        "kind": "tap",
+        "facility_id": null,
+        "target_rank": 3
+      },
+      {
+        "order": 21,
+        "kind": "collector",
+        "facility_id": null,
+        "target_rank": 5
+      },
+      {
+        "order": 22,
+        "kind": "speed",
+        "facility_id": "glass_center",
+        "target_rank": 3
+      },
+      {
+        "order": 23,
+        "kind": "speed",
+        "facility_id": "metal_center",
+        "target_rank": 3
+      },
+      {
+        "order": 24,
+        "kind": "capacity",
+        "facility_id": "glass_center",
+        "target_rank": 3
+      },
+      {
+        "order": 25,
+        "kind": "speed",
+        "facility_id": "glass_center",
+        "target_rank": 4
+      },
+      {
+        "order": 26,
+        "kind": "capacity",
+        "facility_id": "metal_center",
+        "target_rank": 3
+      },
+      {
+        "order": 27,
+        "kind": "speed",
+        "facility_id": "metal_center",
+        "target_rank": 4
+      },
+      {
+        "order": 28,
+        "kind": "capacity",
+        "facility_id": "plastics_center",
+        "target_rank": 3
+      },
+      {
+        "order": 29,
+        "kind": "speed",
+        "facility_id": "plastics_center",
+        "target_rank": 3
+      },
+      {
+        "order": 30,
+        "kind": "speed",
+        "facility_id": "plastics_center",
+        "target_rank": 4
+      },
+      {
+        "order": 31,
+        "kind": "capacity",
+        "facility_id": "paper_center",
+        "target_rank": 2
+      },
+      {
+        "order": 32,
+        "kind": "speed",
+        "facility_id": "paper_center",
+        "target_rank": 2
+      },
+      {
+        "order": 33,
+        "kind": "capacity",
+        "facility_id": "paper_center",
+        "target_rank": 3
+      },
+      {
+        "order": 34,
+        "kind": "speed",
+        "facility_id": "paper_center",
+        "target_rank": 3
+      }
+    ],
+    "tick_order": [
+      "derive_material_unlocks_from_processed_total",
+      "spawn_next_center_pile_if_refill_finished",
+      "apply_collector_fractional_work_and_source_preferences",
+      "apply_due_player_action_click",
+      "process_each_material_lane_independently_carrying_normal_tick_remaining_time",
+      "apply_policy_purchase",
+      "check_material_conservation_and_milestones",
+      "stop_if_all6000processed"
+    ],
+    "click_scheduler": {
+      "first_click_seconds": 0,
+      "constant_action_cps_by_mode": {
+        "active3": 3,
+        "light1": 1,
+        "manual_baseline": 3
+      },
+      "idle_modes_start_cps": 3,
+      "idle_modes_stop_clicks": "immediately_after_first_collector_purchase",
+      "loose_object_priority_every_nth_click": 10,
+      "when_no_loose_object_on_priority_click": "fall_back_to_center_collection_else_assist_else_available_loose_object",
+      "no_human_error_or_purchase_delay": true
+    },
+    "support_timing": "Clicks apply support only to batches active at click time; excess support discarded. Ordinary dt then carries unused time across batches. No RNG.",
+    "purchase_history_by_run": {
+      "active3": [
+        {
+          "time": 67.65,
+          "kind": "collector",
+          "facility": null,
+          "rank": 1,
+          "cost": 100.0
+        },
+        {
+          "time": 88.95,
+          "kind": "speed",
+          "facility": "paper_center",
+          "rank": 1,
+          "cost": 40.0
+        },
+        {
+          "time": 107.1,
+          "kind": "capacity",
+          "facility": "paper_center",
+          "rank": 1,
+          "cost": 70.0
+        },
+        {
+          "time": 130.0,
+          "kind": "tap",
+          "facility": null,
+          "rank": 1,
+          "cost": 90.0
+        },
+        {
+          "time": 147.4,
+          "kind": "speed",
+          "facility": "plastics_center",
+          "rank": 1,
+          "cost": 90.0
+        },
+        {
+          "time": 162.15,
+          "kind": "speed",
+          "facility": "paper_center",
+          "rank": 2,
+          "cost": 88.0
+        },
+        {
+          "time": 184.9,
+          "kind": "capacity",
+          "facility": "plastics_center",
+          "rank": 1,
+          "cost": 150.0
+        },
+        {
+          "time": 207.15,
+          "kind": "capacity",
+          "facility": "paper_center",
+          "rank": 2,
+          "cost": 154.0
+        },
+        {
+          "time": 231.2,
+          "kind": "collector",
+          "facility": null,
+          "rank": 2,
+          "cost": 180.0
+        },
+        {
+          "time": 264.3,
+          "kind": "speed",
+          "facility": "plastics_center",
+          "rank": 2,
+          "cost": 198.0
+        },
+        {
+          "time": 285.55,
+          "kind": "speed",
+          "facility": "metal_center",
+          "rank": 1,
+          "cost": 120.0
+        },
+        {
+          "time": 303.55,
+          "kind": "speed",
+          "facility": "paper_center",
+          "rank": 3,
+          "cost": 194.0
+        },
+        {
+          "time": 329.45,
+          "kind": "capacity",
+          "facility": "metal_center",
+          "rank": 1,
+          "cost": 200.0
+        },
+        {
+          "time": 359.5,
+          "kind": "tap",
+          "facility": null,
+          "rank": 2,
+          "cost": 225.0
+        },
+        {
+          "time": 392.35,
+          "kind": "speed",
+          "facility": "metal_center",
+          "rank": 2,
+          "cost": 264.0
+        },
+        {
+          "time": 419.9,
+          "kind": "speed",
+          "facility": "glass_center",
+          "rank": 1,
+          "cost": 160.0
+        },
+        {
+          "time": 441.05,
+          "kind": "capacity",
+          "facility": "glass_center",
+          "rank": 1,
+          "cost": 260.0
+        },
+        {
+          "time": 484.0,
+          "kind": "collector",
+          "facility": null,
+          "rank": 3,
+          "cost": 324.0
+        },
+        {
+          "time": 515.7,
+          "kind": "capacity",
+          "facility": "plastics_center",
+          "rank": 2,
+          "cost": 330.0
+        },
+        {
+          "time": 554.7,
+          "kind": "speed",
+          "facility": "glass_center",
+          "rank": 2,
+          "cost": 352.0
+        },
+        {
+          "time": 606.0,
+          "kind": "capacity",
+          "facility": "metal_center",
+          "rank": 2,
+          "cost": 440.0
+        },
+        {
+          "time": 650.35,
+          "kind": "speed",
+          "facility": "plastics_center",
+          "rank": 3,
+          "cost": 436.0
+        },
+        {
+          "time": 703.85,
+          "kind": "collector",
+          "facility": null,
+          "rank": 4,
+          "cost": 584.0
+        },
+        {
+          "time": 755.9,
+          "kind": "tap",
+          "facility": null,
+          "rank": 3,
+          "cost": 563.0
+        },
+        {
+          "time": 809.5,
+          "kind": "capacity",
+          "facility": "glass_center",
+          "rank": 2,
+          "cost": 572.0
+        },
+        {
+          "time": 859.4,
+          "kind": "speed",
+          "facility": "metal_center",
+          "rank": 3,
+          "cost": 581.0
+        },
+        {
+          "time": 928.0,
+          "kind": "speed",
+          "facility": "glass_center",
+          "rank": 3,
+          "cost": 775.0
+        },
+        {
+          "time": 1038.55,
+          "kind": "capacity",
+          "facility": "metal_center",
+          "rank": 3,
+          "cost": 968.0
+        },
+        {
+          "time": 1093.35,
+          "kind": "capacity",
+          "facility": "glass_center",
+          "rank": 3,
+          "cost": 1259.0
+        }
+      ],
+      "light1": [
+        {
+          "time": 95.75,
+          "kind": "collector",
+          "facility": null,
+          "rank": 1,
+          "cost": 100.0
+        },
+        {
+          "time": 124.9,
+          "kind": "speed",
+          "facility": "paper_center",
+          "rank": 1,
+          "cost": 40.0
+        },
+        {
+          "time": 150.25,
+          "kind": "capacity",
+          "facility": "paper_center",
+          "rank": 1,
+          "cost": 70.0
+        },
+        {
+          "time": 175.45,
+          "kind": "tap",
+          "facility": null,
+          "rank": 1,
+          "cost": 90.0
+        },
+        {
+          "time": 210.0,
+          "kind": "speed",
+          "facility": "plastics_center",
+          "rank": 1,
+          "cost": 90.0
+        },
+        {
+          "time": 240.6,
+          "kind": "speed",
+          "facility": "paper_center",
+          "rank": 2,
+          "cost": 88.0
+        },
+        {
+          "time": 285.45,
+          "kind": "capacity",
+          "facility": "plastics_center",
+          "rank": 1,
+          "cost": 150.0
+        },
+        {
+          "time": 323.3,
+          "kind": "capacity",
+          "facility": "paper_center",
+          "rank": 2,
+          "cost": 154.0
+        },
+        {
+          "time": 376.15,
+          "kind": "collector",
+          "facility": null,
+          "rank": 2,
+          "cost": 180.0
+        },
+        {
+          "time": 421.95,
+          "kind": "speed",
+          "facility": "plastics_center",
+          "rank": 2,
+          "cost": 198.0
+        },
+        {
+          "time": 459.35,
+          "kind": "speed",
+          "facility": "paper_center",
+          "rank": 3,
+          "cost": 194.0
+        },
+        {
+          "time": 491.4,
+          "kind": "speed",
+          "facility": "metal_center",
+          "rank": 1,
+          "cost": 120.0
+        },
+        {
+          "time": 537.45,
+          "kind": "capacity",
+          "facility": "metal_center",
+          "rank": 1,
+          "cost": 200.0
+        },
+        {
+          "time": 579.65,
+          "kind": "tap",
+          "facility": null,
+          "rank": 2,
+          "cost": 225.0
+        },
+        {
+          "time": 630.05,
+          "kind": "speed",
+          "facility": "metal_center",
+          "rank": 2,
+          "cost": 264.0
+        },
+        {
+          "time": 683.6,
+          "kind": "capacity",
+          "facility": "glass_center",
+          "rank": 1,
+          "cost": 260.0
+        },
+        {
+          "time": 700.05,
+          "kind": "speed",
+          "facility": "glass_center",
+          "rank": 1,
+          "cost": 160.0
+        },
+        {
+          "time": 762.35,
+          "kind": "collector",
+          "facility": null,
+          "rank": 3,
+          "cost": 324.0
+        },
+        {
+          "time": 806.9,
+          "kind": "capacity",
+          "facility": "plastics_center",
+          "rank": 2,
+          "cost": 330.0
+        },
+        {
+          "time": 860.5,
+          "kind": "capacity",
+          "facility": "paper_center",
+          "rank": 3,
+          "cost": 339.0
+        },
+        {
+          "time": 912.9,
+          "kind": "speed",
+          "facility": "glass_center",
+          "rank": 2,
+          "cost": 352.0
+        },
+        {
+          "time": 975.65,
+          "kind": "speed",
+          "facility": "plastics_center",
+          "rank": 3,
+          "cost": 436.0
+        },
+        {
+          "time": 1039.0,
+          "kind": "capacity",
+          "facility": "metal_center",
+          "rank": 2,
+          "cost": 440.0
+        },
+        {
+          "time": 1114.05,
+          "kind": "capacity",
+          "facility": "glass_center",
+          "rank": 2,
+          "cost": 572.0
+        },
+        {
+          "time": 1187.2,
+          "kind": "tap",
+          "facility": null,
+          "rank": 3,
+          "cost": 563.0
+        },
+        {
+          "time": 1257.65,
+          "kind": "collector",
+          "facility": null,
+          "rank": 4,
+          "cost": 584.0
+        },
+        {
+          "time": 1327.35,
+          "kind": "speed",
+          "facility": "metal_center",
+          "rank": 3,
+          "cost": 581.0
+        },
+        {
+          "time": 1399.5,
+          "kind": "capacity",
+          "facility": "plastics_center",
+          "rank": 3,
+          "cost": 726.0
+        },
+        {
+          "time": 1483.3,
+          "kind": "speed",
+          "facility": "glass_center",
+          "rank": 3,
+          "cost": 775.0
+        },
+        {
+          "time": 1635.0,
+          "kind": "capacity",
+          "facility": "glass_center",
+          "rank": 3,
+          "cost": 1259.0
+        }
+      ],
+      "idle_manager": [
+        {
+          "time": 67.65,
+          "kind": "collector",
+          "facility": null,
+          "rank": 1,
+          "cost": 100.0
+        },
+        {
+          "time": 90.3,
+          "kind": "speed",
+          "facility": "paper_center",
+          "rank": 1,
+          "cost": 40.0
+        },
+        {
+          "time": 109.8,
+          "kind": "capacity",
+          "facility": "paper_center",
+          "rank": 1,
+          "cost": 70.0
+        },
+        {
+          "time": 133.25,
+          "kind": "speed",
+          "facility": "paper_center",
+          "rank": 2,
+          "cost": 88.0
+        },
+        {
+          "time": 180.15,
+          "kind": "speed",
+          "facility": "plastics_center",
+          "rank": 1,
+          "cost": 90.0
+        },
+        {
+          "time": 266.45,
+          "kind": "capacity",
+          "facility": "plastics_center",
+          "rank": 1,
+          "cost": 150.0
+        },
+        {
+          "time": 343.3,
+          "kind": "capacity",
+          "facility": "paper_center",
+          "rank": 2,
+          "cost": 154.0
+        },
+        {
+          "time": 432.05,
+          "kind": "collector",
+          "facility": null,
+          "rank": 2,
+          "cost": 180.0
+        },
+        {
+          "time": 495.7,
+          "kind": "speed",
+          "facility": "paper_center",
+          "rank": 3,
+          "cost": 194.0
+        },
+        {
+          "time": 559.65,
+          "kind": "speed",
+          "facility": "plastics_center",
+          "rank": 2,
+          "cost": 198.0
+        },
+        {
+          "time": 596.1,
+          "kind": "speed",
+          "facility": "metal_center",
+          "rank": 1,
+          "cost": 120.0
+        },
+        {
+          "time": 665.35,
+          "kind": "capacity",
+          "facility": "metal_center",
+          "rank": 1,
+          "cost": 200.0
+        },
+        {
+          "time": 737.75,
+          "kind": "speed",
+          "facility": "metal_center",
+          "rank": 2,
+          "cost": 264.0
+        },
+        {
+          "time": 823.2,
+          "kind": "collector",
+          "facility": null,
+          "rank": 3,
+          "cost": 324.0
+        },
+        {
+          "time": 884.25,
+          "kind": "capacity",
+          "facility": "glass_center",
+          "rank": 1,
+          "cost": 260.0
+        },
+        {
+          "time": 911.6,
+          "kind": "speed",
+          "facility": "glass_center",
+          "rank": 1,
+          "cost": 160.0
+        },
+        {
+          "time": 969.25,
+          "kind": "capacity",
+          "facility": "plastics_center",
+          "rank": 2,
+          "cost": 330.0
+        },
+        {
+          "time": 1027.55,
+          "kind": "capacity",
+          "facility": "paper_center",
+          "rank": 3,
+          "cost": 339.0
+        },
+        {
+          "time": 1103.05,
+          "kind": "speed",
+          "facility": "glass_center",
+          "rank": 2,
+          "cost": 352.0
+        },
+        {
+          "time": 1183.05,
+          "kind": "speed",
+          "facility": "plastics_center",
+          "rank": 3,
+          "cost": 436.0
+        },
+        {
+          "time": 1259.2,
+          "kind": "capacity",
+          "facility": "metal_center",
+          "rank": 2,
+          "cost": 440.0
+        },
+        {
+          "time": 1356.2,
+          "kind": "capacity",
+          "facility": "glass_center",
+          "rank": 2,
+          "cost": 572.0
+        },
+        {
+          "time": 1446.7,
+          "kind": "collector",
+          "facility": null,
+          "rank": 4,
+          "cost": 584.0
+        },
+        {
+          "time": 1529.25,
+          "kind": "speed",
+          "facility": "metal_center",
+          "rank": 3,
+          "cost": 581.0
+        },
+        {
+          "time": 1624.3,
+          "kind": "capacity",
+          "facility": "plastics_center",
+          "rank": 3,
+          "cost": 726.0
+        },
+        {
+          "time": 1719.0,
+          "kind": "speed",
+          "facility": "glass_center",
+          "rank": 3,
+          "cost": 775.0
+        },
+        {
+          "time": 1838.0,
+          "kind": "capacity",
+          "facility": "metal_center",
+          "rank": 3,
+          "cost": 968.0
+        },
+        {
+          "time": 2027.2,
+          "kind": "capacity",
+          "facility": "glass_center",
+          "rank": 3,
+          "cost": 1259.0
+        }
+      ],
+      "unattended": [
+        {
+          "time": 67.65,
+          "kind": "collector",
+          "facility": null,
+          "rank": 1,
+          "cost": 100.0
+        }
+      ],
+      "manual_baseline": []
+    }
+  }
+}

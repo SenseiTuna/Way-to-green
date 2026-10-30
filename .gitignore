@@ -1,0 +1,61 @@
+# Unity-generated state; keep Assets, Packages, ProjectSettings and .meta files.
+**/[Ll]ibrary/
+**/[Tt]emp/
+**/[Oo]bj/
+**/[Ll]ogs/
+**/[Uu]ser[Ss]ettings/
+/[Bb]uild/
+/[Bb]uilds/
+/KiyiDongusu/[Bb]uild/
+/KiyiDongusu/[Bb]uilds/
+**/[Mm]emoryCaptures/
+**/[Rr]ecordings/
+
+# IDE and operating system files.
+**/.vs/
+**/.idea/
+**/.vscode/
+*.csproj
+*.sln
+*.slnx
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.opendb
+*.VC.db
+*.DotSettings.user
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local credentials and automation state.
+.env
+.env.*
+!.env.example
+/.codex/
+/.agents/
+/.aws/
+*.pem
+*.pfx
+*.p12
+*.key
+
+# Logs, temporary writes, local saves and packages.
+*.log
+*.tmp
+*.bak
+*.zip
+*.unitypackage
+
+# Internal design, prompts and working records stay local, even for a private repo.
+/*.md
+!/README.md
+!/THIRD_PARTY_NOTICES.md
+/BASLANGIC_PROMPTU.txt
+/Docs/
+/Concepts/
+/Evidence/

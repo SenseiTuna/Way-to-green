@@ -1,0 +1,17 @@
+Kıyı Döngüsü / KiyiDongusu — V1.0.3.2 geliştirme prototipi
+
+Windows x64. KiyiDongusu.exe dosyasını bu klasördeki diğer dosyalarla birlikte tutun.
+Tıkla / Space: merkez. Tab / Enter: düğmeler. ESC: duraklatma.
+Toplamak ham stok verir; işlem tamamlanınca kredi ödenir. Ekip alındıktan sonra otomatik toplama sürer.
+Tek sahilde 6 malzeme / 4 tesis vardır. Ortak tesislerin hatları paraleldir.
+Kayıt otomatik; oyun kapalıyken üretim yok. Yeni Oyun mevcut ilerlemeyi değiştirmeden önce onay ister.
+
+Bu bir final teslim değildir. Normal tempolu 15–25 dakika oyuncu denemesi, ses ve son görsel/UI düzeltmeleri sürmektedir.
+Development Build ibaresi beklenir. Normal açılışta test otomasyonu etkin değildir.
+
+Varsayılan kayıt Windows kullanıcısının LocalLow/KiyiDongusuLocal/KiyiDongusu alanındadır.
+Full ve görsel önizleme sürümleri aynı ilerlemeyi devam ettirir. İki normal oyun penceresini aynı anda çalıştırmayın.
+Eski sürüm açıkken yenisini başlatmak yerine eskisini normal kapatıp sonra yenisini açın.
+Bu prototip klasöründe oyuncu kaydı veya test bakiyesi dağıtılmaz.
+
+Gerçek test kapsamı ve bilinen sınırlamalar proje kökündeki STATE.md ve TEST_PLAN.md içindedir.
