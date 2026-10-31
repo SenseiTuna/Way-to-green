@@ -1,6 +1,6 @@
-# Kıyı Döngüsü
+# Way to Green
 
-Unity 2D Windows geliştirme prototipi. Çalışma adı geçicidir.
+Unity 2D Windows çevre ve geri dönüşüm oyunu.
 
 ## Projeyi açma
 
@@ -11,7 +11,7 @@ Unity 2D Windows geliştirme prototipi. Çalışma adı geçicidir.
 
 ## Windows build
 
-Windows Build Support modülü kuruluyken Editor'deki **Kiyi Dongusu → Build Art Preview Windows** menüsünü kullan. Alternatif olarak, Editor kapalıyken depo kökünde:
+Windows Build Support modülü kuruluyken Editor'deki **Way to Green → Build Art Preview Windows** menüsünü kullan. Alternatif olarak, Editor kapalıyken depo kökünde:
 
 ```powershell
 .\Tools\Build-Windows.ps1 -Profile Art

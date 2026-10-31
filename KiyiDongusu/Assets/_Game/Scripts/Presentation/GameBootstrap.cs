@@ -30,11 +30,15 @@ namespace KiyiDongusu
                 RuntimeSmokeRunner.ValidateTestArguments(Environment.GetCommandLineArgs());
 #endif
                 var definitions = GameDefinitions.Load();
-                string directory = Application.isEditor ? System.IO.Path.Combine(Application.persistentDataPath, "EditorPreview") : Application.persistentDataPath;
+                // Keep the existing on-disk identity when the display/product title changes.
+                // This preserves both current saves and recovery backups without copying/resetting them.
+                string stableDirectory = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Application.persistentDataPath), "KiyiDongusu");
+                string directory = Application.isEditor ? System.IO.Path.Combine(stableDirectory, "EditorPreview") : stableDirectory;
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
                 ValidationRun = RuntimeSmokeRunner.Requested;
                 if (ValidationRun) { directory = System.IO.Path.Combine(RuntimeSmokeRunner.OutputDirectory, "isolated-save-" + Guid.NewGuid().ToString("N")); corePrototype = false; }
                 if (RuntimeRecoveryChecks.Requested) { directory = RuntimeRecoveryChecks.Prepare(definitions); corePrototype = false; }
+                if (RuntimePromoCapture.Requested) { directory = System.IO.Path.Combine(RuntimePromoCapture.Argument("--kiyi-test-output"), "capture-save-" + Guid.NewGuid().ToString("N")); corePrototype = false; }
 #endif
                 Saves = new SaveService(directory, definitions, corePrototype);
                 var restored = Saves.Load();
@@ -63,6 +67,7 @@ namespace KiyiDongusu
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
                 if (ValidationRun) gameObject.AddComponent<RuntimeSmokeRunner>().Initialize(this);
                 if (RuntimeRecoveryChecks.Requested) gameObject.AddComponent<RuntimeRecoveryChecks>().Initialize(this);
+                if (RuntimePromoCapture.Requested) gameObject.AddComponent<RuntimePromoCapture>().Initialize(this);
 #endif
                 Debug.Log("KIYI_READY version=" + Application.version + " profile=" + (corePrototype ? "core" : "full") + " save=" + Saves.Path);
             }
@@ -94,6 +99,9 @@ namespace KiyiDongusu
         }
         void Update()
         {
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+            if(RuntimePromoCapture.Requested)return;
+#endif
             if (Game == null) return;
             if (ValidationRun) return;
             Story.Step(Time.unscaledDeltaTime);

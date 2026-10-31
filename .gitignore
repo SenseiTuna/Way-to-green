@@ -66,3 +66,5 @@ Desktop.ini
 # Local Python verification caches.
 **/__pycache__/
 *.py[cod]
+/Deliverables/
+/*.pptx

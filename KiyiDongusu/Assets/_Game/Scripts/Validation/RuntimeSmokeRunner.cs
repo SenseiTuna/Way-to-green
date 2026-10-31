@@ -29,9 +29,9 @@ namespace KiyiDongusu
         public static bool Requested => Array.IndexOf(Environment.GetCommandLineArgs(), "--kiyi-smoke-test") >= 0;
         public static void ValidateTestArguments(string[] args)
         {
-            string[] known={"--kiyi-smoke-test","--kiyi-recovery-test","--kiyi-test-output","--kiyi-capture-progress","--kiyi-feature-check","--kiyi-manual-check","--kiyi-presentation-check","--kiyi-story-test","--kiyi-typography-check"};
+            string[] known={"--kiyi-smoke-test","--kiyi-recovery-test","--kiyi-test-output","--kiyi-capture-progress","--kiyi-feature-check","--kiyi-manual-check","--kiyi-presentation-check","--kiyi-story-test","--kiyi-typography-check","--kiyi-promo","--kiyi-ffmpeg"};
             bool test=false,any=false;foreach(string arg in args){if(!arg.StartsWith("--kiyi-",StringComparison.Ordinal))continue;any=true;if(Array.IndexOf(known,arg)<0)throw new ArgumentException("Unknown QA argument; refusing to open a player profile: "+arg);test|=arg=="--kiyi-smoke-test"||arg=="--kiyi-recovery-test";}
-            if(any&&!test)throw new ArgumentException("QA options require an isolated smoke or recovery profile.");
+            if(any&&!test&&!RuntimePromoCapture.Requested)throw new ArgumentException("QA options require an isolated smoke, recovery or capture profile.");
         }
         public static string OutputDirectory
         {

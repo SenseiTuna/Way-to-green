@@ -1,4 +1,4 @@
-Coastal Loop / KiyiDongusu — working title
+Way to Green
 Implementation: Codex with the project owner; Unity 6000.5.5f1.
 Visuals: generated using OpenAI image_gen; selected simple colourful 2D direction.
 Tideglass: original instrumental composition, 76 BPM, D minor, 32-bar loop.
@@ -11,7 +11,7 @@ Font source: https://github.com/google/fonts/tree/5d3b76120a319730fda218cc741017
 Game amounts and timings are fictional balancing values.
 Internal production notes and prompts remain with the project owner.
 TextMeshPro SDF shaders: Unity uGUI 2.5.0 bundled resources, Unity Companion License.
-Full notice: TMP-LICENSE.md included with the Windows build.
+Full notice: TMP-LICENSE.txt included with the Windows build.
 
 Mira portraits: OpenAI image_gen, original shore-volunteer character, three expressions.
 Environmental notes: Ocean Conservancy (2025 ICC report, 2024 cleanup data); NOAA Marine Debris; Glass Packaging Institute Facts About Glass.

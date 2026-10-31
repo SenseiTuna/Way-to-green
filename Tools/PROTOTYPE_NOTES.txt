@@ -1,27 +1,21 @@
-Coastal Loop / KiyiDongusu — V1.0.9.1 preview
-Windows x64. Keep KiyiDongusu.exe with all accompanying files.
-Click / Space: collect from the pile; help processing while it is empty.
-Start by clicking the six paper pieces. The first paper pile appears afterward.
-Buy a matching material container with credits, then drag loose litter into it for +0.50 after recycling.
-Container prices: paper100, cardboard100, PET250, HDPE500, aluminium750, glass1500 credits. Containers are optional.
-New litter materials and piles appear as their free processing lines unlock.
-Collected litter is raw stock. Only finished processing pays credits.
-Tab / Enter: buttons. Arrow keys: selected volume slider. Esc: settings / pause.
-Settings: master, music, effects, ocean, mute, English/Turkish, resolution, fullscreen and reduced motion.
-Six materials share four facilities; each material processes independently in parallel.
-Buy a collection crew to continue collecting automatically.
-Autosave runs every ten seconds and on important changes/normal exit. No offline production.
-If a save fails, the game retries; an unsuccessful final save keeps the game open with a warning.
-New game requires confirmation and preserves previous files locally.
-Normal save: LocalLow/KiyiDongusuLocal/KiyiDongusu. Never run two normal copies at once.
-No player save or test currency is distributed in this folder.
-This preview is not final delivery. Normal human playtime and listening/balance checks remain.
-Development Build ibaresi beklenir. Normal açılışta test otomasyonu etkin değildir.
-Unity 6000.5.5f1 includes the Windows UI Automation shutdown fix.
+Way to Green — V1.0.9.2 — Windows x64
 
-Mira introduces the shore and new mechanics. Continue or Skip; switch the guide off in settings.
-Quest log tracks eight shore tasks including crew work and existing progress. Task rewards are information, not currency.
-Environmental notes include sources. Glass processing durations describe this demo, not real factories.
+Extract the ZIP completely and launch Way to Green.exe.
+Keep the executable with all accompanying files and folders.
 
-Clicking litter or dropping it into the free collection net gives raw stock and standard recycling income.
-Only a matching purchased container adds +0.50, paid when the tagged piece finishes processing. Mira explains both routes.
+Start by collecting six paper pieces. Click them or drag them to the free collection net.
+Then click the central pile to collect raw material. When the pile is empty, clicks help active processing.
+Only completed processing earns credits. Six materials run independently in four facilities.
+Basic processing lines unlock for free. Buy speed, batch capacity and a collection crew to improve progress.
+The free net gives standard recycling income. Purchased matching containers add +0.50 credit per sorted piece, paid after processing.
+Containers are optional: paper/cardboard 100 each, PET 250, HDPE 500, aluminium 750, glass 1500 credits.
+Mira explains mechanics. Quest log contains eight tasks and environmental notes.
+
+Controls: left click / drag; Space for the central action; Tab / Enter for buttons; Esc for pause/settings.
+Settings: English/Turkish, master/music/effects/ocean volume, mute, resolution, fullscreen and reduced motion.
+Autosave: every ten seconds, important changes and normal exit. No offline production.
+New game asks for confirmation. Close normally to save; do not run two copies at the same time.
+Existing saves remain compatible in LocalLow/KiyiDongusuLocal/KiyiDongusu.
+
+This package contains no player save, source code, internal design documents or test tools.
+Required third-party notices are in CREDITS.txt, TMP-LICENSE.txt and Lato-OFL.txt.

@@ -8,7 +8,7 @@ if (-not $EditorPath) {
     $EditorPath = if(Test-Path -LiteralPath $hubEditor){$hubEditor}else{$localEditor}
 }
 if (-not (Test-Path -LiteralPath $EditorPath)) { throw 'Unity 6000.5.5f1 bulunamadı. -EditorPath ile kurulu Editor yolunu verin.' }
-if (Get-Process Unity -ErrorAction SilentlyContinue) { throw 'An Editor is already running. Use Kiyi Dongusu > Build in that Editor, or close it normally first. A second Editor was not started.' }
+if (Get-Process Unity -ErrorAction SilentlyContinue) { throw 'An Editor is already running. Use Way to Green > Build in that Editor, or close it normally first. A second Editor was not started.' }
 New-Item -ItemType Directory -Path (Join-Path $workspacePath 'Evidence') -Force | Out-Null
 $sourcePath = Join-Path $workspacePath 'ECONOMY_REFERENCE.json'
 $resourcePath = Join-Path $projectPath 'Assets\_Game\Resources\Economy.json'

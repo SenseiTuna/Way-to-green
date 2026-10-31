@@ -10,12 +10,18 @@ namespace KiyiDongusu.Editor
 {
     public static class Workspace
     {
+        public static void DeliveryChecks()
+        {
+            DomainChecks.Run(); CoastInteractionChecks.Run(); ScatterChecks.Run();
+            NarrativeChecks.Run(); ProgressionChecks.Run();
+            Debug.Log("WAY_TO_GREEN_DELIVERY_CHECKS_COMPLETE");
+        }
         public static void FullAndChecks()
         {
             DomainChecks.Run();
             BuildGame.Full();
         }
-        [MenuItem("Kiyi Dongusu/Open Game and Connect MCP")]
+        [MenuItem("Way to Green/Open Game and Connect MCP")]
         public static async void Open()
         {
             try

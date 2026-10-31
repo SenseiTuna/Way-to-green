@@ -20,7 +20,7 @@ namespace KiyiDongusu
             root=Panel("GameFrame",canvasRoot,0,0,1920,1080,CoastTheme.Clear);root.anchorMin=Vector2.zero;root.anchorMax=Vector2.one;root.offsetMin=root.offsetMax=Vector2.zero;
             var events=new GameObject("EventSystem",typeof(EventSystem),typeof(StandaloneInputModule));events.GetComponent<EventSystem>().sendNavigationEvents=false;
             Panel("Header",root,32,24,1856,96,CoastTheme.Paper,true);
-            Local("Title",root,58,40,450,64,"Coastal Loop","Kıyı Döngüsü",42,true);
+            Local("Title",root,58,40,450,64,"Way to Green","Way to Green",42,true);
             totals=Label("Processed",root,560,36,360,60,"",22);
             Panel("WorldProgressTrack",root,560,102,340,6,CoastTheme.Track);
             progressFill=Panel("WorldProgress",root,560,102,0,6,CoastTheme.Action).GetComponent<Image>();

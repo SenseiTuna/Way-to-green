@@ -3,7 +3,8 @@ $ErrorActionPreference = 'Stop'
 
 function Assert-Paths([string[]]$Paths) {
     $blocked = @($Paths | Where-Object {
-        $_ -match '^(Docs|Concepts|Evidence|Builds|\.hallmark)/' -or
+        $_ -match '^(Docs|Concepts|Evidence|Builds|Deliverables|\.hallmark)/' -or
+        $_ -match '^[^/]+\.pptx$' -or
         $_ -eq 'BASLANGIC_PROMPTU.txt' -or
         ($_ -match '^[^/]+\.md$' -and $_ -notin @('README.md', 'THIRD_PARTY_NOTICES.md')) -or
         $_ -match '(^|/)(\.env(?:\..*)?|\.codex|\.agents|\.aws)(/|$)' -or
