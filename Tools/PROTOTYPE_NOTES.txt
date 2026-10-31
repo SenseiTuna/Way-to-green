@@ -1,4 +1,4 @@
-Coastal Loop / KiyiDongusu — V1.0.6.2 preview
+Coastal Loop / KiyiDongusu — V1.0.7.0 preview
 Windows x64. Keep KiyiDongusu.exe with all accompanying files.
 Click / Space: collect from the pile; help processing while it is empty.
 Drag loose litter into the sorting net for +0.50 credits after that piece is recycled.

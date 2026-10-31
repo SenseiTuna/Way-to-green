@@ -44,7 +44,11 @@ namespace KiyiDongusu
                 View.Initialize(this);
                 Paused = HasLoadedSave || Saves.NeedsRecovery;
                 View.ShowInitial(HasLoadedSave, Saves.NeedsRecovery);
-                if(!Application.isEditor&&!ValidationRun&&Game.State.displayWidth>0)SetDisplay(Game.State.displayWidth,Game.State.displayHeight,Game.State.fullscreen);
+                if(!Application.isEditor&&!ValidationRun)
+                {
+                    if(Game.State.displayWidth>0)SetDisplay(Game.State.displayWidth,Game.State.displayHeight,Game.State.fullscreen);
+                    else{Game.State.displayWidth=Screen.width;Game.State.displayHeight=Screen.height;Game.State.fullscreen=Screen.fullScreenMode!=FullScreenMode.Windowed;needsSave=true;}
+                }
                 Application.wantsToQuit += TryPrepareQuit;
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
                 if (ValidationRun) gameObject.AddComponent<RuntimeSmokeRunner>().Initialize(this);
@@ -128,7 +132,9 @@ namespace KiyiDongusu
         }
         public void SetDisplay(int width,int height,bool full)
         {
-            Game.State.displayWidth=Math.Max(800,width);Game.State.displayHeight=Math.Max(600,height);Game.State.fullscreen=full;
+            width=Math.Max(800,width);height=Math.Max(600,height);
+            if(full&&!Application.isEditor&&Display.main.systemWidth>0&&Display.main.systemHeight>0)height=Mathf.RoundToInt(width*(float)Display.main.systemHeight/Display.main.systemWidth);
+            Game.State.displayWidth=width;Game.State.displayHeight=height;Game.State.fullscreen=full;
             if(!Application.isEditor)Screen.SetResolution(Game.State.displayWidth,Game.State.displayHeight,full?FullScreenMode.FullScreenWindow:FullScreenMode.Windowed);
             needsSave=true;View.MarkDirty();
         }

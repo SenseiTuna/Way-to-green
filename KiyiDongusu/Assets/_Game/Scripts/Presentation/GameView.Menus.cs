@@ -11,7 +11,7 @@ namespace KiyiDongusu
             buttons.RemoveAll(b=>b==null||b.transform.IsChildOf(overlay));words.RemoveAll(w=>w.text==null||w.text.transform.IsChildOf(overlay));
             for(int i=overlay.childCount-1;i>=0;i--)Destroy(overlay.GetChild(i).gameObject);
             overlay.gameObject.SetActive(true);host.Paused=true;MarkDirty();
-            Panel("DialogSurface",overlay,330,tall?100:200,1260,tall?880:620,CoastTheme.Paper,true);
+            Panel("DialogSurface",overlay,330,tall?100:200,1260,tall?880:620,CoastTheme.SolidPaper,true);
             Label("OverlayTitle",overlay,390,tall?125:220,1120,90,title,44,null,true);
             Label("OverlayExplanation",overlay,390,tall?202:320,1120,tall?50:170,explanation,26);
         }
@@ -76,10 +76,20 @@ namespace KiyiDongusu
         }
         void ShowResult()
         {
-            ClearOverlay(T("A shore worth coming back to","Tertemiz bir sahil"),G.TotalUnits+T(" pieces collected and recycled.\n"," parça toplandı ve işlendi.\n")+T("Earned ","Kazanılan ")+Money(G.State.earned)+T(" credits. Time "," kredi. Süre ")+TimeSpan.FromSeconds(G.State.elapsed).ToString(@"mm\:ss"));
-            Button("New",overlay,390,540,550,80,T("New game…","Yeni oyun…"),ConfirmNewGame,out _);
-            Button("Exit",overlay,970,540,550,80,T("Save and quit","Kaydet ve çık"),()=>Application.Quit(),out _,true);
-            Label("Version",overlay,390,724,1130,46,T("Prototype ","Prototip ")+"V"+Application.version,22);
+            ClearOverlay(T("A shore worth coming back to","Tertemiz bir sahil"),G.TotalUnits+T(" pieces collected and recycled.\n"," parça toplandı ve işlendi.\n")+T("Earned ","Kazanılan ")+Money(G.State.earned)+T(" credits. Time "," kredi. Süre ")+TimeSpan.FromSeconds(G.State.elapsed).ToString(@"mm\:ss"),true);
+            overlay.Find("OverlayExplanation").GetComponent<RectTransform>().sizeDelta=new Vector2(1120,100);
+            var picture=Panel("ShoreTransformation",overlay,390,330,1130,340,CoastTheme.White);
+            var photo=new GameObject("BeachPreview",typeof(RectTransform),typeof(RawImage));photo.transform.SetParent(picture,false);var photoRect=(RectTransform)photo.transform;photoRect.anchorMin=Vector2.zero;photoRect.anchorMax=Vector2.one;photoRect.offsetMin=photoRect.offsetMax=Vector2.zero;var photoImage=photo.GetComponent<RawImage>();photoImage.texture=art.Beach.texture;photoImage.uvRect=new Rect(0,.29f,1,.45f);photoImage.raycastTarget=false;
+            Panel("AfterCaptionPlate",picture,20,18,270,50,CoastTheme.SolidPaper,true);Label("AfterCaption",picture,36,18,238,50,T("Shore cleared","Sahil temizlendi"),25,null,true);
+            var before=Panel("FirstPileLayer",picture,0,0,1130,340,CoastTheme.Clear);var group=before.gameObject.AddComponent<CanvasGroup>();
+            var pile=Panel("FirstPileIllustration",before,360,100,500,225,CoastTheme.White).GetComponent<Image>();pile.sprite=art.Pile;pile.preserveAspect=true;
+            for(int i=0;i<3;i++){var piece=Panel("FirstLoose"+i,before,130+i*270,120+i%2*90,65,60,CoastTheme.White).GetComponent<Image>();piece.sprite=art.Waste[i];piece.preserveAspect=true;}
+            Panel("BeforeCaptionPlate",before,20,18,270,50,CoastTheme.SolidPaper,true);Label("BeforeCaption",before,36,18,238,50,T("The first pile","İlk yığın"),25,null,true);
+            picture.gameObject.AddComponent<CoastShoreReveal>().Initialize(host,group);
+            Label("RevealExplanation",overlay,390,686,1130,44,T("From the first pile to a clear shore.","İlk yığından tertemiz bir sahile."),25);
+            Button("New",overlay,390,752,550,76,T("New game…","Yeni oyun…"),ConfirmNewGame,out _);
+            Button("Exit",overlay,970,752,550,76,T("Save and quit","Kaydet ve çık"),()=>Application.Quit(),out _,true);
+            Label("Version",overlay,390,856,1130,46,T("Prototype ","Prototip ")+"V"+Application.version,22);
         }
     }
 }

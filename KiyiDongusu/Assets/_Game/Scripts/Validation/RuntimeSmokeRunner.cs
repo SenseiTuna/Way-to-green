@@ -16,7 +16,7 @@ namespace KiyiDongusu
             public int processed, total, resultCount, acceptedActions;
             public long earned, spent, money;
             public double simulatedSeconds, wallSeconds;
-            public bool snapshotRoundTrip, allUnlocks, parallelObserved;
+            public bool snapshotRoundTrip, allUnlocks, parallelObserved, shoreRevealPlayed;
         }
         GameBootstrap host;
         Report report;
@@ -107,7 +107,12 @@ namespace KiyiDongusu
             yield return new WaitForSecondsRealtime(.5f);
             yield return new WaitForEndOfFrame();
             ScreenCapture.CaptureScreenshot(Path.Combine(directory, "result.png"));
-            yield return new WaitForSecondsRealtime(4);
+            yield return new WaitForSecondsRealtime(3.2f);
+            var reveal=UnityEngine.Object.FindAnyObjectByType<CoastShoreReveal>();
+            report.shoreRevealPlayed=reveal!=null&&reveal.BeforeAlpha<.01f;
+            if(!report.shoreRevealPlayed){report.status="FAIL";report.error="Shore ending did not reveal its clean state";}
+            File.WriteAllText(Path.Combine(directory,"runtime-report.json"),JsonUtility.ToJson(report,true));
+            ScreenCapture.CaptureScreenshot(Path.Combine(directory,"result-after.png"));yield return new WaitForSecondsRealtime(1);
             Application.Quit(report.status == "PASS" ? 0 : 1);
         }
         IEnumerator CaptureProgress(int seconds)

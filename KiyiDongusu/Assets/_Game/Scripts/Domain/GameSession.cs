@@ -32,6 +32,7 @@ namespace KiyiDongusu
                 State.settingsVersion = 1; State.language = "en";
                 State.masterVolume = .8; State.musicVolume = .45; State.effectsVolume = .75; State.ambienceVolume = .5;
             }
+            if(State.litterSeed==0)State.litterSeed=(Guid.NewGuid().GetHashCode()&int.MaxValue)|1;
             if (restored == null)
             {
                 for (int i = 0; i < count; i++) State.materials[i] = new MaterialState { id = definitions.materials[i].id, reserve = definitions.materials[i].center_reserve_units, scatteredReserve = definitions.materials[i].scattered_reserve_units };
@@ -40,6 +41,7 @@ namespace KiyiDongusu
             Supply = new SupplySystem(this);
             Processing = new ProcessingSystem(this);
             if (restored == null) { UpdateProgress(); Supply.SpawnPile(); Supply.RefreshTokens(); }
+            else if(State.materials!=null)for(int i=0;i<State.materials.Length;i++)if(State.materials[i]!=null&&State.materials[i].visible>0&&State.materials[i].scatterX==0&&State.materials[i].scatterY==0)ScatterPlacement.Spawn(State,i);
             Validate();
         }
         public void RecordReward(long reward) { rewards.Enqueue((State.elapsed, reward)); BatchRewarded?.Invoke(reward); }
@@ -130,6 +132,7 @@ namespace KiyiDongusu
         public void Validate()
         {
             var s = State;
+            if(s.litterSeed<=0)throw new InvalidOperationException("Invalid litter layout seed.");
             if(s.settingsVersion!=1 || (s.language!="en"&&s.language!="tr") || !VolumeValid(s.masterVolume)||!VolumeValid(s.musicVolume)||!VolumeValid(s.effectsVolume)||!VolumeValid(s.ambienceVolume) || s.displayWidth<0||s.displayHeight<0 || (s.displayWidth==0)!=(s.displayHeight==0))throw new InvalidOperationException("Invalid preferences.");
             if (s.schemaVersion != 1 || s.balanceId != Definitions.balance_id || s.materials == null || s.materials.Length != (s.corePrototype ? 1 : Definitions.materials.Length) || s.facilities == null || s.facilities.Length != Definitions.facilities.Length) throw new InvalidOperationException("Kayıt şeması veya denge kimliği uyumsuz.");
             if (s.pileRemaining < 0 || s.pileRemaining > Definitions.sources.pile_units || s.pileMaterial < -1 || s.pileMaterial >= s.materials.Length || (s.pileRemaining > 0 && s.pileMaterial < 0) || s.money < 0 || s.earned < 0 || s.spent < 0 || s.earned - s.spent != s.money) throw new InvalidOperationException("Geçersiz kaynak veya cüzdan.");
@@ -138,6 +141,7 @@ namespace KiyiDongusu
             {
                 var m = s.materials[i]; var d = Definitions.materials[i];
                 if (m == null || m.id != d.id || m.reserve < 0 || m.scatteredReserve < 0 || m.visible < 0 || m.visible > 1 || m.raw < 0 || m.batch < 0 || m.processed < 0 || !Finite(m.work) || m.work < 0 || m.work > m.batch || (m.batch == 0 && m.work != 0)) throw new InvalidOperationException("Geçersiz malzeme veya işlem ilerlemesi.");
+                if((m.scatterX!=0||m.scatterY!=0)&&!ScatterPlacement.InBounds(m.scatterX,m.scatterY))throw new InvalidOperationException("Invalid litter position.");
                 long sum = (long)m.reserve + m.scatteredReserve + m.visible + m.raw + m.batch + m.processed + (s.pileMaterial == i ? s.pileRemaining : 0);
                 if (sum != d.reserve_units) throw new InvalidOperationException("Kaynak korunumu ihlali: " + d.id);
                 earned += (long)m.processed * d.reward_cents_per_unit;

@@ -9,13 +9,15 @@ namespace KiyiDongusu
         public SupplySystem(GameSession game) { this.game = game; }
         public void RefreshTokens()
         {
-            foreach (var m in S.materials)
+            for(int i=0;i<S.materials.Length;i++)
             {
+                var m=S.materials[i];
                 if (m.unlocked && m.visible == 0 && m.scatteredReserve > 0)
                 {
                     m.scatteredReserve--;
                     m.visible = 1;
                     m.tokenGeneration++;
+                    ScatterPlacement.Spawn(S,i);
                 }
             }
         }

@@ -13,10 +13,12 @@ namespace KiyiDongusu
             canvasGo.GetComponent<Canvas>().renderMode=RenderMode.ScreenSpaceOverlay;
             var scaler=canvasGo.GetComponent<CanvasScaler>();scaler.uiScaleMode=CanvasScaler.ScaleMode.ScaleWithScreenSize;scaler.referenceResolution=new Vector2(1920,1080);scaler.screenMatchMode=CanvasScaler.ScreenMatchMode.Expand;
             var canvasRoot=canvasGo.GetComponent<RectTransform>();
-            var ground=Panel("OuterBackground",canvasRoot,0,0,0,0,CoastTheme.Paper);ground.anchorMin=Vector2.zero;ground.anchorMax=Vector2.one;ground.sizeDelta=Vector2.zero;
-            root=Panel("GameFrame",canvasRoot,0,0,1920,1080,CoastTheme.Clear);root.anchorMin=root.anchorMax=root.pivot=Vector2.one*.5f;root.anchoredPosition=Vector2.zero;
+            tooltip=new GameObject("UpgradeTooltip",typeof(RectTransform)).AddComponent<CoastUpgradeTooltip>();tooltip.Initialize(host,canvasRoot,ui);
+            var beach=new GameObject("BeachArtwork",typeof(RectTransform),typeof(RawImage));beach.transform.SetParent(canvasRoot,false);
+            var beachRect=(RectTransform)beach.transform;beachRect.anchorMin=Vector2.zero;beachRect.anchorMax=Vector2.one;beachRect.offsetMin=beachRect.offsetMax=Vector2.zero;
+            beach.AddComponent<CoastBackdrop>().Initialize(host,art.Beach.texture);
+            root=Panel("GameFrame",canvasRoot,0,0,1920,1080,CoastTheme.Clear);root.anchorMin=Vector2.zero;root.anchorMax=Vector2.one;root.offsetMin=root.offsetMax=Vector2.zero;
             var events=new GameObject("EventSystem",typeof(EventSystem),typeof(StandaloneInputModule));events.GetComponent<EventSystem>().sendNavigationEvents=false;
-            var scene=Panel("BeachArtwork",root,0,0,1920,1080,CoastTheme.White).GetComponent<Image>();scene.sprite=art.Beach;
             Panel("Header",root,32,24,1856,96,CoastTheme.Paper,true);
             Local("Title",root,58,40,450,64,"Coastal Loop","Kıyı Döngüsü",42,true);
             totals=Label("Processed",root,610,36,430,60,"",22);
@@ -31,7 +33,8 @@ namespace KiyiDongusu
             for(int f=0;f<(host.corePrototype?1:4);f++)
             {
                 int facility=f;float height=f<2?188:150;
-                Local("FacilityName"+f,dock,28,top,374,36,new[]{"Paper mill","Plastic workshop","Metal works","Glass studio"}[f],new[]{"Kâğıt merkezi","Plastik merkezi","Metal merkezi","Cam merkezi"}[f],26,true);
+                Local("FacilityName"+f,dock,28,top,316,36,new[]{"Paper mill","Plastic workshop","Metal works","Glass studio"}[f],new[]{"Kâğıt merkezi","Plastik merkezi","Metal merkezi","Cam merkezi"}[f],26,true);
+                var gear=new GameObject("FacilityGear_"+f,typeof(RectTransform),typeof(CoastMachineGear));gear.transform.SetParent(dock,false);var gearRect=(RectTransform)gear.transform;PositionUi(gearRect,dock,354,top+2,36,36);gearRect.pivot=Vector2.one*.5f;gearRect.anchoredPosition+=new Vector2(18,-18);gear.GetComponent<CoastMachineGear>().Initialize(host,f);
                 int lane=0;
                 for(int i=0;i<G.State.materials.Length;i++)
                 {
@@ -57,13 +60,15 @@ namespace KiyiDongusu
             NetRect=Panel("SortingNet",root,90,740,270,220,CoastTheme.White);NetRect.GetComponent<Image>().sprite=art.Net;NetRect.GetComponent<Image>().preserveAspect=true;
             Panel("NetSign",root,62,949,360,112,CoastTheme.Paper,true);
             netText=Label("NetLabel",root,62,949,360,112,"",22);netText.alignment=TextAlignmentOptions.Midline;
-            float[] px={150,1230,250,1170,990,410},py={305,330,560,614,190,200};
             for(int i=0;i<G.State.materials.Length;i++)
             {
                 int index=i;
-                var b=Button("WasteToken_"+i,root,px[i],py[i],110,106,"",()=>{var d=litter.Find(v=>v.i==index).drag;if(d!=null&&d.AllowClick)host.TokenAction(index,G.State.materials[index].tokenGeneration);},out var label);
-                label.gameObject.SetActive(false);var img=b.GetComponent<Image>();img.sprite=art.Waste[i];img.type=Image.Type.Simple;img.preserveAspect=true;img.color=CoastTheme.White;
-                var drag=b.gameObject.AddComponent<BeachLitterDrag>();drag.Initialize(host,this,i,new Vector2(px[i],-py[i]));litter.Add((i,b,drag));
+                var b=Button("WasteToken_"+i,root,0,0,110,106,"",()=>{var d=litter.Find(v=>v.i==index).drag;if(d!=null&&d.AllowClick)host.TokenAction(index,G.State.materials[index].tokenGeneration);},out var label);
+                label.gameObject.SetActive(false);b.GetComponent<Image>().color=CoastTheme.Clear;
+                var visual=Panel("TokenArtwork_"+i,b.transform,0,0,110,106,CoastTheme.White);visual.anchorMin=visual.anchorMax=visual.pivot=Vector2.one*.5f;visual.anchoredPosition=Vector2.zero;
+                var img=visual.GetComponent<Image>();img.sprite=art.Waste[i];img.preserveAspect=true;
+                var hit=(RectTransform)b.transform;hit.anchorMin=hit.anchorMax=Vector2.one*.5f;
+                var drag=b.gameObject.AddComponent<BeachLitterDrag>();drag.Initialize(host,this,i,visual);litter.Add((i,b,drag));
             }
             NetRect.gameObject.AddComponent<CoastNetFeedback>().Initialize(host,root.GetComponentsInChildren<BeachLitterDrag>(true));
             AddUpgrade(PurchaseKind.Collector,0,root,470,934,430);
@@ -76,6 +81,7 @@ namespace KiyiDongusu
             noticeGroup=notice.gameObject.AddComponent<CanvasGroup>();noticeGroup.blocksRaycasts=false;noticeGroup.alpha=0;
             host.Feedback.Notice+=ShowFeedback;
             overlay=Panel("Overlay",root,0,0,1920,1080,CoastTheme.Scrim);overlay.GetComponent<Image>().raycastTarget=true;overlay.gameObject.SetActive(false);
+            ArrangeGameplay();
             var cursor=new GameObject("CoastalHandCursor").AddComponent<CoastHandCursor>();cursor.Initialize(host,art);
             Refresh();
         }

@@ -9,6 +9,7 @@ namespace KiyiDongusu
         public double work;
         public bool unlocked;
         public int netRaw, netBatch, netProcessed;
+        public int scatterX, scatterY;
     }
     [Serializable] public sealed class FacilityState { public int speed, capacity; }
     [Serializable] public sealed class GameState
@@ -26,5 +27,6 @@ namespace KiyiDongusu
         public string language;
         public double masterVolume, musicVolume, effectsVolume, ambienceVolume;
         public bool fullscreen;
+        public int litterSeed;
     }
 }

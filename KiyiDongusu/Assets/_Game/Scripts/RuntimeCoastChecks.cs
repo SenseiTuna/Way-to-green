@@ -34,6 +34,7 @@ namespace KiyiDongusu
             Test("Language UI switches to Turkish",()=>{Button("Language").onClick.Invoke();Assert(host.Game.State.language=="tr"&&GameText.Language=="tr","Language not applied");});yield return null;
             ScreenCapture.CaptureScreenshot(Path.Combine(output,"settings-tr.png"));
             Button("Language").onClick.Invoke();yield return null;
+            host.SetDisplay(1280,720,false);yield return new WaitForSecondsRealtime(.5f);
             Test("Resolution UI applies 1600 by 900",()=>Button("Resolution").onClick.Invoke());yield return new WaitForSecondsRealtime(.7f);
             Test("Actual Windows render target matches resolution setting",()=>Assert(Screen.width==1600&&Screen.height==900,"Resolution not applied: "+Screen.width+"x"+Screen.height));
             ScreenCapture.CaptureScreenshot(Path.Combine(output,"settings-en-900.png"));

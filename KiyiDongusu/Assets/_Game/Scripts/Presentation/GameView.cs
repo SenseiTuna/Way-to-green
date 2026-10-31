@@ -12,6 +12,7 @@ namespace KiyiDongusu
     {
         GameBootstrap host; GameSession G=>host.Game;
         GameUiAssets ui; GameArt art;
+        CoastUpgradeTooltip tooltip;
         RectTransform root, overlay; public RectTransform NetRect { get; private set; }
         Text credits, goal, totals, pileText, role, notice, netText, saveText;
         Image pileImage, progressFill; Button center;
@@ -27,14 +28,14 @@ namespace KiyiDongusu
         RectTransform Panel(string name,Transform parent,float x,float y,float w,float h,Color color,bool rounded=false)
         {
             var go=new GameObject(name,typeof(RectTransform),typeof(Image)); go.transform.SetParent(parent,false);
-            var r=go.GetComponent<RectTransform>(); r.anchorMin=r.anchorMax=new Vector2(0,1);r.pivot=new Vector2(0,1);r.anchoredPosition=new Vector2(x,-y);r.sizeDelta=new Vector2(w,h);
+            var r=go.GetComponent<RectTransform>();PositionUi(r,parent,x,y,w,h);
             var image=go.GetComponent<Image>();image.color=color;image.raycastTarget=false;
             if(rounded){image.sprite=ui.Surface;image.type=Image.Type.Sliced;}return r;
         }
         Text Label(string name,Transform parent,float x,float y,float w,float h,string value,int size=24,Color? color=null,bool bold=false)
         {
             var go=new GameObject(name,typeof(RectTransform),typeof(Text));go.transform.SetParent(parent,false);
-            var r=go.GetComponent<RectTransform>();r.anchorMin=r.anchorMax=new Vector2(0,1);r.pivot=new Vector2(0,1);r.anchoredPosition=new Vector2(x,-y);r.sizeDelta=new Vector2(w,h);
+            var r=go.GetComponent<RectTransform>();PositionUi(r,parent,x,y,w,h);
             var t=go.GetComponent<Text>();t.font=bold?ui.Bold:ui.Regular;t.text=value;t.fontSize=size;t.color=color??CoastTheme.Ink;t.raycastTarget=false;t.alignment=TextAlignmentOptions.MidlineLeft;
             t.enableAutoSizing=false;t.textWrappingMode=TextWrappingModes.Normal;t.overflowMode=TextOverflowModes.Ellipsis;t.richText=false;t.extraPadding=true;
             return t;
@@ -52,7 +53,7 @@ namespace KiyiDongusu
             return b;
         }
         void AddUpgrade(PurchaseKind kind,int f,Transform p,float x,float y,float width)
-        {var b=Button(kind+"_"+f,p,x,y,width,64,"",()=>host.Purchase(kind,f),out var t);t.fontSize=22;upgrades.Add((kind,f,b,t));}
+        {var b=Button(kind+"_"+f,p,x,y,width,64,"",()=>host.Purchase(kind,f),out var t);t.fontSize=22;b.gameObject.AddComponent<UpgradeHover>().Initialize(tooltip,kind,f);upgrades.Add((kind,f,b,t));}
         void Update()
         {
             noticeTime=Mathf.Max(0,noticeTime-Time.unscaledDeltaTime);noticeGroup.alpha=Mathf.Clamp01(noticeTime/.25f);
@@ -123,6 +124,6 @@ namespace KiyiDongusu
             for(int i=0;i<G.State.materials.Length;i++)if(!G.State.materials[i].unlocked)return T("Next free line: ","Sıradaki ücretsiz hat: ")+GameText.Material(i)+"  "+G.Processed+" / "+G.Definitions.materials[i].unlock_processed_total_units;
             return T("Every piece counts. Collected ","Her parça önemli. Toplanan ")+G.Collected+" / "+G.TotalUnits;
         }
-        void OnDestroy(){if(host!=null&&host.Feedback!=null)host.Feedback.Notice-=ShowFeedback;ui?.Dispose();}
+        void OnDestroy(){if(host!=null&&host.Feedback!=null)host.Feedback.Notice-=ShowFeedback;if(tooltip!=null)Destroy(tooltip.gameObject);ui?.Dispose();}
     }
 }
