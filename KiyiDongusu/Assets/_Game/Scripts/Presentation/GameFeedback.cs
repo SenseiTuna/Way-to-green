@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace KiyiDongusu
 {
-    public enum FeedbackKind { Collect, Assist, Batch, Purchase, Unlock, Complete }
+    public enum FeedbackKind { Collect, Assist, Batch, Purchase, Unlock, Complete, Net }
     public readonly struct FeedbackNotice
     {
         public readonly FeedbackKind Kind;
@@ -136,7 +136,7 @@ namespace KiyiDongusu
             Notice?.Invoke(new FeedbackNotice(FeedbackKind.Batch, "+" + (reward / 100.0).ToString("N1", GameText.Culture) + GameText.T(" credits recycled"," kredi işlendi")));
         }
         public void Tap(){Cue(FeedbackKind.Collect);}
-        public void NetDelivery(){Cue(FeedbackKind.Purchase);Notice?.Invoke(new FeedbackNotice(FeedbackKind.Collect,GameText.T("Nice catch! +0.50 after recycling","Güzel yakaladın! İşlenince +0,50 kredi")));}
+        public void NetDelivery(){Cue(FeedbackKind.Purchase);Notice?.Invoke(new FeedbackNotice(FeedbackKind.Net,GameText.T("Nice catch! +0.50 after recycling","Güzel yakaladın! İşlenince +0,50 kredi")));}
         void OnDestroy()
         {
             if (session != null) { session.BatchRewarded -= OnReward; session.ImportantChange -= OnImportant; }

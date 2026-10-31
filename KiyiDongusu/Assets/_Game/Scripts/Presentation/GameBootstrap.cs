@@ -134,7 +134,7 @@ namespace KiyiDongusu
         }
         public void CycleResolution()
         {
-            int[] widths={1280,1600,1920},heights={720,900,1080};int current=Game.State.displayWidth>0?Game.State.displayWidth:Screen.width;
+            int[] widths={1280,1600,1920,2560},heights={720,900,1080,1440};int current=Game.State.displayWidth>0?Game.State.displayWidth:Screen.width;
             int next=0;for(int i=0;i<widths.Length;i++)if(widths[i]==current){next=(i+1)%widths.Length;break;}
             if(widths[next]>Screen.currentResolution.width)next=0;
             SetDisplay(widths[next],heights[next],Game.State.fullscreen);

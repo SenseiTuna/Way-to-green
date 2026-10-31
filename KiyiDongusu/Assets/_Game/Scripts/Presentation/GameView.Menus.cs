@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using Text=TMPro.TextMeshProUGUI;
 namespace KiyiDongusu
 {
     public sealed partial class GameView

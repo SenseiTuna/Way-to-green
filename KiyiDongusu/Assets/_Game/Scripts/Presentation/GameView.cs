@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
+using Text=TMPro.TextMeshProUGUI;
 
 namespace KiyiDongusu
 {
@@ -33,7 +35,8 @@ namespace KiyiDongusu
         {
             var go=new GameObject(name,typeof(RectTransform),typeof(Text));go.transform.SetParent(parent,false);
             var r=go.GetComponent<RectTransform>();r.anchorMin=r.anchorMax=new Vector2(0,1);r.pivot=new Vector2(0,1);r.anchoredPosition=new Vector2(x,-y);r.sizeDelta=new Vector2(w,h);
-            var t=go.GetComponent<Text>();t.font=bold?ui.Bold:ui.Regular;t.text=value;t.fontSize=size;t.color=color??CoastTheme.Ink;t.raycastTarget=false;t.alignment=TextAnchor.MiddleLeft;
+            var t=go.GetComponent<Text>();t.font=bold?ui.Bold:ui.Regular;t.text=value;t.fontSize=size;t.color=color??CoastTheme.Ink;t.raycastTarget=false;t.alignment=TextAlignmentOptions.MidlineLeft;
+            t.enableAutoSizing=false;t.textWrappingMode=TextWrappingModes.Normal;t.overflowMode=TextOverflowModes.Ellipsis;t.richText=false;t.extraPadding=true;
             return t;
         }
         Text Local(string name,Transform p,float x,float y,float w,float h,string en,string tr,int size=24,bool bold=false)
@@ -44,12 +47,12 @@ namespace KiyiDongusu
             var b=r.gameObject.AddComponent<Button>();b.targetGraphic=r.GetComponent<Image>();b.navigation=new Navigation{mode=Navigation.Mode.None};
             var colors=b.colors;colors.normalColor=colors.disabledColor=CoastTheme.White;colors.highlightedColor=CoastTheme.Hover;colors.selectedColor=CoastTheme.Sun;b.colors=colors;
             b.onClick.AddListener(()=>action());buttons.Add(b);
-            label=Label(name+"Text",r,12,3,w-24,h-6,value,23,quiet?CoastTheme.Ink:CoastTheme.White,true);label.alignment=TextAnchor.MiddleCenter;
+            label=Label(name+"Text",r,12,3,w-24,h-6,value,24,quiet?CoastTheme.Ink:CoastTheme.White,true);label.alignment=TextAlignmentOptions.Midline;
             r.gameObject.AddComponent<CoastPressable>().Initialize(host);
             return b;
         }
         void AddUpgrade(PurchaseKind kind,int f,Transform p,float x,float y,float width)
-        {var b=Button(kind+"_"+f,p,x,y,width,58,"",()=>host.Purchase(kind,f),out var t);t.fontSize=20;upgrades.Add((kind,f,b,t));}
+        {var b=Button(kind+"_"+f,p,x,y,width,64,"",()=>host.Purchase(kind,f),out var t);t.fontSize=22;upgrades.Add((kind,f,b,t));}
         void Update()
         {
             noticeTime=Mathf.Max(0,noticeTime-Time.unscaledDeltaTime);noticeGroup.alpha=Mathf.Clamp01(noticeTime/.25f);
@@ -76,9 +79,13 @@ namespace KiyiDongusu
             progressFill.rectTransform.sizeDelta=new Vector2(340f*G.Collected/G.TotalUnits,6);
             role.text=G.State.pileRemaining>0?GameText.Material(G.State.pileMaterial)+T(" pile"," yığını"):T("Give the machines a hand","İşlemeye yardım et");
             pileText.text=G.State.pileRemaining>0?G.State.pileRemaining+" / "+G.Definitions.sources.pile_units+T(" remaining"," kaldı"):G.WorldRemaining==0?T("Finishing the last batches","Son partiler işleniyor"):T("Next pile in ","Yeni parti: ")+G.State.refillRemaining.ToString("0.0",GameText.Culture)+T("s"," sn");
-            pileImage.gameObject.SetActive(G.State.pileRemaining>0);
+            pileImage.gameObject.SetActive(!G.State.complete);
             float fraction=G.State.pileRemaining/(float)G.Definitions.sources.pile_units;
-            pileImage.sprite=art.PileAt(fraction);
+            bool collecting=G.State.pileRemaining>0;
+            int facility=0;for(int i=0;i<G.State.materials.Length;i++)if(G.State.materials[i].batch>0){facility=G.Definitions.FacilityIndex(i);break;}
+            pileImage.sprite=collecting?art.PileAt(fraction):art.Facilities[facility];
+            pileImage.rectTransform.sizeDelta=collecting?new Vector2(840,390):new Vector2(460,300);
+            pileImage.rectTransform.anchoredPosition=collecting?Vector2.zero:new Vector2(190,-45);
             center.interactable=!host.Paused&&!G.State.complete;
             netText.text=T("Sorting net","Ayırma ağı")+"\n"+(G.NetDelivered==0?T("Drag loose litter here","Tekil çöpleri buraya sürükle"):T("Sorted: ","Ayrılan: ")+G.NetDelivered)+"\n"+T("+0.50 after recycling","İşlenince +0,50 kredi");
             foreach(var lane in lanes)

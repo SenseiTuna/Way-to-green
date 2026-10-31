@@ -10,7 +10,7 @@ namespace KiyiDongusu.Editor
 {
     public static class BuildGame
     {
-        public const string ArtVersion = "1.0.6.1";
+        public const string ArtVersion = "1.0.6.2";
         [MenuItem("Kiyi Dongusu/Build Core Windows")]
         public static void Core() => Build(true);
         [MenuItem("Kiyi Dongusu/Build Full Windows")]
@@ -21,6 +21,7 @@ namespace KiyiDongusu.Editor
         public static void ReleaseCandidate() => Build(false, true, false);
         static void Build(bool core, bool artPreview = false, bool development = true)
         {
+            CoastTypography.Prepare();
             string source = Path.GetFullPath("../ECONOMY_REFERENCE.json");
             const string resource = "Assets/_Game/Resources/Economy.json";
             if (File.ReadAllText(source) != File.ReadAllText(resource))
@@ -53,6 +54,7 @@ namespace KiyiDongusu.Editor
             foreach (var pair in new[] {
                 new[] { "../CREDITS.txt", "CREDITS.txt" },
                 new[] { "../Tools/PROTOTYPE_NOTES.txt", "README.txt" },
+                new[] { "Assets/TextMesh Pro/LICENSE.md", "TMP-LICENSE.md" },
                 new[] { "Assets/_Game/Resources/Typography/OFL.txt", "Lato-OFL.txt" }
             }) if (File.Exists(pair[0])) File.Copy(pair[0], Path.Combine(directory, pair[1]), true);
             string notes = Path.Combine(directory, "README.txt");

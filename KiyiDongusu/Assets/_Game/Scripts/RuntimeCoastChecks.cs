@@ -5,6 +5,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Text=TMPro.TextMeshProUGUI;
 namespace KiyiDongusu
 {
     public sealed partial class RuntimeRecoveryChecks

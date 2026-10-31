@@ -10,3 +10,5 @@ Full font license: Lato-OFL.txt, included with this Windows build.
 Font source: https://github.com/google/fonts/tree/5d3b76120a319730fda218cc7410174a462b32cb/ofl/lato
 Game amounts and timings are fictional balancing values.
 Internal production notes and prompts remain with the project owner.
+TextMeshPro SDF shaders: Unity uGUI 2.5.0 bundled resources, Unity Companion License.
+Full notice: TMP-LICENSE.md included with the Windows build.

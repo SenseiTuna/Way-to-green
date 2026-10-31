@@ -89,6 +89,7 @@ namespace KiyiDongusu
             });
             Test("exit preparation succeeds once storage recovers", () => Assert(host.TryPrepareQuit(), "Still blocking saved exit"));
             if (Array.IndexOf(Environment.GetCommandLineArgs(), "--kiyi-feature-check") >= 0) yield return Features();
+            if (Array.IndexOf(Environment.GetCommandLineArgs(), "--kiyi-typography-check") >= 0) yield return Typography();
             report.status = report.checks.TrueForAll(c => c.status == "PASS") ? "PASS" : "FAIL";
             File.WriteAllText(Path.Combine(output, "recovery-report.json"), JsonUtility.ToJson(report, true));
             Debug.Log("KIYI_RECOVERY_CHECKS " + report.status + " path=" + output);

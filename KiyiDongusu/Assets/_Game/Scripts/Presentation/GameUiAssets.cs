@@ -1,17 +1,19 @@
 using UnityEngine;
+using TMPro;
 
 namespace KiyiDongusu
 {
     // Small UI-only rounded surface; illustrations remain the approved A assets.
     public sealed class GameUiAssets
     {
-        public readonly Font Regular, Bold;
+        public readonly TMP_FontAsset Regular, Bold;
         public readonly Sprite Surface;
         readonly Texture2D texture;
         public GameUiAssets()
         {
-            Regular = Resources.Load<Font>("Typography/Lato-Regular") ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            Bold = Resources.Load<Font>("Typography/Lato-Bold") ?? Regular;
+            Regular = Resources.Load<TMP_FontAsset>("Typography/Lato-Regular SDF");
+            Bold = Resources.Load<TMP_FontAsset>("Typography/Lato-Bold SDF");
+            if(Regular==null||Bold==null)throw new System.InvalidOperationException("SDF fonts missing. Run Prepare SDF Typography in the Editor.");
             const int size = 64, radius = 14;
             texture = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = "UI_RoundedSurface", filterMode = FilterMode.Bilinear, wrapMode = TextureWrapMode.Clamp };
             var pixels = new Color32[size * size];
