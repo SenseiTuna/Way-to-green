@@ -24,6 +24,7 @@ namespace KiyiDongusu
         double nextAction, accumulator;
         float start;
         bool finished;
+        double nextCapture = 300;
         public static bool Requested => Array.IndexOf(Environment.GetCommandLineArgs(), "--kiyi-smoke-test") >= 0;
         public static string OutputDirectory
         {
@@ -67,6 +68,10 @@ namespace KiyiDongusu
                             if (game.State.facilities[f].capacity < 2) game.Purchase(PurchaseKind.Capacity, f);
                         }
                     game.Validate();
+                    if (Array.IndexOf(Environment.GetCommandLineArgs(), "--kiyi-capture-progress") >= 0 && game.State.elapsed >= nextCapture)
+                    {
+                        StartCoroutine(CaptureProgress((int)nextCapture)); nextCapture += 600;
+                    }
                     report.parallelObserved |= game.State.materials[0].batch > 0 && game.State.materials[1].batch > 0;
                     if (!report.snapshotRoundTrip && game.State.elapsed > 300)
                     {
@@ -104,6 +109,11 @@ namespace KiyiDongusu
             ScreenCapture.CaptureScreenshot(Path.Combine(directory, "result.png"));
             yield return new WaitForSecondsRealtime(4);
             Application.Quit(report.status == "PASS" ? 0 : 1);
+        }
+        IEnumerator CaptureProgress(int seconds)
+        {
+            yield return new WaitForEndOfFrame();
+            ScreenCapture.CaptureScreenshot(Path.Combine(directory, "gameplay-" + seconds + ".png"));
         }
     }
 }

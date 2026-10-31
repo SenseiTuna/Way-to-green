@@ -7,18 +7,19 @@ using UnityEngine.UI;
 
 namespace KiyiDongusu
 {
-    // Temporary, code-built uGUI. Economy is owned exclusively by GameSession.
+    // Native uGUI presentation. Economy is owned exclusively by GameSession.
     public sealed class GameView : MonoBehaviour
     {
         GameBootstrap host;
         GameSession G => host.Game;
-        readonly Color ink = new Color32(24, 52, 61, 255);
-        readonly Color teal = new Color32(14, 104, 108, 255);
-        readonly Color pale = new Color32(239, 246, 237, 255);
+        readonly Color ink = new Color32(24, 61, 65, 255);
+        readonly Color teal = new Color32(13, 106, 97, 255);
+        readonly Color pale = new Color32(246, 244, 235, 255);
         readonly Color sand = new Color32(232, 207, 151, 255);
         readonly CultureInfo tr = CultureInfo.GetCultureInfo("tr-TR");
         Font font;
         GameArt art;
+        GameUiAssets ui;
         Image pileImage;
         RectTransform root, beach, overlay;
         Text money, income, target, status, cleanup, recycled, pile, mode, result;
@@ -29,7 +30,7 @@ namespace KiyiDongusu
         int feedbackPriority;
         readonly Image[] facilityCards = new Image[4];
         readonly float[] facilityFlash = new float[4];
-        readonly List<(int i, Text text, Image bar)> lines = new List<(int, Text, Image)>();
+        readonly List<(int i, Text text, Text details, Image bar)> lines = new List<(int, Text, Text, Image)>();
         readonly List<(int i, Button button, Text text)> tokens = new List<(int, Button, Text)>();
         readonly List<(PurchaseKind kind, int facility, Button button, Text text)> upgrades = new List<(PurchaseKind, int, Button, Text)>();
         readonly List<Image> dirt = new List<Image>();
@@ -38,7 +39,7 @@ namespace KiyiDongusu
         bool dirty = true, resultShown;
         float renderTimer;
         public void MarkDirty() { dirty = true; }
-        RectTransform Panel(string name, Transform parent, float x, float y, float w, float h, Color color)
+        RectTransform Panel(string name, Transform parent, float x, float y, float w, float h, Color color, bool rounded = false)
         {
             var go = new GameObject(name, typeof(RectTransform), typeof(Image));
             go.transform.SetParent(parent, false);
@@ -46,6 +47,7 @@ namespace KiyiDongusu
             r.anchorMin = r.anchorMax = new Vector2(0, 1); r.pivot = new Vector2(0, 1);
             r.anchoredPosition = new Vector2(x, -y); r.sizeDelta = new Vector2(w, h);
             var image = go.GetComponent<Image>(); image.color = color; image.raycastTarget = false;
+            if (rounded) { image.sprite = ui.Surface; image.type = Image.Type.Sliced; }
             return r;
         }
         Text Label(string name, Transform parent, float x, float y, float w, float h, string value, int size = 26, Color? color = null)
@@ -57,8 +59,9 @@ namespace KiyiDongusu
         }
         Button Button(string name, Transform parent, float x, float y, float w, float h, string value, Action action, out Text label)
         {
-            var r = Panel(name, parent, x, y, w, h, teal); r.GetComponent<Image>().raycastTarget = true;
+            var r = Panel(name, parent, x, y, w, h, teal, true); r.GetComponent<Image>().raycastTarget = true;
             var b = r.gameObject.AddComponent<Button>(); b.targetGraphic = r.GetComponent<Image>(); b.onClick.AddListener(() => action());
+            var colors = b.colors; colors.disabledColor = Color.white; colors.highlightedColor = new Color(.86f, 1, .94f); colors.selectedColor = new Color(.83f, 1, .7f); b.colors = colors;
             // Keyboard main action is handled once by the bootstrap, avoiding Submit+Return double dispatch.
             b.navigation = new Navigation { mode = Navigation.Mode.None };
             buttons.Add(b);
@@ -69,19 +72,24 @@ namespace KiyiDongusu
         {
             host = bootstrap;
             art = new GameArt();
-            font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            ui = new GameUiAssets(); font = ui.Regular;
             var canvasGo = new GameObject("Canvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
             var canvas = canvasGo.GetComponent<Canvas>(); canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             var scaler = canvasGo.GetComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1920, 1080); scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
             root = canvasGo.GetComponent<RectTransform>();
+            var outer = Panel("OuterBackground", root, 0, 0, 0, 0, pale); outer.anchorMin = Vector2.zero; outer.anchorMax = Vector2.one; outer.sizeDelta = Vector2.zero;
+            root = Panel("GameFrame", root, 0, 0, 1920, 1080, Color.clear); root.anchorMin = root.anchorMax = root.pivot = Vector2.one * .5f; root.anchoredPosition = Vector2.zero;
             var events = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
             events.GetComponent<EventSystem>().sendNavigationEvents = false;
             Panel("Background", root, 0, 0, 1920, 1080, pale);
-            Label("Title", root, 24, 18, 560, 60, "KIYI DÖNGÜSÜ", 38);
-            money = Label("Credits", root, 610, 18, 420, 60, "", 34);
-            income = Label("Income", root, 1050, 18, 540, 60, "", 25);
+            Panel("Header", root, 0, 0, 1920, 96, ink);
+            var title = Label("Title", root, 32, 12, 540, 68, "Kıyı Döngüsü", 40, Color.white); title.font = ui.Bold;
+            Label("CreditsCaption", root, 624, 8, 420, 25, "İŞLEME KREDİSİ", 18, new Color32(178, 218, 203, 255));
+            money = Label("Credits", root, 624, 30, 420, 54, "", 36, Color.white); money.font = ui.Bold;
+            income = Label("Income", root, 1050, 22, 550, 58, "", 24, new Color32(201, 229, 214, 255));
             Button("Pause", root, 1660, 18, 236, 72, "Duraklat · ESC", TogglePause, out _);
-            target = Label("NextGoal", root, 24, 104, 1872, 62, "", 28);
+            Panel("GoalSurface", root, 24, 108, 1872, 58, Color.white, true);
+            target = Label("NextGoal", root, 44, 108, 1832, 58, "", 26);
             beach = Panel("Beach", root, 24, 182, 1188, 768, sand);
             Panel("Sea", beach, 0, 0, 1188, 142, new Color32(102, 184, 184, 255));
             Panel("WaterEdge", beach, 0, 142, 1188, 14, new Color32(202, 231, 216, 255));
@@ -90,40 +98,43 @@ namespace KiyiDongusu
                 var background = Panel("BeachArtwork", beach, 0, 0, 1188, 768, Color.white).GetComponent<Image>();
                 background.sprite = art.Beach;
             }
-            Label("BeachTitle", beach, 28, 20, 1120, 60, "TEK SAHİL · SONLU KAYNAK", 30);
-            var noticePanel = Panel("FeedbackNotice", beach, 28, 106, 1120, 62, new Color(.96f, .98f, .92f, .93f));
+            Panel("BeachTitleSurface", beach, 24, 20, 492, 56, new Color(.98f, .98f, .92f, .95f), true);
+            var beachTitle = Label("BeachTitle", beach, 44, 20, 450, 56, "Bir sahil, temiz bir başlangıç.", 27); beachTitle.font = ui.Bold;
+            var noticePanel = Panel("FeedbackNotice", beach, 28, 100, 1120, 62, new Color(.96f, .98f, .92f, .97f), true);
             feedbackGroup = noticePanel.gameObject.AddComponent<CanvasGroup>(); feedbackGroup.alpha = 0; feedbackGroup.blocksRaycasts = false; feedbackGroup.interactable = false;
             feedbackText = Label("FeedbackText", noticePanel, 18, 0, 1084, 62, "", 28);
             host.Feedback.Notice += ShowFeedback;
             for (int n = 0; n < 6; n++)
             {
-                var patch = Panel("WastePatch" + n, beach, 54 + n * 182, 192 + (n % 2) * 46, 130, 88, new Color32(140, 128, 96, 255)).GetComponent<Image>();
+                var patch = Panel("WastePatch" + n, beach, 120 + n * 158, 626 + (n % 2) * 12, 52, 40, new Color32(140, 128, 96, 255)).GetComponent<Image>();
                 if (art.Waste[n] != null) { patch.sprite = art.Waste[n]; patch.preserveAspect = true; patch.color = Color.white; }
                 dirt.Add(patch);
             }
-            mode = Label("CenterRole", beach, 200, 290, 790, 64, "", 34); mode.alignment = TextAnchor.MiddleCenter;
-            center = Button("CenterAction", beach, 410, 364, 368, 196, "", host.CenterAction, out pile);
+            Panel("CenterRoleSurface", beach, 306, 226, 576, 64, new Color(.98f, .98f, .93f, .95f), true);
+            mode = Label("CenterRole", beach, 316, 226, 556, 64, "", 30); mode.alignment = TextAnchor.MiddleCenter; mode.font = ui.Bold;
+            center = Button("CenterAction", beach, 354, 310, 480, 268, "", host.CenterAction, out pile);
             if (art.Pile != null)
             {
-                center.GetComponent<Image>().color = new Color(1, 1, 1, .18f);
-                pileImage = Panel("PileArtwork", center.transform, 0, 0, 368, 130, Color.white).GetComponent<Image>();
+                center.GetComponent<Image>().color = new Color(1, 1, 1, .83f);
+                pileImage = Panel("PileArtwork", center.transform, 12, 8, 456, 184, Color.white).GetComponent<Image>();
                 pileImage.sprite = art.Pile; pileImage.preserveAspect = true;
-                pile.rectTransform.anchoredPosition = new Vector2(14, -130);
-                pile.rectTransform.sizeDelta = new Vector2(340, 62); pile.color = ink; pile.fontSize = 24;
+                pile.rectTransform.anchoredPosition = new Vector2(14, -192);
+                pile.rectTransform.sizeDelta = new Vector2(452, 70); pile.color = ink; pile.fontSize = 25;
             }
             for (int i = 0; i < G.State.materials.Length; i++)
             {
                 int index = i;
-                var button = Button("WasteToken_" + i, beach, 30 + (i % 3) * 388, 574 + (i / 3) * 82, 356, 72, "", () => host.TokenAction(index, displayedGenerations[index]), out var label);
+                float[] tokenX = { 84, 936, 116, 928, 914, 74 }, tokenY = { 346, 360, 504, 516, 184, 186 };
+                var button = Button("WasteToken_" + i, beach, tokenX[i], tokenY[i], 164, 112, "", () => host.TokenAction(index, displayedGenerations[index]), out var label);
                 if (art.Waste[i] != null)
                 {
-                    button.GetComponent<Image>().color = new Color(1, 1, 1, .82f);
-                    var icon = Panel("WasteIcon", button.transform, 4, 4, 64, 64, Color.white).GetComponent<Image>(); icon.sprite = art.Waste[i]; icon.preserveAspect = true;
-                    label.rectTransform.anchoredPosition = new Vector2(72, -4); label.rectTransform.sizeDelta = new Vector2(276, 64); label.color = ink; label.fontSize = 24;
+                    button.GetComponent<Image>().color = new Color(1, 1, 1, .91f);
+                    var icon = Panel("WasteIcon", button.transform, 42, 4, 80, 70, Color.white).GetComponent<Image>(); icon.sprite = art.Waste[i]; icon.preserveAspect = true;
+                    label.rectTransform.anchoredPosition = new Vector2(4, -74); label.rectTransform.sizeDelta = new Vector2(156, 34); label.color = ink; label.fontSize = 21;
                 }
                 tokens.Add((i, button, label));
             }
-            Panel("CounterBackdrop", beach, 12, 686, 1164, 70, new Color(.97f, .98f, .93f, .92f));
+            Panel("CounterBackdrop", beach, 12, 686, 1164, 70, new Color(.97f, .98f, .93f, .97f), true);
             cleanup = Label("Collected", beach, 28, 690, 550, 58, "", 26);
             recycled = Label("Processed", beach, 590, 690, 570, 58, "", 26);
             var facilities = Panel("FacilityPanel", root, 1236, 182, 660, 768, pale);
@@ -133,9 +144,9 @@ namespace KiyiDongusu
             {
                 int facility = f;
                 float height = f < 2 ? 216 : 156;
-                var card = Panel("Facility_" + f, facilities, 0, top, 660, height, Color.white);
+                var card = Panel("Facility_" + f, facilities, 0, top, 660, height, Color.white, true);
                 facilityCards[f] = card.GetComponent<Image>();
-                Label("FacilityName", card, art.Facilities[f] == null ? 16 : 80, 6, art.Facilities[f] == null ? 628 : 564, 40, facilityNames[f], 28);
+                var facilityTitle = Label("FacilityName", card, art.Facilities[f] == null ? 16 : 80, 6, art.Facilities[f] == null ? 628 : 564, 40, facilityNames[f], 25); facilityTitle.font = ui.Bold;
                 if (art.Facilities[f] != null)
                 {
                     var icon = Panel("FacilityIcon", card, 8, 2, 64, 44, Color.white).GetComponent<Image>(); icon.sprite = art.Facilities[f]; icon.preserveAspect = true;
@@ -144,10 +155,12 @@ namespace KiyiDongusu
                 for (int i = 0; i < G.State.materials.Length; i++)
                 {
                     if (G.Definitions.FacilityIndex(i) != f) continue;
-                    var label = Label("Lane_" + i, card, 16, 45 + lane * 60, 628, 46, "", 24);
+                    var icon = Panel("LaneIcon_" + i, card, 16, 52 + lane * 60, 32, 32, Color.white).GetComponent<Image>(); icon.sprite = art.Waste[i]; icon.preserveAspect = true;
+                    var label = Label("Lane_" + i, card, 56, 45 + lane * 60, 184, 46, "", 22);
+                    var details = Label("LaneDetails_" + i, card, 246, 45 + lane * 60, 398, 46, "", 22);
                     Panel("Track_" + i, card, 16, 89 + lane * 60, 628, 6, new Color32(216, 230, 224, 255));
                     var bar = Panel("Progress_" + i, card, 16, 89 + lane * 60, 0, 6, teal).GetComponent<Image>();
-                    lines.Add((i, label, bar)); lane++;
+                    lines.Add((i, label, details, bar)); lane++;
                 }
                 AddUpgrade(PurchaseKind.Speed, facility, card, 16, height - 66, 304, 66);
                 AddUpgrade(PurchaseKind.Capacity, facility, card, 336, height - 66, 308, 66);
@@ -156,9 +169,10 @@ namespace KiyiDongusu
             if (host.corePrototype) Label("PrototypeScope", facilities, 16, 242, 628, 230, "İLK OYNANABİLİR PROTOTİP\n\nBu çıktı tek kâğıt hattını doğrular.\nAltı malzeme / dört tesis tam sürüme eklenecek.\n\nGörseller geçicidir.", 28);
             AddUpgrade(PurchaseKind.Collector, 0, root, 24, 964, 570, 72);
             AddUpgrade(PurchaseKind.Manual, 0, root, 610, 964, 602, 72);
-            status = Label("SaveStatus", root, 1236, 958, 660, 114, "", 23);
+            Panel("SaveSurface", root, 1236, 964, 660, 92, Color.white, true);
+            status = Label("SaveStatus", root, 1252, 968, 628, 84, "", 21);
             Label("InputHint", root, 24, 1036, 1188, 40, "Tıkla / Space: merkez · Tab / Enter: düğmeler · ESC: duraklat", 24);
-            overlay = Panel("Overlay", root, 0, 0, 1920, 1080, new Color(0.04f, 0.12f, 0.15f, 0.92f)); overlay.GetComponent<Image>().raycastTarget = true;
+            overlay = Panel("Overlay", root, 0, 0, 1920, 1080, new Color(0.04f, 0.12f, 0.15f, 0.65f)); overlay.GetComponent<Image>().raycastTarget = true;
             overlay.gameObject.SetActive(false);
             Refresh();
         }
@@ -227,7 +241,10 @@ namespace KiyiDongusu
             {
                 var m = G.State.materials[line.i]; var d = G.Definitions.materials[line.i];
                 string name = d.id == "hdpe" ? "HDPE ambalaj" : d.id == "pet" ? "PET şişe" : d.id == "glass" ? "Ambalaj camı" : d.display_name_tr;
-                line.text.text = !m.unlocked ? name + " · Kilitli: " + d.unlock_processed_total_units + " işlenen" : name + " · Stok " + m.raw + " · " + (m.batch > 0 ? m.batch + " işlemde · " + ((m.batch - m.work) / G.Processing.Rate(line.i)).ToString("N1", tr) + " sn" : "Malzeme bekliyor");
+                line.text.text = name;
+                line.text.color = m.unlocked ? ink : new Color32(102, 118, 112, 255);
+                line.details.text = !m.unlocked ? d.unlock_processed_total_units + " işlenince ücretsiz" : "Ham " + m.raw + "  ·  " + (m.batch > 0 ? m.batch + " işlemde / " + ((m.batch - m.work) / G.Processing.Rate(line.i)).ToString("N1", tr) + " sn" : "Malzeme bekliyor");
+                line.details.color = m.unlocked ? ink : new Color32(102, 118, 112, 255);
                 line.bar.rectTransform.sizeDelta = new Vector2(m.batch > 0 ? (float)(628 * m.work / m.batch) : 0, 6);
             }
             foreach (var token in tokens)
@@ -235,7 +252,8 @@ namespace KiyiDongusu
                 var m = G.State.materials[token.i];
                 token.button.gameObject.SetActive(m.unlocked && m.visible > 0);
                 displayedGenerations[token.i] = m.tokenGeneration;
-                token.text.text = G.Definitions.materials[token.i].display_name_tr + " · +1 ham";
+                string[] shortNames = { "Kâğıt", "Karton", "PET", "HDPE", "Metal", "Cam" };
+                token.text.text = shortNames[token.i] + " · +1 ham";
             }
             foreach (var item in upgrades)
             {
@@ -245,8 +263,11 @@ namespace KiyiDongusu
                 string effect = item.kind == PurchaseKind.Collector ? " · " + G.Definitions.collector.nominal_units_per_second_by_rank[Math.Min(rank + 1, 5)].ToString("N2", tr) + "/sn" : item.kind == PurchaseKind.Manual ? " · " + G.Definitions.manual_collection_upgrade.work_per_click_by_rank[Math.Min(rank + 1, 3)].ToString("N2", tr) + "/tık" : "";
                 item.text.text = name + " " + rank + " → " + (locked ? "Kilitli" : cost < 0 ? "Maks." : Credits(cost) + " kr" + effect);
                 if (!locked && cost >= 0 && G.State.money < cost) item.text.text += "\n" + Credits(cost - G.State.money) + " kr eksik";
-                item.text.fontSize = 24;
+                item.text.fontSize = item.kind == PurchaseKind.Speed || item.kind == PurchaseKind.Capacity ? 22 : 24;
                 item.button.interactable = !host.Paused && !G.State.complete && !locked && cost >= 0 && G.State.money >= cost;
+                bool available = !locked && cost >= 0 && G.State.money >= cost && !G.State.complete;
+                item.button.GetComponent<Image>().color = available ? teal : new Color32(226, 232, 219, 255);
+                item.text.color = available ? Color.white : new Color32(71, 92, 86, 255);
             }
             double fraction = G.Collected / (double)G.TotalUnits;
             double[] thresholds = { .1, .25, .5, .75, .9, 1 };
@@ -263,8 +284,11 @@ namespace KiyiDongusu
             buttons.RemoveAll(b => b == null || b.transform.IsChildOf(overlay));
             for (int i = overlay.childCount - 1; i >= 0; i--) Destroy(overlay.GetChild(i).gameObject);
             overlay.gameObject.SetActive(true); host.Paused = true; MarkDirty();
-            Label("OverlayTitle", overlay, 380, 200, 1160, 100, title, 46, Color.white);
-            Label("OverlayExplanation", overlay, 380, 310, 1160, 180, explanation, 30, Color.white);
+            Panel("DialogShadow", overlay, 338, 154, 1260, 780, new Color(0, 0, 0, .13f), true);
+            Panel("DialogSurface", overlay, 330, 144, 1260, 780, pale, true);
+            Panel("DialogAccent", overlay, 380, 180, 92, 8, teal, true);
+            var heading = Label("OverlayTitle", overlay, 380, 200, 1160, 100, title, 46, ink); heading.font = ui.Bold;
+            Label("OverlayExplanation", overlay, 380, 310, 1160, 180, explanation, 28, ink);
         }
         void Resume() { overlay.gameObject.SetActive(false); host.Paused = false; MarkDirty(); }
         public void ShowInitial(bool loaded, bool recovery)
@@ -318,10 +342,10 @@ namespace KiyiDongusu
         void ShowResult()
         {
             ClearOverlay("Sahil tamamlandı", G.TotalUnits + " birim toplandı ve işlendi.\nBrüt ödül: " + Credits(G.State.earned) + " kredi · Oynanan süre: " + TimeSpan.FromSeconds(G.State.elapsed).ToString(@"mm\:ss") + "\n" + (host.corePrototype ? "Bu tek malzemeli ilk prototiptir." : "Dört tesiste altı bağımsız hat tamamlandı."));
-            result = Label("Result", overlay, 380, 760, 1160, 70, "Geliştirme sürümü · V" + Application.version, 24, Color.white);
+            result = Label("Result", overlay, 380, 760, 1160, 70, "Geliştirme sürümü · V" + Application.version, 24, ink);
             Button("New", overlay, 380, 560, 560, 90, "Yeni oyun…", ConfirmNewGame, out _);
             Button("Exit", overlay, 970, 560, 570, 90, "Kaydet ve çık", () => Application.Quit(), out _);
         }
-        void OnDestroy() { if (host != null && host.Feedback != null) host.Feedback.Notice -= ShowFeedback; }
+        void OnDestroy() { if (host != null && host.Feedback != null) host.Feedback.Notice -= ShowFeedback; ui?.Dispose(); }
     }
 }

@@ -4,7 +4,7 @@ Unity 2D Windows geliştirme prototipi. Çalışma adı geçicidir.
 
 ## Projeyi açma
 
-- Unity Hub ve **Unity 6000.5.0f1** kullanılır.
+- Unity Hub ve **Unity 6000.5.5f1** kullanılır. Windows kapanışındaki UUM-146676 düzeltmesi nedeniyle bu sürüm doğrulandı.
 - Unity Hub'dan deponun içindeki **KiyiDongusu/** klasörünü ekle.
 - İlk import işlemleri bitince **Assets/_Game/Scenes/Game.unity** sahnesini açıp Play'e bas.
 - Aynı projeyi iki Editor örneğiyle açma; paketleri veya Editor sürümünü kendiliğinden yükseltme.
@@ -18,6 +18,7 @@ Windows Build Support modülü kuruluyken Editor'deki **Kiyi Dongusu → Build A
 ```
 
 Betikteki Editor yolu yerel Unity Hub kurulumuna göre değiştirilebilir. Çıktı **Builds/** altına yazılır. Oyunu çalıştırırken exe ve bütün yan dosyaları birlikte tut.
+Farklı kurulum yeri için `-EditorPath 'C:\...\Editor\Unity.exe'` verilebilir.
 
 Development ve hızlandırılmış test kodunu içermeyen aday için **Build Release Candidate Windows** menüsü veya `-Profile Release` kullanılır. Aday çıktısı `-ReleaseCandidate` klasörüne yazılır; final kabulü ayrıca yapılır.
 

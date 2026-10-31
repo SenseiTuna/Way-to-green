@@ -1,8 +1,13 @@
-param([ValidateSet('Core','Full','Art','Release')][string]$Profile = 'Art')
+param([ValidateSet('Core','Full','Art','Release')][string]$Profile = 'Art', [string]$EditorPath)
 $ErrorActionPreference = 'Stop'
 $workspacePath = Split-Path $PSScriptRoot -Parent
 $projectPath = Join-Path $workspacePath 'KiyiDongusu'
-$editorPath = 'C:\Program Files\Unity\Hub\Editor\6000.5.0f1\Editor\Unity.exe'
+if (-not $EditorPath) {
+    $hubEditor = 'C:\Program Files\Unity\Hub\Editor\6000.5.5f1\Editor\Unity.exe'
+    $localEditor = Join-Path $workspacePath 'Builds\Toolchain\6000.5.5f1\Editor\Unity.exe'
+    $EditorPath = if(Test-Path -LiteralPath $hubEditor){$hubEditor}else{$localEditor}
+}
+if (-not (Test-Path -LiteralPath $EditorPath)) { throw 'Unity 6000.5.5f1 bulunamadı. -EditorPath ile kurulu Editor yolunu verin.' }
 if (Get-Process Unity -ErrorAction SilentlyContinue) { throw 'An Editor is already running. Use Kiyi Dongusu > Build in that Editor, or close it normally first. A second Editor was not started.' }
 New-Item -ItemType Directory -Path (Join-Path $workspacePath 'Evidence') -Force | Out-Null
 $sourcePath = Join-Path $workspacePath 'ECONOMY_REFERENCE.json'

@@ -1,4 +1,4 @@
-Kıyı Döngüsü / KiyiDongusu — V1.0.4.1 geliştirme prototipi
+Kıyı Döngüsü / KiyiDongusu — V1.0.5.0 geliştirme prototipi
 
 Windows x64. KiyiDongusu.exe dosyasını bu klasördeki diğer dosyalarla birlikte tutun.
 Tıkla / Space: merkez. Tab / Enter: düğmeler. ESC: duraklatma.
@@ -18,5 +18,5 @@ Bu prototip klasöründe oyuncu kaydı veya test bakiyesi dağıtılmaz.
 
 Bilinen sınır: tam deneyimin 15–25 dakika dengesi henüz insan oyuncuyla ölçülmedi.
 Otomatik hızlandırılmış doğrulama, normal tempolu oyuncu denemesinin yerine geçmez.
-Bilinen sorun: bu makinede normal kapanışın sonunda UnityPlayer.dll native hata kodu verebiliyor.
-İlerleme kapanıştan önce kaydediliyor; temiz kapanış/final teslim kabulü henüz geçmedi.
+Unity 6000.5.5f1 ile Windows kapanışındaki motor düzeltmesi kullanılır.
+Temiz kapanış, kayıt kontrolü ve final teslim kabulü ayrı doğrulanır.

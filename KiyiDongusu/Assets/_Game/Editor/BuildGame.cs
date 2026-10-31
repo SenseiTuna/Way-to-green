@@ -10,7 +10,7 @@ namespace KiyiDongusu.Editor
 {
     public static class BuildGame
     {
-        public const string ArtVersion = "1.0.4.1";
+        public const string ArtVersion = "1.0.5.0";
         [MenuItem("Kiyi Dongusu/Build Core Windows")]
         public static void Core() => Build(true);
         [MenuItem("Kiyi Dongusu/Build Full Windows")]
@@ -49,6 +49,16 @@ namespace KiyiDongusu.Editor
             var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions { scenes = new[] { scenePath }, locationPathName = output, target = BuildTarget.StandaloneWindows64, options = development ? BuildOptions.Development : BuildOptions.None });
             Debug.Log("KIYI_BUILD " + report.summary.result + " development=" + development + " bytes=" + report.summary.totalSize + " path=" + output);
             if (report.summary.result != BuildResult.Succeeded) throw new Exception("Windows build başarısız.");
+            string directory = Path.GetDirectoryName(output);
+            foreach (var pair in new[] {
+                new[] { "../CREDITS.txt", "CREDITS.txt" },
+                new[] { "../Tools/PROTOTYPE_NOTES.txt", "README.txt" },
+                new[] { "Assets/_Game/Resources/Typography/OFL.txt", "Lato-OFL.txt" }
+            }) if (File.Exists(pair[0])) File.Copy(pair[0], Path.Combine(directory, pair[1]), true);
+            string notes = Path.Combine(directory, "README.txt");
+            if (!development && File.Exists(notes)) File.WriteAllText(notes, File.ReadAllText(notes).Replace(
+                "Development Build ibaresi beklenir. Normal açılışta test otomasyonu etkin değildir.",
+                "Bu adayda Development Build ibaresi yoktur; hızlandırılmış test kodu derlemeye dahil değildir."));
         }
     }
 }

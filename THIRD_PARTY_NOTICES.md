@@ -11,3 +11,8 @@
 Paket mevcut yerel Unity kurulumundan aynı sürümle aktarılmıştır. Bu bileşenin MIT lisansı, oyun kaynakları veya AI görselleri için ayrıca bir lisans beyanı değildir.
 
 Unity ve diğer Unity paketleri kendi kullanım koşullarına tabidir. Oyundaki görsel/font atıfları [CREDITS.txt](CREDITS.txt) içindedir. İç üretim günlükleri yerelde tutulur.
+## Lato
+
+Lato Regular ve Bold, tyPoland Łukasz Dziedzic tarafından hazırlanmıştır; SIL Open Font License 1.1 ile kullanılır. Font dosyaları değiştirilmedi.
+
+Kaynak: [Google Fonts, sabit revizyon](https://github.com/google/fonts/tree/5d3b76120a319730fda218cc7410174a462b32cb/ofl/lato). Tam lisans [OFL.txt](KiyiDongusu/Assets/_Game/Resources/Typography/OFL.txt) içindedir; Windows çıktısına `Lato-OFL.txt` olarak da kopyalanır. Bu lisans oyunun kaynak kodunun lisansı değildir.
