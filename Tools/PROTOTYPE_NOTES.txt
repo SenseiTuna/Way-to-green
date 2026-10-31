@@ -1,10 +1,11 @@
-Kıyı Döngüsü / KiyiDongusu — V1.0.4.0 geliştirme prototipi
+Kıyı Döngüsü / KiyiDongusu — V1.0.4.1 geliştirme prototipi
 
 Windows x64. KiyiDongusu.exe dosyasını bu klasördeki diğer dosyalarla birlikte tutun.
 Tıkla / Space: merkez. Tab / Enter: düğmeler. ESC: duraklatma.
 Toplamak ham stok verir; işlem tamamlanınca kredi ödenir. Ekip alındıktan sonra otomatik toplama sürer.
 Tek sahilde 6 malzeme / 4 tesis vardır. Ortak tesislerin hatları paraleldir.
 Kayıt otomatik; oyun kapalıyken üretim yok. Yeni Oyun mevcut ilerlemeyi değiştirmeden önce onay ister.
+Kayıt yazılamazsa yeniden denenir; çıkış sırasında hata varsa oyun açık kalır ve uyarı gösterir.
 
 Bu bir final teslim değildir. Normal tempolu 15–25 dakika oyuncu denemesi ve son görsel/UI düzeltmeleri sürmektedir.
 Toplama, işlem, satın alma ve açılım sesleri vardır. Duraklatma menüsünden ses kapatılabilir ve Az Hareket açılabilir.

@@ -272,7 +272,7 @@ namespace KiyiDongusu
             if (recovery)
             {
                 ClearOverlay("Kayıt kontrolü gerekiyor", host.Saves.LastMessage);
-                if (loaded) Button("RestoreBackup", overlay, 380, 520, 560, 90, "Geçerli yedeği geri yükle", () => { host.Saves.ConfirmRecovery(); Resume(); }, out _);
+                if (loaded) Button("RestoreBackup", overlay, 380, 520, 560, 90, "Geçerli yedeği geri yükle", () => { if (host.TryRecover()) Resume(); }, out _);
                 Button("NewGame", overlay, 970, 520, 570, 90, "Yeni oyun…", ConfirmNewGame, out _);
             }
             else if (loaded)
@@ -287,6 +287,18 @@ namespace KiyiDongusu
             if (host.Saves.NeedsRecovery || G.State.complete) return;
             if (overlay.gameObject.activeSelf) { Resume(); return; }
             ShowPause();
+        }
+        public void ShowSaveFailure()
+        {
+            ClearOverlay("Kayıt tamamlanamadı", "İlerleme diske yazılamadığı için oyun açık tutuldu.\nBoş alanı ve klasöre yazma iznini kontrol edip yeniden dene.\nOyun bu ekranda durur; mevcut kayıt korunur.");
+            Button("RetrySave", overlay, 380, 520, 560, 90, "Yeniden kaydet", () => { if (host.TrySaveNow()) ShowPause(); else ShowSaveFailure(); }, out _);
+            Button("BackToGame", overlay, 970, 520, 570, 90, "Oyuna dön", Resume, out _);
+        }
+        public void ShowRecoveryFailure()
+        {
+            ShowInitial(host.HasLoadedSave, true);
+            var explanation = overlay.Find("OverlayExplanation").GetComponent<Text>();
+            explanation.text = "Yedek geri yüklenemedi. Dosyalar korunuyor.\nBoş alanı ve yazma iznini kontrol edip yeniden dene.";
         }
         void ShowPause()
         {

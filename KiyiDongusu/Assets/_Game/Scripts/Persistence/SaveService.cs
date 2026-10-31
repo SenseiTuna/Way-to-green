@@ -65,6 +65,7 @@ namespace KiyiDongusu
                 if (File.Exists(Path)) File.Replace(Path + ".tmp", Path, null); else File.Move(Path + ".tmp", Path);
             }
             CanWrite = true; NeedsRecovery = false;
+            LastMessage = "Geçerli yedek geri yüklendi. Kapalı geçen süre üretime eklenmedi.";
         }
         public void ConfirmNewGame()
         {

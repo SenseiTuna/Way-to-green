@@ -16,6 +16,7 @@ namespace KiyiDongusu
         public bool ValidationRun { get; private set; }
         bool needsSave;
         double saveTimer;
+        double retrySaveAfter;
         void Awake()
         {
             Application.runInBackground = true;
@@ -27,6 +28,7 @@ namespace KiyiDongusu
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
                 ValidationRun = RuntimeSmokeRunner.Requested;
                 if (ValidationRun) { directory = System.IO.Path.Combine(RuntimeSmokeRunner.OutputDirectory, "isolated-save-" + Guid.NewGuid().ToString("N")); corePrototype = false; }
+                if (RuntimeRecoveryChecks.Requested) { directory = RuntimeRecoveryChecks.Prepare(definitions); corePrototype = false; }
 #endif
                 Saves = new SaveService(directory, definitions, corePrototype);
                 var restored = Saves.Load();
@@ -38,8 +40,10 @@ namespace KiyiDongusu
                 View.Initialize(this);
                 Paused = HasLoadedSave || Saves.NeedsRecovery;
                 View.ShowInitial(HasLoadedSave, Saves.NeedsRecovery);
+                Application.wantsToQuit += TryPrepareQuit;
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
                 if (ValidationRun) gameObject.AddComponent<RuntimeSmokeRunner>().Initialize(this);
+                if (RuntimeRecoveryChecks.Requested) gameObject.AddComponent<RuntimeRecoveryChecks>().Initialize(this);
 #endif
                 Debug.Log("KIYI_READY version=" + Application.version + " profile=" + (corePrototype ? "core" : "full") + " save=" + Saves.Path);
             }
@@ -75,9 +79,9 @@ namespace KiyiDongusu
                 if (dt <= 5) { Game.Tick(dt); saveTimer += dt; }
                 if (Input.GetKeyDown(KeyCode.Space) || (Input.GetKeyDown(KeyCode.Return) && (EventSystem.current == null || EventSystem.current.currentSelectedGameObject == null))) CenterAction();
             }
-            if ((needsSave || saveTimer >= 10) && Saves.CanWrite)
+            if ((needsSave || saveTimer >= 10) && Saves.CanWrite && Time.realtimeSinceStartupAsDouble >= retrySaveAfter)
             {
-                Saves.Save(Game); needsSave = false; saveTimer = 0; View.MarkDirty();
+                TrySaveNow();
             }
         }
         public void CenterAction()
@@ -103,6 +107,27 @@ namespace KiyiDongusu
         }
         public void SetMuted(bool muted) { Game.State.muted = muted; Feedback.ApplyMute(); needsSave = true; View.MarkDirty(); }
         public void SetReducedMotion(bool reduced) { Game.State.reduceMotion = reduced; needsSave = true; View.MarkDirty(); }
-        void OnApplicationQuit() { if (Game != null && Saves != null && Saves.CanWrite) Saves.Save(Game); }
+        public bool TrySaveNow()
+        {
+            bool saved = Saves.Save(Game);
+            needsSave = !saved;
+            retrySaveAfter = saved ? 0 : Time.realtimeSinceStartupAsDouble + 2;
+            if (saved) saveTimer = 0;
+            View.MarkDirty();
+            return saved;
+        }
+        public bool TryPrepareQuit()
+        {
+            // Recovery files remain untouched when the user leaves without choosing recovery/new game.
+            if (Game == null || Saves == null || !Saves.CanWrite) return true;
+            if (TrySaveNow()) return true;
+            Paused = true; View.ShowSaveFailure(); return false;
+        }
+        public bool TryRecover()
+        {
+            try { Saves.ConfirmRecovery(); return true; }
+            catch (Exception error) { Debug.LogWarning("Kayıt geri yüklenemedi: " + error.Message); View.ShowRecoveryFailure(); return false; }
+        }
+        void OnDestroy() { Application.wantsToQuit -= TryPrepareQuit; }
     }
 }
