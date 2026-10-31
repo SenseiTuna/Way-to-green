@@ -87,7 +87,7 @@ namespace KiyiDongusu
             pileImage.sprite=collecting?art.PileAt(fraction):art.Facilities[facility];
             pileImage.rectTransform.sizeDelta=collecting?new Vector2(840,390):new Vector2(460,300);
             pileImage.rectTransform.anchoredPosition=collecting?Vector2.zero:new Vector2(190,-45);
-            center.interactable=!host.Paused&&!G.State.complete;
+            center.interactable=host.CanInteract;
             netText.text=T("Sorting net","Ayırma ağı")+"\n"+(G.NetDelivered==0?T("Drag loose litter here","Tekil çöpleri buraya sürükle"):T("Sorted: ","Ayrılan: ")+G.NetDelivered)+"\n"+T("+0.50 after recycling","İşlenince +0,50 kredi");
             foreach(var lane in lanes)
             {
@@ -99,7 +99,7 @@ namespace KiyiDongusu
             foreach(var item in litter)
             {
                 var m=G.State.materials[item.i];if(item.drag.Dragging)continue;
-                item.button.gameObject.SetActive(m.unlocked&&m.visible>0);item.drag.SetGeneration(m.tokenGeneration);item.button.interactable=!host.Paused&&!G.State.complete;
+                item.button.gameObject.SetActive(m.unlocked&&m.visible>0);item.drag.SetGeneration(m.tokenGeneration);item.button.interactable=host.CanInteract;
             }
             foreach(var item in upgrades)
             {
@@ -115,9 +115,9 @@ namespace KiyiDongusu
                     item.text.text=name+" "+rank+"\n"+(cost<0?T("Max: ","Maks: ")+effect:T("Next ","Sonraki ")+effect+"   "+Money(cost)+T(" cr"," kr"));
                 }
                 bool available=!locked&&cost>=0&&G.State.money>=cost&&!G.State.complete;
-                item.button.interactable=available&&!host.Paused;item.button.GetComponent<Image>().color=available?CoastTheme.Action:CoastTheme.Disabled;item.text.color=available?CoastTheme.White:CoastTheme.Muted;
+                item.button.interactable=available&&host.CanInteract;item.button.GetComponent<Image>().color=available?CoastTheme.Action:CoastTheme.Disabled;item.text.color=available?CoastTheme.White:CoastTheme.Muted;
             }
-            goal.text=NextGoal();saveText.text=host.Saves.LastMessage;
+            goal.text=TrackedQuest();saveText.text=host.Saves.LastMessage;RefreshQuestLog();
         }
         string NextGoal()
         {

@@ -21,10 +21,11 @@ namespace KiyiDongusu
             var events=new GameObject("EventSystem",typeof(EventSystem),typeof(StandaloneInputModule));events.GetComponent<EventSystem>().sendNavigationEvents=false;
             Panel("Header",root,32,24,1856,96,CoastTheme.Paper,true);
             Local("Title",root,58,40,450,64,"Coastal Loop","Kıyı Döngüsü",42,true);
-            totals=Label("Processed",root,610,36,430,60,"",22);
-            Panel("WorldProgressTrack",root,610,102,340,6,CoastTheme.Track);
-            progressFill=Panel("WorldProgress",root,610,102,0,6,CoastTheme.Action).GetComponent<Image>();
-            credits=Label("Credits",root,1120,40,490,64,"",42,null,true);
+            totals=Label("Processed",root,560,36,360,60,"",22);
+            Panel("WorldProgressTrack",root,560,102,340,6,CoastTheme.Track);
+            progressFill=Panel("WorldProgress",root,560,102,0,6,CoastTheme.Action).GetComponent<Image>();
+            credits=Label("Credits",root,980,40,410,64,"",42,null,true);
+            Button("QuestLog",root,1440,43,188,58,T("Quest log","Görevler"),()=>ShowQuestLog(),out var questButton,true);words.Add((questButton,"Quest log","Görevler"));
             Button("Pause",root,1650,43,208,58,T("Settings","Ayarlar"),TogglePause,out var settingsText,true);words.Add((settingsText,"Settings","Ayarlar"));
 
             var dock=Panel("FacilityPanel",root,1450,150,430,790,CoastTheme.Paper,true);
@@ -82,6 +83,7 @@ namespace KiyiDongusu
             host.Feedback.Notice+=ShowFeedback;
             overlay=Panel("Overlay",root,0,0,1920,1080,CoastTheme.Scrim);overlay.GetComponent<Image>().raycastTarget=true;overlay.gameObject.SetActive(false);
             ArrangeGameplay();
+            InitializeNarrativeUi();
             var cursor=new GameObject("CoastalHandCursor").AddComponent<CoastHandCursor>();cursor.Initialize(host,art);
             Refresh();
         }

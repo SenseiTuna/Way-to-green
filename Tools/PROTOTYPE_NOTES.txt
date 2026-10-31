@@ -1,4 +1,4 @@
-Coastal Loop / KiyiDongusu — V1.0.7.0 preview
+Coastal Loop / KiyiDongusu — V1.0.8.1 preview
 Windows x64. Keep KiyiDongusu.exe with all accompanying files.
 Click / Space: collect from the pile; help processing while it is empty.
 Drag loose litter into the sorting net for +0.50 credits after that piece is recycled.
@@ -15,3 +15,7 @@ No player save or test currency is distributed in this folder.
 This preview is not final delivery. Normal human playtime and listening/balance checks remain.
 Development Build ibaresi beklenir. Normal açılışta test otomasyonu etkin değildir.
 Unity 6000.5.5f1 includes the Windows UI Automation shutdown fix.
+
+Mira introduces the shore and new mechanics. Continue or Skip; switch the guide off in settings.
+Quest log tracks eight shore tasks including crew work and existing progress. Task rewards are information, not currency.
+Environmental notes include sources. Glass processing durations describe this demo, not real factories.

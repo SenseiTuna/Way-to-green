@@ -11,6 +11,7 @@ namespace KiyiDongusu
         public Sprite Net { get; }
         public Sprite HandOpen { get; }
         public Sprite HandPinch { get; }
+        public Sprite[] Mira{get;}=new Sprite[3];
         readonly Sprite[] stages=new Sprite[3];
         public Sprite PileAt(float fraction)=>fraction>.75f?Pile:fraction>.5f?stages[0]??Pile:fraction>.25f?stages[1]??Pile:stages[2]??Pile;
         public GameArt()
@@ -22,6 +23,7 @@ namespace KiyiDongusu
             Pile = pileTexture == null ? null : Cut(pileTexture, new Rect(32, 160, 1384, 700));
             Grid("Art/WasteAtlas", 3, 2, Waste);
             Grid("Art/FacilityAtlas", 2, 2, Facilities);
+            Grid("Art/MiraAtlas",3,1,Mira);
             var parts=Resources.Load<Texture2D>("Art/InteractionAtlas");
             if(parts!=null) Net=Cut(parts,new Rect(0,0,parts.width*.39f,parts.height));
             var hands=Resources.Load<Texture2D>("Art/HandAtlas");
@@ -45,7 +47,13 @@ namespace KiyiDongusu
             var texture = Resources.Load<Texture2D>(path);
             if (texture == null) return;
             float width = texture.width / (float)columns, height = texture.height / (float)rows;
-            for (int i = 0; i < destination.Length; i++) destination[i] = Cut(texture, new Rect((i % columns) * width, (rows - 1 - i / columns) * height, width, height));
+            for(int i=0;i<destination.Length;i++)
+            {
+                int x=Mathf.RoundToInt((i%columns)*width),y=Mathf.RoundToInt((rows-1-i/columns)*height);
+                int right=Mathf.RoundToInt((i%columns+1)*width),top=Mathf.RoundToInt((rows-i/columns)*height);
+                if(path=="Art/MiraAtlas"){int trim=Mathf.RoundToInt((right-x)*.08f);x+=trim;right-=trim;}
+                destination[i]=Cut(texture,new Rect(x,y,right-x,top-y));
+            }
         }
     }
 }

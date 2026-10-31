@@ -41,6 +41,7 @@ namespace KiyiDongusu
             if (S.pileRemaining == 0) return false;
             S.materials[S.pileMaterial].raw++;
             S.pileRemaining--;
+            game.SyncNarrative();
             if (S.pileRemaining == 0)
             {
                 S.refillRemaining = game.Definitions.sources.pile_refill_seconds / game.Definitions.tempo.multiplier;
@@ -64,6 +65,7 @@ namespace KiyiDongusu
             if (!m.unlocked || m.visible == 0 || m.tokenGeneration != generation) return false;
             m.visible--;
             m.raw++;
+            game.SyncNarrative();
             return true;
         }
         bool CollectLoose()

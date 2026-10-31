@@ -42,9 +42,11 @@ namespace KiyiDongusu
             Processing = new ProcessingSystem(this);
             if (restored == null) { UpdateProgress(); Supply.SpawnPile(); Supply.RefreshTokens(); }
             else if(State.materials!=null)for(int i=0;i<State.materials.Length;i++)if(State.materials[i]!=null&&State.materials[i].visible>0&&State.materials[i].scatterX==0&&State.materials[i].scatterY==0)ScatterPlacement.Spawn(State,i);
+            NarrativeProgress.Initialize(this,restored!=null);
             Validate();
         }
         public void RecordReward(long reward) { rewards.Enqueue((State.elapsed, reward)); BatchRewarded?.Invoke(reward); }
+        internal void SyncNarrative(){if(NarrativeProgress.Sync(this))ImportantChange?.Invoke();}
         public double RecentIncome()
         {
             while (rewards.Count > 0 && State.elapsed - rewards.Peek().time > 10) rewards.Dequeue();
@@ -73,7 +75,7 @@ namespace KiyiDongusu
         {
             if (!TokenAction(i, generation)) return false;
             State.materials[i].netRaw++;
-            Changed?.Invoke(); ImportantChange?.Invoke(); return true;
+            SyncNarrative();Changed?.Invoke(); ImportantChange?.Invoke(); return true;
         }
         public void Tick(double seconds)
         {
@@ -114,7 +116,7 @@ namespace KiyiDongusu
                 case PurchaseKind.Speed: State.facilities[facility].speed++; break;
                 case PurchaseKind.Capacity: State.facilities[facility].capacity++; break;
             }
-            Changed?.Invoke(); ImportantChange?.Invoke(); return true;
+            SyncNarrative();Changed?.Invoke(); ImportantChange?.Invoke(); return true;
         }
         void UpdateProgress()
         {
@@ -127,11 +129,13 @@ namespace KiyiDongusu
                 bool empty = true; foreach (var m in State.materials) empty &= m.raw == 0 && m.batch == 0;
                 if (empty) { State.complete = true; State.resultCount++; important = true; }
             }
+            important|=NarrativeProgress.Sync(this);
             if (important) ImportantChange?.Invoke();
         }
         public void Validate()
         {
             var s = State;
+            NarrativeProgress.Validate(this);
             if(s.litterSeed<=0)throw new InvalidOperationException("Invalid litter layout seed.");
             if(s.settingsVersion!=1 || (s.language!="en"&&s.language!="tr") || !VolumeValid(s.masterVolume)||!VolumeValid(s.musicVolume)||!VolumeValid(s.effectsVolume)||!VolumeValid(s.ambienceVolume) || s.displayWidth<0||s.displayHeight<0 || (s.displayWidth==0)!=(s.displayHeight==0))throw new InvalidOperationException("Invalid preferences.");
             if (s.schemaVersion != 1 || s.balanceId != Definitions.balance_id || s.materials == null || s.materials.Length != (s.corePrototype ? 1 : Definitions.materials.Length) || s.facilities == null || s.facilities.Length != Definitions.facilities.Length) throw new InvalidOperationException("Kayıt şeması veya denge kimliği uyumsuz.");

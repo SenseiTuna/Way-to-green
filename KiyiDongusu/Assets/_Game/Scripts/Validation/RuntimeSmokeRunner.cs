@@ -13,7 +13,7 @@ namespace KiyiDongusu
         [Serializable] sealed class Report
         {
             public string environment, version, utc, status, error, policy;
-            public int processed, total, resultCount, acceptedActions;
+            public int processed, total, resultCount, acceptedActions, completedTasks;
             public long earned, spent, money;
             public double simulatedSeconds, wallSeconds;
             public bool snapshotRoundTrip, allUnlocks, parallelObserved, shoreRevealPlayed;
@@ -26,6 +26,12 @@ namespace KiyiDongusu
         bool finished;
         double nextCapture = 300;
         public static bool Requested => Array.IndexOf(Environment.GetCommandLineArgs(), "--kiyi-smoke-test") >= 0;
+        public static void ValidateTestArguments(string[] args)
+        {
+            string[] known={"--kiyi-smoke-test","--kiyi-recovery-test","--kiyi-test-output","--kiyi-capture-progress","--kiyi-feature-check","--kiyi-manual-check","--kiyi-presentation-check","--kiyi-story-test","--kiyi-typography-check"};
+            bool test=false,any=false;foreach(string arg in args){if(!arg.StartsWith("--kiyi-",StringComparison.Ordinal))continue;any=true;if(Array.IndexOf(known,arg)<0)throw new ArgumentException("Unknown QA argument; refusing to open a player profile: "+arg);test|=arg=="--kiyi-smoke-test"||arg=="--kiyi-recovery-test";}
+            if(any&&!test)throw new ArgumentException("QA options require an isolated smoke or recovery profile.");
+        }
         public static string OutputDirectory
         {
             get
@@ -93,9 +99,10 @@ namespace KiyiDongusu
             var game = host.Game;
             report.total = game.TotalUnits; report.processed = game.Processed; report.earned = game.State.earned; report.spent = game.State.spent; report.money = game.State.money; report.resultCount = game.State.resultCount;
             report.simulatedSeconds = game.State.elapsed; report.wallSeconds = Time.realtimeSinceStartup - start;
+            report.completedTasks=NarrativeProgress.CompletedCount(game);
             report.allUnlocks = true; foreach (var m in game.State.materials) report.allUnlocks &= m.unlocked;
             report.error = error == null ? "" : error.ToString();
-            report.status = error == null && report.processed == 6000 && report.earned == 1056000 && report.resultCount == 1 && report.snapshotRoundTrip && report.allUnlocks && report.parallelObserved ? "PASS" : "FAIL";
+            report.status = error == null && report.processed == 6000 && report.earned == 1056000 && report.resultCount == 1 && report.completedTasks==8 && report.snapshotRoundTrip && report.allUnlocks && report.parallelObserved ? "PASS" : "FAIL";
             File.WriteAllText(Path.Combine(directory, "runtime-report.json"), JsonUtility.ToJson(report, true));
             Debug.Log("KIYI_WINDOWS_SMOKE " + report.status + " output=" + directory);
             host.Saves.Save(game);
@@ -113,6 +120,8 @@ namespace KiyiDongusu
             if(!report.shoreRevealPlayed){report.status="FAIL";report.error="Shore ending did not reveal its clean state";}
             File.WriteAllText(Path.Combine(directory,"runtime-report.json"),JsonUtility.ToJson(report,true));
             ScreenCapture.CaptureScreenshot(Path.Combine(directory,"result-after.png"));yield return new WaitForSecondsRealtime(1);
+            var review=GameObject.Find("ReviewShoreTasks");if(review==null){report.status="FAIL";report.error="Ending has no quest review";}else{review.GetComponent<UnityEngine.UI.Button>().onClick.Invoke();yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(directory,"finished-tasks.png"));}
+            File.WriteAllText(Path.Combine(directory,"runtime-report.json"),JsonUtility.ToJson(report,true));
             Application.Quit(report.status == "PASS" ? 0 : 1);
         }
         IEnumerator CaptureProgress(int seconds)

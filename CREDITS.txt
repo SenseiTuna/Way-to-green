@@ -12,3 +12,10 @@ Game amounts and timings are fictional balancing values.
 Internal production notes and prompts remain with the project owner.
 TextMeshPro SDF shaders: Unity uGUI 2.5.0 bundled resources, Unity Companion License.
 Full notice: TMP-LICENSE.md included with the Windows build.
+
+Mira portraits: OpenAI image_gen, original shore-volunteer character, three expressions.
+Environmental notes: Ocean Conservancy (2025 ICC report, 2024 cleanup data); NOAA Marine Debris; Glass Packaging Institute Facts About Glass.
+https://oceanconservancy.org/wp-content/uploads/2025/09/FINAL_ICCAnnualReport_Digital.pdf
+https://oceanservice.noaa.gov/education/tutorial-coastal/marine-debris/md03.html
+https://www.gpi.org/facts-about-glass
+Cleanup figures refer to that program and year, not a global annual total. Game processing times are fictional.

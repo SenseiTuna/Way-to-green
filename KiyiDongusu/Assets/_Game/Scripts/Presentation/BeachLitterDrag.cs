@@ -18,7 +18,7 @@ namespace KiyiDongusu
         }
         public void OnBeginDrag(PointerEventData e)
         {
-            if(host.Paused||host.Game.State.complete||host.Game.State.materials[material].visible==0)return;
+            if(!host.CanInteract||host.Game.State.materials[material].visible==0)return;
             Dragging=true;heldGeneration=generation;homeSibling=transform.GetSiblingIndex();rect.pivot=Vector2.one*.5f;transform.SetAsLastSibling();OnDrag(e);
         }
         public void OnDrag(PointerEventData e){if(Dragging)rect.position=e.position;}

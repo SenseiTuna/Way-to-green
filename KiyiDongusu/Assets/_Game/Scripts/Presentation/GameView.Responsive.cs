@@ -18,8 +18,8 @@ namespace KiyiDongusu
         void ArrangeGameplay()
         {
             var header=(RectTransform)root.Find("Header");header.anchorMin=new Vector2(0,1);header.anchorMax=Vector2.one;header.sizeDelta=new Vector2(-64,96);
-            Anchor("Pause",Vector2.one,-270,-43);Anchor("Credits",Vector2.one,-800,-40);
-            Anchor("Processed",new Vector2(.5f,1),-350,-36);Anchor("WorldProgressTrack",new Vector2(.5f,1),-350,-102);Anchor("WorldProgress",new Vector2(.5f,1),-350,-102);
+            Anchor("Pause",Vector2.one,-270,-43);Anchor("QuestLog",Vector2.one,-480,-43);Anchor("Credits",Vector2.one,-940,-40);
+            Anchor("Processed",new Vector2(.5f,1),-400,-36);Anchor("WorldProgressTrack",new Vector2(.5f,1),-400,-102);Anchor("WorldProgress",new Vector2(.5f,1),-400,-102);
             Anchor("FacilityPanel",Vector2.one,-470,-150);Anchor("SaveSign",new Vector2(1,0),-470,130);Anchor("SaveStatus",new Vector2(1,0),-454,122);
             Anchor("CenterRole",Vector2.one*.5f,-480,278);Anchor("CenterAction",Vector2.one*.5f,-510,202);Anchor("PileRemaining",Vector2.one*.5f,-400,-210);
             Anchor("Collector_0",new Vector2(.5f,0),-490,146);Anchor("Manual_0",new Vector2(.5f,0),-30,146);

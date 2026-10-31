@@ -19,6 +19,7 @@ namespace KiyiDongusu
             public List<Check> checks = new List<Check>();
         }
         public static bool Requested => Array.IndexOf(Environment.GetCommandLineArgs(), "--kiyi-recovery-test") >= 0;
+        public static bool StoryRequested=>Array.IndexOf(Environment.GetCommandLineArgs(),"--kiyi-story-test")>=0;
         static string output;
         GameBootstrap host;
         readonly Report report = new Report();
@@ -91,6 +92,7 @@ namespace KiyiDongusu
             if (Array.IndexOf(Environment.GetCommandLineArgs(), "--kiyi-feature-check") >= 0) yield return Features();
             if (Array.IndexOf(Environment.GetCommandLineArgs(), "--kiyi-typography-check") >= 0) yield return Typography();
             if (Array.IndexOf(Environment.GetCommandLineArgs(), "--kiyi-presentation-check") >= 0) yield return Presentation();
+            if (StoryRequested) yield return Stories();
             report.status = report.checks.TrueForAll(c => c.status == "PASS") ? "PASS" : "FAIL";
             File.WriteAllText(Path.Combine(output, "recovery-report.json"), JsonUtility.ToJson(report, true));
             Debug.Log("KIYI_RECOVERY_CHECKS " + report.status + " path=" + output);

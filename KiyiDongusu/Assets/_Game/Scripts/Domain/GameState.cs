@@ -28,5 +28,6 @@ namespace KiyiDongusu
         public double masterVolume, musicVolume, effectsVolume, ambienceVolume;
         public bool fullscreen;
         public int litterSeed;
+        public NarrativeState story;
     }
 }

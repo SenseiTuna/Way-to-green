@@ -1,0 +1,274 @@
+{
+  "nodes": [
+    {
+      "id": 0,
+      "pages": [
+        {
+          "en": "I used to spend my summers here. I am Mira, a local shore volunteer. Let us give this cove a fresh start.",
+          "tr": "Çocukken yazları bu kıyıya gelirdim. Ben Mira, bir kıyı gönüllüsüyüm. Bu koya birlikte yeniden hayat verelim.",
+          "fact": "",
+          "pose": 0
+        },
+        {
+          "en": "People are already making a difference: in 2024, International Coastal Cleanup volunteers collected about 3.4 million kg of litter.",
+          "tr": "İnsanlar şimdiden fark yaratıyor: 2024 yılında International Coastal Cleanup gönüllüleri yaklaşık 3,4 milyon kg atık topladı.",
+          "fact": "cleanup",
+          "pose": 1
+        },
+        {
+          "en": "Pick up litter from the pile. It becomes raw stock; the mill pays credits when recycling finishes. Your first task: collect 20 pieces.",
+          "tr": "Yığından atık topla. Önce ham stok oluşur; tesis işleme bitince kredi verir. İlk görevin: 20 parça topla.",
+          "fact": "loop",
+          "pose": 1
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "pages": [
+        {
+          "en": "That first batch is recycled! Collection and processing are two parts of the same loop. Use credits to improve your equipment.",
+          "tr": "İlk parti geri kazanıldı! Toplama ve işleme aynı döngünün iki parçası. Kredilerle ekipmanını geliştirebilirsin.",
+          "fact": "loop",
+          "pose": 2
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "pages": [
+        {
+          "en": "The cardboard line has opened for free. It shares the paper mill, and both lines work at the same time.",
+          "tr": "Karton hattı ücretsiz açıldı. Kâğıt merkezini paylaşırlar ve iki hat aynı anda çalışır.",
+          "fact": "parallel",
+          "pose": 1
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "pages": [
+        {
+          "en": "The PET line is ready. Giving plastic another useful life matters: many plastics fragment into microplastics in the environment.",
+          "tr": "PET hattı hazır. Plastiğe yeniden kullanım olanağı vermek önemli: birçok plastik doğada mikroplastiklere ayrılıyor.",
+          "fact": "plastic",
+          "pose": 1
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "pages": [
+        {
+          "en": "Your HDPE line is open. PET and HDPE use separate lines in the plastic workshop, with different processing times.",
+          "tr": "HDPE hattı açıldı. PET ve HDPE plastik merkezinde ayrı hatlarda, farklı sürelerle işlenir.",
+          "fact": "",
+          "pose": 1
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "pages": [
+        {
+          "en": "The metal works is ready. It starts automatically when aluminium stock is available. You can keep collecting while it works.",
+          "tr": "Metal merkezi hazır. Alüminyum stoğu olduğunda otomatik çalışır. O işlerken sen toplamaya devam edebilirsin.",
+          "fact": "",
+          "pose": 1
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "pages": [
+        {
+          "en": "Glass gets another chance. Properly sorted bottle and jar glass can be recycled again and again without losing quality.",
+          "tr": "Cam yeni bir şans kazanıyor. Uygun ayrılan şişe ve kavanoz camı kalitesini kaybetmeden tekrar tekrar geri dönüştürülebilir.",
+          "fact": "glass",
+          "pose": 1
+        },
+        {
+          "en": "At your current settings, a full batch of {capacity} glass game units takes {seconds}s. These are demo timings; upgrades change them.",
+          "tr": "Mevcut ayarlarında tam bir parti, {capacity} cam oyun birimini {seconds} sn içinde işler. Bunlar demo süreleridir; geliştirmeler süreyi değiştirir.",
+          "fact": "timing",
+          "pose": 1
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "pages": [
+        {
+          "en": "Your collection crew is on the job! They pick up piles and loose litter without clicks. You can still help or sort pieces into the net.",
+          "tr": "Toplama ekibin iş başında! Yığından ve tekil atıklardan tıklama olmadan toplarlar. Sen de yardım edebilir veya ağa ayırabilirsin.",
+          "fact": "",
+          "pose": 2
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "pages": [
+        {
+          "en": "Every piece recycled. Thank you for bringing this shore back.",
+          "tr": "Her parça geri kazanıldı. Bu sahile yeniden hayat verdiğin için teşekkürler.",
+          "fact": "finite",
+          "pose": 2
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "pages": [
+        {
+          "en": "Welcome back! Your work is still here. I have added your existing progress to the shore tasks. Check the Quest Log whenever you like.",
+          "tr": "Tekrar hoş geldin! Emeğin burada duruyor. Önceki ilerlemeni sahil görevlerine ekledim. Dilediğinde görev günlüğüne bakabilirsin.",
+          "fact": "",
+          "pose": 0
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "pages": [
+        {
+          "en": "A quarter of the litter is collected. We are making room for the shore again!",
+          "tr": "Atıkların dörtte biri toplandı. Sahile yeniden alan açıyoruz!",
+          "fact": "",
+          "pose": 2
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "pages": [
+        {
+          "en": "Half the litter is collected. Look at the difference you are making.",
+          "tr": "Atıkların yarısı toplandı. Yarattığın farka bir bak.",
+          "fact": "",
+          "pose": 2
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "pages": [
+        {
+          "en": "Three quarters collected! Keep the lines running while we gather the rest.",
+          "tr": "Dörtte üçü toplandı! Kalanları toplarken hatlar çalışmayı sürdürsün.",
+          "fact": "",
+          "pose": 2
+        }
+      ]
+    }
+  ],
+  "quests": [
+    {
+      "en": "First steps",
+      "tr": "İlk adımlar",
+      "descriptionEn": "Collect 20 pieces of any material.",
+      "descriptionTr": "Herhangi bir malzemeden 20 parça topla.",
+      "fact": "cleanup"
+    },
+    {
+      "en": "Close the loop",
+      "tr": "Döngüyü tamamla",
+      "descriptionEn": "Recycle 20 paper pieces.",
+      "descriptionTr": "20 kâğıt işle.",
+      "fact": "loop"
+    },
+    {
+      "en": "Cardboard counts",
+      "tr": "Karton da önemli",
+      "descriptionEn": "Collect 25 cardboard pieces.",
+      "descriptionTr": "25 karton topla.",
+      "fact": "parallel"
+    },
+    {
+      "en": "Bottle patrol",
+      "tr": "Şişelerin peşinde",
+      "descriptionEn": "Collect 30 PET pieces.",
+      "descriptionTr": "30 PET topla.",
+      "fact": "plastic"
+    },
+    {
+      "en": "Keep them separate",
+      "tr": "Ayrı hatlar",
+      "descriptionEn": "Recycle 20 HDPE pieces.",
+      "descriptionTr": "20 HDPE işle.",
+      "fact": "plastic"
+    },
+    {
+      "en": "Metal matters",
+      "tr": "Metali değerlendir",
+      "descriptionEn": "Recycle 25 aluminium pieces.",
+      "descriptionTr": "25 alüminyum işle.",
+      "fact": "loop"
+    },
+    {
+      "en": "Another life for glass",
+      "tr": "Cama yeni hayat",
+      "descriptionEn": "Recycle 20 glass pieces.",
+      "descriptionTr": "20 cam işle.",
+      "fact": "glass"
+    },
+    {
+      "en": "A clear shore",
+      "tr": "Tertemiz bir sahil",
+      "descriptionEn": "Collect and recycle all {total} pieces.",
+      "descriptionTr": "{total} parçanın tümünü topla ve işle.",
+      "fact": "finite"
+    }
+  ],
+  "facts": [
+    {
+      "id": "cleanup",
+      "en": "In 2024, International Coastal Cleanup volunteers removed about 3.4 million kilograms of litter from beaches and waterways.",
+      "tr": "2024 yılında International Coastal Cleanup gönüllüleri kıyılardan ve su yollarından yaklaşık 3,4 milyon kilogram atık topladı.",
+      "source": "Ocean Conservancy, 2025 report / 2024 cleanup data",
+      "url": "https://oceanconservancy.org/wp-content/uploads/2025/09/FINAL_ICCAnnualReport_Digital.pdf"
+    },
+    {
+      "id": "plastic",
+      "en": "Many plastics break into smaller pieces called microplastics rather than fully disappearing in the environment.",
+      "tr": "Birçok plastik doğada tamamen yok olmak yerine mikroplastik adı verilen küçük parçalara ayrılır.",
+      "source": "NOAA Ocean Service, Marine debris",
+      "url": "https://oceanservice.noaa.gov/education/tutorial-coastal/marine-debris/md03.html"
+    },
+    {
+      "id": "glass",
+      "en": "Properly sorted container glass can be recycled repeatedly without losing quality or purity.",
+      "tr": "Uygun şekilde ayrılan ambalaj camı kalite ve saflığını kaybetmeden tekrar tekrar geri dönüştürülebilir.",
+      "source": "Glass Packaging Institute, Facts about glass",
+      "url": "https://www.gpi.org/facts-about-glass"
+    },
+    {
+      "id": "loop",
+      "en": "In this demo, collecting transfers litter into raw stock. Completed recycling batches pay credits.",
+      "tr": "Bu demoda toplamak atığı ham stoğa aktarır. Tamamlanan işleme partileri kredi kazandırır.",
+      "source": "Game mechanics",
+      "url": ""
+    },
+    {
+      "id": "parallel",
+      "en": "Paper and cardboard share a building, but each line processes independently in parallel.",
+      "tr": "Kâğıt ve karton aynı binayı paylaşır; her hat kendi süresiyle paralel çalışır.",
+      "source": "Game mechanics",
+      "url": ""
+    },
+    {
+      "id": "finite",
+      "en": "This shore contains {total} game pieces. Clearing it means collecting and recycling every piece.",
+      "tr": "Bu sahilde {total} oyun birimi var. Tam temizlik için her parçayı toplamak ve işlemek gerekiyor.",
+      "source": "Game mechanics",
+      "url": ""
+    },
+    {
+      "id": "timing",
+      "en": "At current settings, a full glass batch takes {seconds}s. These are game timings.",
+      "tr": "Mevcut ayarlarda tam cam partisi {seconds} sn sürer. Bunlar oyun süreleridir.",
+      "source": "Game mechanics",
+      "url": ""
+    }
+  ]
+}

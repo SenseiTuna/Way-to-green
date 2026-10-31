@@ -12,6 +12,8 @@ namespace KiyiDongusu
         public GameView View { get; private set; }
         public GameFeedback Feedback { get; private set; }
         public CoastAudio Audio { get; private set; }
+        public NarrativeDirector Story{get;private set;}
+        public bool CanInteract=>!Paused&&!(Story!=null&&Story.IntroBlocking)&&!(View!=null&&View.ModalOpen)&&!Game.State.complete;
         public bool Paused { get; set; }
         public bool HasLoadedSave { get; private set; }
         public bool ValidationRun { get; private set; }
@@ -24,6 +26,9 @@ namespace KiyiDongusu
             Application.targetFrameRate = 60;
             try
             {
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+                RuntimeSmokeRunner.ValidateTestArguments(Environment.GetCommandLineArgs());
+#endif
                 var definitions = GameDefinitions.Load();
                 string directory = Application.isEditor ? System.IO.Path.Combine(Application.persistentDataPath, "EditorPreview") : Application.persistentDataPath;
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
@@ -44,6 +49,11 @@ namespace KiyiDongusu
                 View.Initialize(this);
                 Paused = HasLoadedSave || Saves.NeedsRecovery;
                 View.ShowInitial(HasLoadedSave, Saves.NeedsRecovery);
+                bool quietStory=ValidationRun;
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+                quietStory|=RuntimeRecoveryChecks.Requested&&!RuntimeRecoveryChecks.StoryRequested;
+#endif
+                Story=gameObject.AddComponent<NarrativeDirector>();Story.Initialize(this,quietStory);
                 if(!Application.isEditor&&!ValidationRun)
                 {
                     if(Game.State.displayWidth>0)SetDisplay(Game.State.displayWidth,Game.State.displayHeight,Game.State.fullscreen);
@@ -75,17 +85,20 @@ namespace KiyiDongusu
             Game.State.muted = muted; Game.State.reduceMotion = reduced;
             Game.State.language=preferences.language;Game.State.masterVolume=preferences.masterVolume;Game.State.musicVolume=preferences.musicVolume;Game.State.effectsVolume=preferences.effectsVolume;Game.State.ambienceVolume=preferences.ambienceVolume;
             Game.State.displayWidth=preferences.displayWidth;Game.State.displayHeight=preferences.displayHeight;Game.State.fullscreen=preferences.fullscreen;
+            Game.State.story.enabled=preferences.story.enabled;NarrativeProgress.Sync(Game);
             Feedback.BindSession(Game);
             Audio.Apply();
             Paused = false; needsSave = true; saveTimer = 0;
+            Story.Bind();Story.Step(0);
             View.MarkDirty();
         }
         void Update()
         {
             if (Game == null) return;
             if (ValidationRun) return;
+            Story.Step(Time.unscaledDeltaTime);
             if (Input.GetKeyDown(KeyCode.Escape)) View.TogglePause();
-            if (!Paused && !Game.State.complete)
+            if (!Paused && !Story.IntroBlocking && !Game.State.complete)
             {
                 // OS sleep/resume gaps do not become production; ordinary frames retain their time.
                 double dt = Time.unscaledDeltaTime;
@@ -99,7 +112,7 @@ namespace KiyiDongusu
         }
         public void CenterAction()
         {
-            if (Paused || Game.State.complete) return;
+            if (!CanInteract) return;
             int before = Game.Collected, material = Game.State.pileMaterial;
             bool active = false; foreach (var m in Game.State.materials) active |= m.batch > 0;
             if (!Game.CenterAction()) return;
@@ -108,11 +121,11 @@ namespace KiyiDongusu
         }
         public void TokenAction(int material, int generation)
         {
-            if (!Paused && Game.TokenAction(material, generation)) Feedback.Collection(material, 1);
+            if (CanInteract && Game.TokenAction(material, generation)) Feedback.Collection(material, 1);
         }
         public void Purchase(PurchaseKind kind, int facility)
         {
-            if (!Paused && Game.Purchase(kind, facility))
+            if (CanInteract && Game.Purchase(kind, facility))
             {
                 Feedback.Purchase(kind, facility);
                 Debug.Log("KIYI_PURCHASE " + kind + " rank=" + Game.Rank(kind, facility) + " money=" + Game.State.money);
@@ -120,10 +133,11 @@ namespace KiyiDongusu
         }
         public bool NetAction(int material,int generation)
         {
-            if(Paused||!Game.NetDropAction(material,generation))return false;
+            if(!CanInteract||!Game.NetDropAction(material,generation))return false;
             Feedback.NetDelivery();return true;
         }
         public void SetLanguage(string language){Game.State.language=language=="tr"?"tr":"en";GameText.Language=Game.State.language;needsSave=true;View.MarkDirty();}
+        public void MarkNarrativeChanged(){needsSave=true;View.MarkDirty();}
         public void SetVolume(int channel,float value)
         {
             value=Mathf.Clamp01(value);var s=Game.State;

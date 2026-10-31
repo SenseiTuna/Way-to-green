@@ -137,6 +137,7 @@ namespace KiyiDongusu
         }
         public void Tap(){Cue(FeedbackKind.Collect);}
         public void NetDelivery(){Cue(FeedbackKind.Purchase);Notice?.Invoke(new FeedbackNotice(FeedbackKind.Net,GameText.T("Nice catch! +0.50 after recycling","Güzel yakaladın! İşlenince +0,50 kredi")));}
+        public void NarrativeNotice(string text){Cue(FeedbackKind.Purchase);Notice?.Invoke(new FeedbackNotice(FeedbackKind.Unlock,text));}
         void OnDestroy()
         {
             if (session != null) { session.BatchRewarded -= OnReward; session.ImportantChange -= OnImportant; }
