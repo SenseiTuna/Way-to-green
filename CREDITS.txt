@@ -19,3 +19,7 @@ https://oceanconservancy.org/wp-content/uploads/2025/09/FINAL_ICCAnnualReport_Di
 https://oceanservice.noaa.gov/education/tutorial-coastal/marine-debris/md03.html
 https://www.gpi.org/facts-about-glass
 Cleanup figures refer to that program and year, not a global annual total. Game processing times are fictional.
+
+Material-specific recycling containers: original OpenAI image_gen sprite atlas, six cells.
+Container colors are fictional game cues; follow local recycling rules in real life.
+Material piles: original Unity composition of existing generated waste artwork.

@@ -34,7 +34,7 @@ namespace KiyiDongusu
             output = Path.Combine(RuntimeSmokeRunner.OutputDirectory, "recovery-" + Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(output);
             var saves = new SaveService(output, definitions, false); saves.Load();
-            var game = new GameSession(definitions, false); game.State.muted = true; game.State.reduceMotion = true;
+            var game = new GameSession(definitions, false);if(!StoryRequested)CheckFixtures.Ready(game,true); game.State.muted = true; game.State.reduceMotion = true;
             Assert(saves.Save(game), "Cannot create fixture backup");
             game.CenterAction(); Assert(saves.Save(game), "Cannot rotate fixture");
             File.WriteAllText(saves.Path, "deliberately corrupt isolated primary");

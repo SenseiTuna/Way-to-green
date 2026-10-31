@@ -9,13 +9,13 @@ namespace KiyiDongusu.Editor
         [Serializable] sealed class Row{public string name,status,detail;}
         [Serializable] sealed class Report{public string environment="Real Unity Editor C# + isolated files; not Windows or human play",version,utc;public List<Row> checks=new List<Row>();}
         static void Assert(bool v,string message){if(!v)throw new Exception(message);}
-        static GameSession New()=>new GameSession(GameDefinitions.Load(),false);
+        static GameSession New()=>CheckFixtures.Ready(new GameSession(GameDefinitions.Load(),false));
         static void Test(Report r,string name,Action action){try{action();r.checks.Add(new Row{name=name,status="PASS"});}catch(Exception e){r.checks.Add(new Row{name=name,status="FAIL",detail=e.ToString()});}}
         public static void Run()
         {
             var r=new Report{version=BuildGame.ArtVersion,utc=DateTime.UtcNow.ToString("o")};
             Test(r,"Content has eight finite tasks, three portraits and cited real facts",()=>{
-                var c=NarrativeContent.Load();Assert(c.quests.Length==8&&c.nodes.Length==13,"Content incomplete");for(int i=0;i<c.nodes.Length;i++)Assert(c.nodes[i].id==i&&c.nodes[i].pages.Length>0,"Node id mismatch");
+                var c=NarrativeContent.Load();Assert(c.quests.Length==8&&c.nodes.Length==15,"Content incomplete");for(int i=0;i<c.nodes.Length;i++)Assert(c.nodes[i].id==i&&c.nodes[i].pages.Length>0,"Node id mismatch");
                 foreach(var f in c.facts)Assert(!string.IsNullOrWhiteSpace(f.en)&&!string.IsNullOrWhiteSpace(f.tr)&&(!string.IsNullOrEmpty(f.url)||f.source=="Game mechanics"),"Missing translation or attribution");
                 var art=new GameArt();foreach(var image in art.Mira)Assert(image!=null,"Mira pose missing");
             });
@@ -38,7 +38,7 @@ namespace KiyiDongusu.Editor
                 var g=New();while(g.Collected<35){g.CenterAction();g.Tick(.5);}string json=JsonUtility.ToJson(g.State);json=json.Substring(0,json.LastIndexOf(",\"story\":",StringComparison.Ordinal))+"}";
                 var parsed=JsonUtility.FromJson<GameState>(json);Assert(parsed.story!=null&&parsed.story.version==0,"Missing-story serializer sentinel changed");string expected=JsonUtility.ToJson(parsed);expected=expected.Substring(0,expected.LastIndexOf(",\"story\":",StringComparison.Ordinal));
                 string directory=Path.GetFullPath("../Evidence/legacy81-"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(directory);string hash;using(var sha=System.Security.Cryptography.SHA256.Create())hash=Convert.ToBase64String(sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(json)));
-                File.WriteAllText(Path.Combine(directory,"beach-v1.json"),JsonUtility.ToJson(new SaveEnvelope{payload=json,sha256=hash}));var saves=new SaveService(directory,g.Definitions,false);var restored=saves.Load();Assert(restored!=null&&!saves.NeedsRecovery,"Legacy envelope failed to load");string actual=JsonUtility.ToJson(restored);actual=actual.Substring(0,actual.LastIndexOf(",\"story\":",StringComparison.Ordinal));Assert(expected==actual,"Economy changed during migration");Assert(restored.story.version==1&&restored.story.pending.Count==1&&restored.story.pending[0]==9,"Legacy dialogue flood");var loaded=new GameSession(g.Definitions,false,restored);Assert(saves.Save(loaded),"Migration write failed");var again=saves.Load();Assert(JsonUtility.ToJson(again)==JsonUtility.ToJson(restored),"Migration repeated on reopen");
+                File.WriteAllText(Path.Combine(directory,"beach-v1.json"),JsonUtility.ToJson(new SaveEnvelope{payload=json,sha256=hash}));var saves=new SaveService(directory,g.Definitions,false);var restored=saves.Load();Assert(restored!=null&&!saves.NeedsRecovery,"Legacy envelope failed to load");string actual=JsonUtility.ToJson(restored);actual=actual.Substring(0,actual.LastIndexOf(",\"story\":",StringComparison.Ordinal));Assert(expected==actual,"Economy changed during migration");Assert(restored.story.version==1&&restored.story.pending.Count==1&&restored.story.pending[0]==9,"Legacy dialogue flood");var loaded=new GameSession(g.Definitions,false,restored);Assert(saves.Save(loaded),"Migration write failed");var again=saves.Load();Assert(JsonUtility.ToJson(again)==JsonUtility.ToJson(JsonUtility.FromJson<GameState>(JsonUtility.ToJson(restored))),"Migration repeated on reopen");
             });
             Test(r,"Duplicate story sync changes no stock or currency; bad page rejected",()=>{
                 var g=New();NarrativeProgress.Sync(g);string before=JsonUtility.ToJson(g.State);for(int i=0;i<100;i++)NarrativeProgress.Sync(g);Assert(before==JsonUtility.ToJson(g.State),"Duplicate sync changed state");

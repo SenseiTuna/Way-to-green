@@ -9,6 +9,7 @@ namespace KiyiDongusu
         public SupplySystem(GameSession game) { this.game = game; }
         public void RefreshTokens()
         {
+            if(!S.opening.complete)return;
             for(int i=0;i<S.materials.Length;i++)
             {
                 var m=S.materials[i];
@@ -23,6 +24,7 @@ namespace KiyiDongusu
         }
         public void SpawnPile()
         {
+            if(!S.opening.complete)return;
             if (S.pileRemaining > 0 || S.refillRemaining > 1e-9) return;
             for (int offset = 0; offset < S.materials.Length; offset++)
             {
@@ -70,6 +72,7 @@ namespace KiyiDongusu
         }
         bool CollectLoose()
         {
+            if(!S.opening.complete){for(int slot=0;slot<OpeningProgress.PaperCount;slot++)if(OpeningProgress.Collect(game,slot))return true;}
             for (int n = 0; n < S.materials.Length; n++)
             {
                 int i = (S.scatteredCursor + n) % S.materials.Length;

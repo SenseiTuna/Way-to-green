@@ -12,10 +12,12 @@ namespace KiyiDongusu
         public Sprite HandOpen { get; }
         public Sprite HandPinch { get; }
         public Sprite[] Mira{get;}=new Sprite[3];
+        public Sprite[] Bins{get;}=new Sprite[6];
         readonly Sprite[] stages=new Sprite[3];
         public Sprite PileAt(float fraction)=>fraction>.75f?Pile:fraction>.5f?stages[0]??Pile:fraction>.25f?stages[1]??Pile:stages[2]??Pile;
         public GameArt()
         {
+            Grid("Art/SortingBinsAtlas",6,1,Bins);
             Beach = Whole("Art/BeachClean");
             var pileTexture = Resources.Load<Texture2D>("Art/Pile");
             // Native sprite sub-rectangle trims only inspected transparent margins.
@@ -52,6 +54,7 @@ namespace KiyiDongusu
                 int x=Mathf.RoundToInt((i%columns)*width),y=Mathf.RoundToInt((rows-1-i/columns)*height);
                 int right=Mathf.RoundToInt((i%columns+1)*width),top=Mathf.RoundToInt((rows-i/columns)*height);
                 if(path=="Art/MiraAtlas"){int trim=Mathf.RoundToInt((right-x)*.08f);x+=trim;right-=trim;}
+                if(path=="Art/SortingBinsAtlas"){y=Mathf.RoundToInt(texture.height*.16f);top=Mathf.RoundToInt(texture.height*.86f);}
                 destination[i]=Cut(texture,new Rect(x,y,right-x,top-y));
             }
         }

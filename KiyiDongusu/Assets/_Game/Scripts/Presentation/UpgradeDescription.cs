@@ -5,9 +5,10 @@ namespace KiyiDongusu
     {
         static string T(string en,string tr)=>GameText.T(en,tr);
         static string Number(double value)=>value.ToString("0.##",GameText.Culture);
-        public static string Title(PurchaseKind kind,int facility)=>kind==PurchaseKind.Collector?T("Collection crew","Toplama ekibi"):kind==PurchaseKind.Manual?T("Stronger hands","Toplama gücü"):GameText.Facility(facility)+" / "+(kind==PurchaseKind.Speed?T("Speed","Hız"):T("Batch capacity","Parti kapasitesi"));
+        public static string Title(PurchaseKind kind,int facility)=>kind==PurchaseKind.SortingBin?GameText.Material(facility)+T(" container"," konteyneri"):kind==PurchaseKind.Collector?T("Collection crew","Toplama ekibi"):kind==PurchaseKind.Manual?T("Stronger hands","Toplama gücü"):GameText.Facility(facility)+" / "+(kind==PurchaseKind.Speed?T("Speed","Hız"):T("Batch capacity","Parti kapasitesi"));
         public static string Body(GameSession game,PurchaseKind kind,int facility)
         {
+            if(kind==PurchaseKind.SortingBin){bool owned=game.OwnsBin(facility);return T("Buy with recycling credits.\n","İşleme kredisiyle satın al.\n")+T("Current: ","Mevcut: ")+(owned?T("Owned","Satın alındı"):T("Not purchased","Satın alınmadı"))+"\n"+T("Matching loose litter only. +0.50 per sorted piece, paid after processing.\n","Yalnız uygun tekil atık. Ayrılan parça işlenince +0,50 kredi.\n")+T("Clicks and the crew keep collecting without containers.\n","Tıklama ve ekip konteyner olmadan da toplar.\n")+(!game.State.materials[facility].unlocked?T("Available after this material line opens.","Bu malzeme hattı açılınca alınabilir."):owned?T("Ready to sort.","Ayırmaya hazır."):T("Cost: ","Fiyat: ")+(game.Cost(kind,facility)/100.0).ToString("0",GameText.Culture));}
             int rank=game.Rank(kind,facility);long cost=game.Cost(kind,facility);bool max=cost<0;var d=game.Definitions;var text=new StringBuilder();
             if(kind==PurchaseKind.Collector||kind==PurchaseKind.Manual)
             {

@@ -108,7 +108,7 @@ namespace KiyiDongusu
         }
         public void Purchase(PurchaseKind kind, int facility)
         {
-            string name = kind == PurchaseKind.Collector ? GameText.T("Collection crew","Toplama ekibi") : kind == PurchaseKind.Manual ? GameText.T("Stronger hands","Toplama gücü") : kind == PurchaseKind.Speed ? GameText.T("Processing speed","Tesis hızı") : GameText.T("Batch capacity","Tesis kapasitesi");
+            string name = kind==PurchaseKind.SortingBin?GameText.Material(facility)+GameText.T(" container"," konteyneri"):kind == PurchaseKind.Collector ? GameText.T("Collection crew","Toplama ekibi") : kind == PurchaseKind.Manual ? GameText.T("Stronger hands","Toplama gücü") : kind == PurchaseKind.Speed ? GameText.T("Processing speed","Tesis hızı") : GameText.T("Batch capacity","Tesis kapasitesi");
             Cue(FeedbackKind.Purchase);
             Notice?.Invoke(new FeedbackNotice(FeedbackKind.Purchase, name + GameText.T(" upgraded to "," geliştirildi: ") + session.Rank(kind, facility), kind == PurchaseKind.Speed || kind == PurchaseKind.Capacity ? facility : -1));
         }
@@ -136,7 +136,7 @@ namespace KiyiDongusu
             Notice?.Invoke(new FeedbackNotice(FeedbackKind.Batch, "+" + (reward / 100.0).ToString("N1", GameText.Culture) + GameText.T(" credits recycled"," kredi işlendi")));
         }
         public void Tap(){Cue(FeedbackKind.Collect);}
-        public void NetDelivery(){Cue(FeedbackKind.Purchase);Notice?.Invoke(new FeedbackNotice(FeedbackKind.Net,GameText.T("Nice catch! +0.50 after recycling","Güzel yakaladın! İşlenince +0,50 kredi")));}
+        public void NetDelivery(int material=0){Cue(FeedbackKind.Purchase);Notice?.Invoke(new FeedbackNotice(FeedbackKind.Net,GameText.T("Nice catch! +0.50 after recycling","Güzel yakaladın! İşlenince +0,50 kredi"),material));}
         public void NarrativeNotice(string text){Cue(FeedbackKind.Purchase);Notice?.Invoke(new FeedbackNotice(FeedbackKind.Unlock,text));}
         void OnDestroy()
         {

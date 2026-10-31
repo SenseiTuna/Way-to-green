@@ -14,7 +14,7 @@ namespace KiyiDongusu.Editor
         {
             var report=new Report{version=BuildGame.ArtVersion,utc=DateTime.UtcNow.ToString("o")};
             Test(report,"Random replacement moves away and preserves every finite unit",()=>{
-                var game=new GameSession(GameDefinitions.Load(),false);var m=game.State.materials[0];var positions=new HashSet<string>();
+                var game=CheckFixtures.Ready(new GameSession(GameDefinitions.Load(),false));var m=game.State.materials[0];var positions=new HashSet<string>();
                 int count=Math.Min(100,m.scatteredReserve);for(int i=0;i<count;i++)
                 {
                     int x=m.scatterX,y=m.scatterY,generation=m.tokenGeneration;Assert(game.Supply.CollectToken(0,generation),"Collect rejected");game.Supply.RefreshTokens();
@@ -23,13 +23,13 @@ namespace KiyiDongusu.Editor
                 Assert(positions.Count>count*.9,"Positions repeat too often");
             });
             Test(report,"Layout, seed and subsequent spawn survive save reload",()=>{
-                var g=new GameSession(GameDefinitions.Load(),false);var save=new SaveService(Path.GetFullPath("../Evidence/scatter-save-"+Guid.NewGuid().ToString("N")),g.Definitions,false);save.Load();Assert(save.Save(g),"Save rejected");
+                var g=CheckFixtures.Ready(new GameSession(GameDefinitions.Load(),false));var save=new SaveService(Path.GetFullPath("../Evidence/scatter-save-"+Guid.NewGuid().ToString("N")),g.Definitions,false);save.Load();Assert(save.Save(g),"Save rejected");
                 var replay=new GameSession(g.Definitions,false,save.Load());Assert(JsonUtility.ToJson(g.State)==JsonUtility.ToJson(replay.State),"Positions changed on reload");
                 foreach(var session in new[]{g,replay}){session.Supply.CollectToken(0,session.State.materials[0].tokenGeneration);session.Supply.RefreshTokens();session.Validate();}
                 Assert(JsonUtility.ToJson(g.State)==JsonUtility.ToJson(replay.State),"Future spawn diverges after reload");
             });
             Test(report,"Simultaneous visible pieces keep their positions and separation",()=>{
-                var g=new GameSession(GameDefinitions.Load(),false);
+                var g=CheckFixtures.Ready(new GameSession(GameDefinitions.Load(),false));
                 for(int i=0;i<g.State.materials.Length;i++)g.State.materials[i].unlocked=true;
                 g.Supply.RefreshTokens();
                 for(int round=0;round<80;round++)

@@ -24,6 +24,7 @@ namespace KiyiDongusu
         double nextAction, accumulator;
         float start;
         bool finished;
+        bool capturePause;
         double nextCapture = 300;
         public static bool Requested => Array.IndexOf(Environment.GetCommandLineArgs(), "--kiyi-smoke-test") >= 0;
         public static void ValidateTestArguments(string[] args)
@@ -47,7 +48,7 @@ namespace KiyiDongusu
         }
         void Update()
         {
-            if (finished || host == null) return;
+            if (finished || host == null||capturePause) return;
             try
             {
                 var game = host.Game;
@@ -62,7 +63,7 @@ namespace KiyiDongusu
                         if (report.acceptedActions % 10 == 0)
                             for (int i = 0; i < game.State.materials.Length; i++)
                                 if (game.State.materials[i].visible > 0) { loose = game.TokenAction(i, game.State.materials[i].tokenGeneration); break; }
-                        if (!loose) game.CenterAction();
+                        if(!game.State.opening.complete){for(int slot=0;slot<6;slot++)if(game.OpeningTokenAction(slot))break;}else if (!loose) game.CenterAction();
                         nextAction += 1.0 / 3;
                     }
                     game.Tick(.05);
@@ -126,8 +127,10 @@ namespace KiyiDongusu
         }
         IEnumerator CaptureProgress(int seconds)
         {
+            capturePause=true;yield return new WaitForSecondsRealtime(.12f);
             yield return new WaitForEndOfFrame();
             ScreenCapture.CaptureScreenshot(Path.Combine(directory, "gameplay-" + seconds + ".png"));
+            yield return new WaitForEndOfFrame();capturePause=false;
         }
     }
 }

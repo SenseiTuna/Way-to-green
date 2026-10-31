@@ -123,6 +123,7 @@ namespace KiyiDongusu
         {
             if (CanInteract && Game.TokenAction(material, generation)) Feedback.Collection(material, 1);
         }
+        public void OpeningAction(int slot){if(CanInteract&&Game.OpeningTokenAction(slot))Feedback.Collection(0,1);}
         public void Purchase(PurchaseKind kind, int facility)
         {
             if (CanInteract && Game.Purchase(kind, facility))
@@ -133,8 +134,13 @@ namespace KiyiDongusu
         }
         public bool NetAction(int material,int generation)
         {
-            if(!CanInteract||!Game.NetDropAction(material,generation))return false;
-            Feedback.NetDelivery();return true;
+            return BinAction(material,generation,material);
+        }
+        public bool BinAction(int material,int generation,int target,int openingSlot=-1)
+        {
+            if(!CanInteract)return false;
+            if(!Game.BinDropAction(material,generation,target,openingSlot)){Feedback.NarrativeNotice(GameText.T("Use the matching purchased container.","Satın alınmış uygun konteyneri kullan."));return false;}
+            Feedback.NetDelivery(material);return true;
         }
         public void SetLanguage(string language){Game.State.language=language=="tr"?"tr":"en";GameText.Language=Game.State.language;needsSave=true;View.MarkDirty();}
         public void MarkNarrativeChanged(){needsSave=true;View.MarkDirty();}

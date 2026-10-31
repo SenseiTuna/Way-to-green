@@ -22,7 +22,7 @@ namespace KiyiDongusu
             if(s.activeId<0){s.cooldown=System.Math.Max(0,s.cooldown-dt);if(NarrativeProgress.Begin(host.Game)){host.MarkNarrativeChanged();entrance=0;}}
             if(s.activeId<0){host.View.HideDialogue();host.Audio.SetDialogueGain(1);return;}
             s.activeSeconds+=dt;
-            if(s.activeId>=10&&s.activeSeconds>=4){Skip();return;}
+            if(s.activeId>=10&&s.activeId<=12&&s.activeSeconds>=4){Skip();return;}
             if(lastId!=s.activeId||lastPage!=s.page){lastId=s.activeId;lastPage=s.page;entrance=0;host.Feedback.Tap();}
             entrance+=dt;host.View.RenderDialogue(s.activeId,s.page,host.Game.State.reduceMotion?1:Mathf.Clamp01(entrance/.22f));host.Audio.SetDialogueGain(.72f);
         }

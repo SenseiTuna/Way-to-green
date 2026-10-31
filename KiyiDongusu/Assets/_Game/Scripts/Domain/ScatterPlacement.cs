@@ -5,7 +5,7 @@ namespace KiyiDongusu
     public static class ScatterPlacement
     {
         static readonly int[] X={110,350,620,910,1210,1280,1290,1250,1020,740,470,220,100,110,300,1280};
-        static readonly int[] Y={190,180,180,180,190,310,490,700,785,780,775,660,490,340,300,795};
+        static readonly int[] Y={190,180,180,180,190,310,490,660,660,650,660,600,490,340,300,650};
         static uint Mix(uint n){unchecked{n^=n>>16;n*=0x7feb352d;n^=n>>15;n*=0x846ca68b;return n^(n>>16);}}
         public static bool InBounds(int x,int y)=>x>=60&&x<=1340&&y>=140&&y<=850;
         public static void Spawn(GameState state,int index)

@@ -46,6 +46,7 @@ namespace KiyiDongusu
     [Serializable] public sealed class FinalDefinition { public double automatic_processing_multiplier; }
     [Serializable] public sealed class TempoDefinition { public double multiplier; }
     [Serializable] public sealed class SortingNetDefinition { public int bonus_cents_per_unit; public bool reward_after_processing; }
+    [Serializable] public sealed class SortingBinsDefinition { public int[] purchase_cost_credits; }
     [Serializable] public sealed class GameDefinitions
     {
         public string balance_id;
@@ -59,6 +60,7 @@ namespace KiyiDongusu
         public FinalDefinition final_phase;
         public TempoDefinition tempo;
         public SortingNetDefinition sorting_net;
+        public SortingBinsDefinition sorting_bins;
 
         public static GameDefinitions Load() => JsonUtility.FromJson<GameDefinitions>(Resources.Load<TextAsset>("Economy").text);
         public int FacilityIndex(int material) => Array.FindIndex(facilities, f => f.id == materials[material].facility_id);

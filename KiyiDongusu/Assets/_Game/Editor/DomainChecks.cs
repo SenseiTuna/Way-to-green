@@ -11,7 +11,7 @@ namespace KiyiDongusu.Editor
         [Serializable] sealed class Result { public string test, status, detail; }
         [Serializable] sealed class Report { public string environment, utc, version; public List<Result> results = new List<Result>(); }
         static void Assert(bool condition, string message) { if (!condition) throw new Exception(message); }
-        static GameSession New() => new GameSession(GameDefinitions.Load(), false);
+        static GameSession New() => CheckFixtures.Ready(new GameSession(GameDefinitions.Load(), false));
         // Relocate existing finite world material into raw stock, never mint test material.
         static void Stock(GameSession g, int i, int amount)
         {

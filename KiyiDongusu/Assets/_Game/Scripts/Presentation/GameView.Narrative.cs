@@ -11,7 +11,7 @@ namespace KiyiDongusu
         bool questLogOpen;int selectedQuest;string questUrl;
         readonly List<(int id,Text text)> questRows=new List<(int,Text)>();
         public bool DialogueVisible=>dialogue!=null&&dialogue.gameObject.activeSelf;
-        public bool AnyLitterDragging{get{foreach(var item in litter)if(item.drag!=null&&item.drag.Dragging)return true;return false;}}
+        public bool AnyLitterDragging{get{foreach(var item in litter)if(item.drag!=null&&item.drag.Dragging)return true;foreach(var item in openingPieces)if(item.drag!=null&&item.drag.Dragging)return true;return false;}}
         void InitializeNarrativeUi()
         {
             dialogue=Panel("MiraDialogue",root,0,0,0,300,CoastTheme.SolidPaper,true);

@@ -80,15 +80,16 @@ namespace KiyiDongusu
             progressFill.rectTransform.sizeDelta=new Vector2(340f*G.Collected/G.TotalUnits,6);
             role.text=G.State.pileRemaining>0?GameText.Material(G.State.pileMaterial)+T(" pile"," yığını"):T("Give the machines a hand","İşlemeye yardım et");
             pileText.text=G.State.pileRemaining>0?G.State.pileRemaining+" / "+G.Definitions.sources.pile_units+T(" remaining"," kaldı"):G.WorldRemaining==0?T("Finishing the last batches","Son partiler işleniyor"):T("Next pile in ","Yeni parti: ")+G.State.refillRemaining.ToString("0.0",GameText.Culture)+T("s"," sn");
-            pileImage.gameObject.SetActive(!G.State.complete);
+            pileImage.gameObject.SetActive(!G.State.complete&&G.State.opening.complete&&G.State.pileRemaining==0);
             float fraction=G.State.pileRemaining/(float)G.Definitions.sources.pile_units;
             bool collecting=G.State.pileRemaining>0;
             int facility=0;for(int i=0;i<G.State.materials.Length;i++)if(G.State.materials[i].batch>0){facility=G.Definitions.FacilityIndex(i);break;}
             pileImage.sprite=collecting?art.PileAt(fraction):art.Facilities[facility];
             pileImage.rectTransform.sizeDelta=collecting?new Vector2(840,390):new Vector2(460,300);
             pileImage.rectTransform.anchoredPosition=collecting?Vector2.zero:new Vector2(190,-45);
-            center.interactable=host.CanInteract;
-            netText.text=T("Sorting net","Ayırma ağı")+"\n"+(G.NetDelivered==0?T("Drag loose litter here","Tekil çöpleri buraya sürükle"):T("Sorted: ","Ayrılan: ")+G.NetDelivered)+"\n"+T("+0.50 after recycling","İşlenince +0,50 kredi");
+            center.interactable=host.CanInteract&&G.State.opening.complete;
+            if(!G.State.opening.complete){role.text=T("Collect the paper on the shore","Sahildeki kâğıtları topla");pileText.text=(OpeningProgress.PaperCount-OpeningProgress.Remaining(G.State))+" / 6";}
+            RefreshSortingUi();
             foreach(var lane in lanes)
             {
                 var m=G.State.materials[lane.i];var d=G.Definitions.materials[lane.i];lane.name.text=GameText.Material(lane.i);

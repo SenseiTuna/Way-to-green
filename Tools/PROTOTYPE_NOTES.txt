@@ -1,7 +1,10 @@
-Coastal Loop / KiyiDongusu — V1.0.8.1 preview
+Coastal Loop / KiyiDongusu — V1.0.9.0 preview
 Windows x64. Keep KiyiDongusu.exe with all accompanying files.
 Click / Space: collect from the pile; help processing while it is empty.
-Drag loose litter into the sorting net for +0.50 credits after that piece is recycled.
+Start by clicking the six paper pieces. The first paper pile appears afterward.
+Buy a matching material container with credits, then drag loose litter into it for +0.50 after recycling.
+Container prices: paper15, cardboard20, PET30, HDPE35, aluminium40, glass45 credits. Containers are optional.
+New litter materials and piles appear as their free processing lines unlock.
 Collected litter is raw stock. Only finished processing pays credits.
 Tab / Enter: buttons. Arrow keys: selected volume slider. Esc: settings / pause.
 Settings: master, music, effects, ocean, mute, English/Turkish, resolution, fullscreen and reduced motion.

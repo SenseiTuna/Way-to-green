@@ -16,8 +16,8 @@
           "pose": 1
         },
         {
-          "en": "Pick up litter from the pile. It becomes raw stock; the mill pays credits when recycling finishes. Your first task: collect 20 pieces.",
-          "tr": "Yığından atık topla. Önce ham stok oluşur; tesis işleme bitince kredi verir. İlk görevin: 20 parça topla.",
+          "en": "Start with the six paper pieces scattered on the shore. Click them to collect raw stock. The first pile appears when all six are picked up.",
+          "tr": "Önce sahile dağılmış altı kâğıt parçasını tıklayarak topla. Bunlar ham stok olur. Altısı da toplanınca ilk yığın gelecek.",
           "fact": "loop",
           "pose": 1
         }
@@ -27,8 +27,8 @@
       "id": 1,
       "pages": [
         {
-          "en": "That first batch is recycled! Collection and processing are two parts of the same loop. Use credits to improve your equipment.",
-          "tr": "İlk parti geri kazanıldı! Toplama ve işleme aynı döngünün iki parçası. Kredilerle ekipmanını geliştirebilirsin.",
+          "en": "Your first recycling credits! Save them for a collection crew, upgrades, or material-specific containers. Containers are optional purchases.",
+          "tr": "İlk işleme kredilerin geldi! Toplama ekibi, geliştirmeler veya malzemeye özel konteynerler alabilirsin. Konteyner almak isteğe bağlıdır.",
           "fact": "loop",
           "pose": 2
         }
@@ -38,8 +38,8 @@
       "id": 2,
       "pages": [
         {
-          "en": "The cardboard line has opened for free. It shares the paper mill, and both lines work at the same time.",
-          "tr": "Karton hattı ücretsiz açıldı. Kâğıt merkezini paylaşırlar ve iki hat aynı anda çalışır.",
+          "en": "Cardboard is unlocked for free. Cardboard pieces and piles can now appear. Both paper-mill lines work in parallel; its container is a separate purchase.",
+          "tr": "Karton hattı ücretsiz açıldı. Artık karton parçaları ve yığınları görünebilir. İki hat paralel çalışır; karton konteyneri ayrıca satın alınır.",
           "fact": "parallel",
           "pose": 1
         }
@@ -99,8 +99,8 @@
       "id": 7,
       "pages": [
         {
-          "en": "Your collection crew is on the job! They pick up piles and loose litter without clicks. You can still help or sort pieces into the net.",
-          "tr": "Toplama ekibin iş başında! Yığından ve tekil atıklardan tıklama olmadan toplarlar. Sen de yardım edebilir veya ağa ayırabilirsin.",
+          "en": "Your collection crew is on the job! They collect piles and loose litter without clicks or purchased containers. You can still sort pieces for a processing bonus.",
+          "tr": "Toplama ekibin iş başında! Konteyner satın almak veya tıklamak gerekmeden yığın ve tekil atıkları toplarlar. Sen ek işleme ödülü için ayırabilirsin.",
           "fact": "",
           "pose": 2
         }
@@ -160,14 +160,36 @@
           "pose": 2
         }
       ]
+    },
+    {
+      "id": 13,
+      "pages": [
+        {
+          "en": "The first paper pile is here! Click the pile to collect. While a pile is empty, clicks help working recycling lines. New materials appear as their lines open.",
+          "tr": "İlk kâğıt yığını geldi! Toplamak için yığına tıkla. Yığın boşken tıklamalar çalışan hatlara yardım eder. Yeni malzemeler hatları açıldıkça görünür.",
+          "fact": "loop",
+          "pose": 1
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "pages": [
+        {
+          "en": "Your first container is ready! Drag matching loose litter into it. Paper, cardboard, PET, HDPE, metal and glass each have their own container. A sorted piece earns an extra 0.50 only when recycled.",
+          "tr": "İlk konteynerin hazır! Uygun tekil atığı içine sürükle. Kâğıt, karton, PET, HDPE, metal ve camın ayrı konteyneri var. Ayrılan parça yalnız işlenince ek 0,50 kredi verir.",
+          "fact": "loop",
+          "pose": 1
+        }
+      ]
     }
   ],
   "quests": [
     {
-      "en": "First steps",
-      "tr": "İlk adımlar",
-      "descriptionEn": "Collect 20 pieces of any material.",
-      "descriptionTr": "Herhangi bir malzemeden 20 parça topla.",
+      "en": "A paper start",
+      "tr": "Kâğıtla başla",
+      "descriptionEn": "Collect the six paper pieces to reveal the first pile.",
+      "descriptionTr": "İlk yığın için sahildeki altı kâğıt parçasını topla.",
       "fact": "cleanup"
     },
     {
@@ -180,15 +202,15 @@
     {
       "en": "Cardboard counts",
       "tr": "Karton da önemli",
-      "descriptionEn": "Collect 25 cardboard pieces.",
-      "descriptionTr": "25 karton topla.",
+      "descriptionEn": "After the cardboard line opens, collect 25 cardboard pieces.",
+      "descriptionTr": "Karton hattı açılınca 25 karton topla.",
       "fact": "parallel"
     },
     {
       "en": "Bottle patrol",
       "tr": "Şişelerin peşinde",
-      "descriptionEn": "Collect 30 PET pieces.",
-      "descriptionTr": "30 PET topla.",
+      "descriptionEn": "After the PET line opens, collect 30 PET pieces.",
+      "descriptionTr": "PET hattı açılınca 30 PET topla.",
       "fact": "plastic"
     },
     {

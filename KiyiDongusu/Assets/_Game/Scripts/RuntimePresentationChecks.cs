@@ -11,7 +11,7 @@ namespace KiyiDongusu
     {
         IEnumerator Shot(string name)
         {
-            yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,name+".png"));yield return new WaitForEndOfFrame();yield return new WaitForSecondsRealtime(.15f);
+            yield return new WaitForSecondsRealtime(.12f);yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,name+".png"));yield return new WaitForEndOfFrame();yield return new WaitForSecondsRealtime(.15f);
         }
         IEnumerator Presentation()
         {

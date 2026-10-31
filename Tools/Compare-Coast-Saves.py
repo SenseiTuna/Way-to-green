@@ -37,8 +37,15 @@ def main():
     parser.add_argument("after")
     parser.add_argument("--output", required=True)
     parser.add_argument("--allow-story-migration", action="store_true")
+    parser.add_argument("--allow-progression-migration", action="store_true")
     args = parser.parse_args()
     before, after = load(args.before), load(args.after)
+    progression_migrated = args.allow_progression_migration and "opening" not in before
+    if progression_migrated:
+        opening = after.get("opening", {})
+        if opening != {"version": 1, "remainingMask": 0, "complete": True, "guided": False} or after.get("purchasedBinsMask") != 0:
+            raise ValueError("Legacy progression should be complete with no paid containers granted")
+        after = {key: value for key, value in after.items() if key not in ("opening", "purchasedBinsMask")}
     migrated = args.allow_story_migration and "story" not in before
     if migrated:
         if after.get("story", {}).get("version") != 1:
@@ -47,6 +54,7 @@ def main():
     diff = differences(before, after)
     report = {"status": "PASS" if not diff else "FAIL", "environment": "Checksum-validated snapshot files; no simulation",
               "floatTolerance": 1e-9, "storyMigrationAllowed": migrated,
+              "progressionMigrationAllowed": progression_migrated,
               "before": str(Path(args.before).resolve()), "after": str(Path(args.after).resolve()),
               "money": after["money"], "processed": sum(m["processed"] for m in after["materials"]),
               "elapsed": after["elapsed"], "differences": diff}

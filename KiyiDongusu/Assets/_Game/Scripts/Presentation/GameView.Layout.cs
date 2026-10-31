@@ -58,9 +58,6 @@ namespace KiyiDongusu
             pileImage=Panel("PileArtwork",center.transform,0,0,840,390,CoastTheme.White).GetComponent<Image>();pileImage.sprite=art.Pile;pileImage.preserveAspect=true;
             pileText=Label("PileRemaining",root,560,750,610,50,"",27);pileText.alignment=TextAlignmentOptions.Midline;
 
-            NetRect=Panel("SortingNet",root,90,740,270,220,CoastTheme.White);NetRect.GetComponent<Image>().sprite=art.Net;NetRect.GetComponent<Image>().preserveAspect=true;
-            Panel("NetSign",root,62,949,360,112,CoastTheme.Paper,true);
-            netText=Label("NetLabel",root,62,949,360,112,"",22);netText.alignment=TextAlignmentOptions.Midline;
             for(int i=0;i<G.State.materials.Length;i++)
             {
                 int index=i;
@@ -71,7 +68,7 @@ namespace KiyiDongusu
                 var hit=(RectTransform)b.transform;hit.anchorMin=hit.anchorMax=Vector2.one*.5f;
                 var drag=b.gameObject.AddComponent<BeachLitterDrag>();drag.Initialize(host,this,i,visual);litter.Add((i,b,drag));
             }
-            NetRect.gameObject.AddComponent<CoastNetFeedback>().Initialize(host,root.GetComponentsInChildren<BeachLitterDrag>(true));
+            InitializeSortingUi();
             AddUpgrade(PurchaseKind.Collector,0,root,470,934,430);
             AddUpgrade(PurchaseKind.Manual,0,root,930,934,430);
             Panel("GoalSign",root,466,1006,934,50,CoastTheme.Paper,true);

@@ -10,7 +10,7 @@ namespace KiyiDongusu.Editor
         [Serializable] sealed class Row {public string test,status,detail;}
         [Serializable] sealed class Report {public string environment="Real Unity Editor C# domain, no human playtest",version,utc;public List<Row> results=new List<Row>();}
         static void Assert(bool value,string text){if(!value)throw new Exception(text);}
-        static GameSession New()=>new GameSession(GameDefinitions.Load(),false);
+        static GameSession New()=>CheckFixtures.Ready(new GameSession(GameDefinitions.Load(),false),true);
         static void Check(Report report,string name,Action action){try{action();report.results.Add(new Row{test=name,status="PASS"});}catch(Exception e){report.results.Add(new Row{test=name,status="FAIL",detail=e.ToString()});}}
         [MenuItem("Kiyi Dongusu/Run Coast Interaction Checks")]
         public static void Run()

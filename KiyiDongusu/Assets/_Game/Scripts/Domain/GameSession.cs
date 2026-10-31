@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace KiyiDongusu
 {
-    public enum PurchaseKind { Collector, Manual, Speed, Capacity }
+    public enum PurchaseKind { Collector, Manual, Speed, Capacity, SortingBin }
     public sealed class GameSession
     {
         public GameDefinitions Definitions { get; }
@@ -16,7 +16,7 @@ namespace KiyiDongusu
         readonly Queue<(double time, long amount)> rewards = new Queue<(double, long)>();
         public int TotalUnits { get; }
         public int Processed { get { int n = 0; foreach (var m in State.materials) n += m.processed; return n; } }
-        public int WorldRemaining { get { int n = State.pileRemaining; foreach (var m in State.materials) n += m.reserve + m.scatteredReserve + m.visible; return n; } }
+        public int WorldRemaining { get { int n = State.pileRemaining+(State.opening==null?0:OpeningProgress.Remaining(State)); foreach (var m in State.materials) n += m.reserve + m.scatteredReserve + m.visible; return n; } }
         public int Collected => TotalUnits - WorldRemaining;
         public int NetBonusCents => Definitions.sorting_net == null ? 50 : Definitions.sorting_net.bonus_cents_per_unit;
         public int NetDelivered { get { int n=0; foreach(var m in State.materials) n+=m.netRaw+m.netBatch+m.netProcessed; return n; } }
@@ -40,6 +40,7 @@ namespace KiyiDongusu
             }
             Supply = new SupplySystem(this);
             Processing = new ProcessingSystem(this);
+            OpeningProgress.Initialize(this,restored!=null);
             if (restored == null) { UpdateProgress(); Supply.SpawnPile(); Supply.RefreshTokens(); }
             else if(State.materials!=null)for(int i=0;i<State.materials.Length;i++)if(State.materials[i]!=null&&State.materials[i].visible>0&&State.materials[i].scatterX==0&&State.materials[i].scatterY==0)ScatterPlacement.Spawn(State,i);
             NarrativeProgress.Initialize(this,restored!=null);
@@ -61,6 +62,7 @@ namespace KiyiDongusu
         }
         public bool CenterAction()
         {
+            if(!State.opening.complete)return false;
             if (!AcceptAction()) return false;
             if (State.pileRemaining > 0) Supply.ManualPile(); else Processing.Assist();
             UpdateProgress(); Changed?.Invoke(); return true;
@@ -73,7 +75,19 @@ namespace KiyiDongusu
         }
         public bool NetDropAction(int i, int generation)
         {
-            if (!TokenAction(i, generation)) return false;
+            return BinDropAction(i,generation,i);
+        }
+        public bool OwnsBin(int material)=>material>=0&&material<State.materials.Length&&(State.purchasedBinsMask&(1<<material))!=0;
+        public bool OpeningTokenAction(int slot)
+        {
+            if(!OpeningProgress.Visible(State,slot)||!AcceptAction())return false;
+            bool collected=OpeningProgress.Collect(this,slot);UpdateProgress();Changed?.Invoke();ImportantChange?.Invoke();return collected;
+        }
+        public bool BinDropAction(int i,int generation,int target,int openingSlot=-1)
+        {
+            if(target!=i||!OwnsBin(target)||!State.materials[target].unlocked)return false;
+            if(openingSlot>=0){if(i!=0||!OpeningTokenAction(openingSlot))return false;}
+            else if (!TokenAction(i, generation)) return false;
             State.materials[i].netRaw++;
             SyncNarrative();Changed?.Invoke(); ImportantChange?.Invoke(); return true;
         }
@@ -95,8 +109,8 @@ namespace KiyiDongusu
             for (int i = 0; i < State.materials.Length; i++) if (Definitions.FacilityIndex(i) == facility && State.materials[i].unlocked) return true;
             return false;
         }
-        public int Rank(PurchaseKind kind, int facility = 0) => kind == PurchaseKind.Collector ? State.collectorRank : kind == PurchaseKind.Manual ? State.manualRank : kind == PurchaseKind.Speed ? State.facilities[facility].speed : State.facilities[facility].capacity;
-        public int[] Costs(PurchaseKind kind, int facility = 0) => kind == PurchaseKind.Collector ? Definitions.collector.purchase_cost_credits : kind == PurchaseKind.Manual ? Definitions.manual_collection_upgrade.purchase_cost_credits : kind == PurchaseKind.Speed ? Definitions.facilities[facility].shared_speed_costs_by_rank_credits : Definitions.facilities[facility].shared_capacity_costs_by_rank_credits;
+        public int Rank(PurchaseKind kind, int facility = 0) => kind == PurchaseKind.SortingBin?(OwnsBin(facility)?1:0):kind == PurchaseKind.Collector ? State.collectorRank : kind == PurchaseKind.Manual ? State.manualRank : kind == PurchaseKind.Speed ? State.facilities[facility].speed : State.facilities[facility].capacity;
+        public int[] Costs(PurchaseKind kind, int facility = 0) => kind==PurchaseKind.SortingBin?new[]{Definitions.sorting_bins.purchase_cost_credits[facility]}:kind == PurchaseKind.Collector ? Definitions.collector.purchase_cost_credits : kind == PurchaseKind.Manual ? Definitions.manual_collection_upgrade.purchase_cost_credits : kind == PurchaseKind.Speed ? Definitions.facilities[facility].shared_speed_costs_by_rank_credits : Definitions.facilities[facility].shared_capacity_costs_by_rank_credits;
         public long Cost(PurchaseKind kind, int facility = 0)
         {
             var costs = Costs(kind, facility); int rank = Rank(kind, facility);
@@ -104,6 +118,11 @@ namespace KiyiDongusu
         }
         public bool Purchase(PurchaseKind kind, int facility = 0)
         {
+            if(kind==PurchaseKind.SortingBin)
+            {
+                int material=facility;if(material<0||material>=State.materials.Length||State.complete||!State.opening.complete||!State.materials[material].unlocked||OwnsBin(material))return false;
+                long price=Cost(kind,material);if(State.money<price)return false;State.money-=price;State.spent+=price;State.purchasedBinsMask|=1<<material;SyncNarrative();Changed?.Invoke();ImportantChange?.Invoke();return true;
+            }
             if (!Enum.IsDefined(typeof(PurchaseKind), kind) || facility < 0 || facility >= State.facilities.Length || State.complete) return false;
             if ((kind == PurchaseKind.Speed || kind == PurchaseKind.Capacity) && !FacilityUnlocked(facility)) return false;
             long cost = Cost(kind, facility);
@@ -136,6 +155,7 @@ namespace KiyiDongusu
         {
             var s = State;
             NarrativeProgress.Validate(this);
+            OpeningProgress.Validate(s);
             if(s.litterSeed<=0)throw new InvalidOperationException("Invalid litter layout seed.");
             if(s.settingsVersion!=1 || (s.language!="en"&&s.language!="tr") || !VolumeValid(s.masterVolume)||!VolumeValid(s.musicVolume)||!VolumeValid(s.effectsVolume)||!VolumeValid(s.ambienceVolume) || s.displayWidth<0||s.displayHeight<0 || (s.displayWidth==0)!=(s.displayHeight==0))throw new InvalidOperationException("Invalid preferences.");
             if (s.schemaVersion != 1 || s.balanceId != Definitions.balance_id || s.materials == null || s.materials.Length != (s.corePrototype ? 1 : Definitions.materials.Length) || s.facilities == null || s.facilities.Length != Definitions.facilities.Length) throw new InvalidOperationException("Kayıt şeması veya denge kimliği uyumsuz.");
@@ -146,7 +166,7 @@ namespace KiyiDongusu
                 var m = s.materials[i]; var d = Definitions.materials[i];
                 if (m == null || m.id != d.id || m.reserve < 0 || m.scatteredReserve < 0 || m.visible < 0 || m.visible > 1 || m.raw < 0 || m.batch < 0 || m.processed < 0 || !Finite(m.work) || m.work < 0 || m.work > m.batch || (m.batch == 0 && m.work != 0)) throw new InvalidOperationException("Geçersiz malzeme veya işlem ilerlemesi.");
                 if((m.scatterX!=0||m.scatterY!=0)&&!ScatterPlacement.InBounds(m.scatterX,m.scatterY))throw new InvalidOperationException("Invalid litter position.");
-                long sum = (long)m.reserve + m.scatteredReserve + m.visible + m.raw + m.batch + m.processed + (s.pileMaterial == i ? s.pileRemaining : 0);
+                long sum = (long)m.reserve + m.scatteredReserve + m.visible + m.raw + m.batch + m.processed + (s.pileMaterial == i ? s.pileRemaining : 0)+(i==0?OpeningProgress.Remaining(s):0);
                 if (sum != d.reserve_units) throw new InvalidOperationException("Kaynak korunumu ihlali: " + d.id);
                 earned += (long)m.processed * d.reward_cents_per_unit;
                 if (m.netRaw < 0 || m.netRaw > m.raw || m.netBatch < 0 || m.netBatch > m.batch || m.netProcessed < 0 || m.netProcessed > m.processed) throw new InvalidOperationException("Invalid sorting-net ledger.");

@@ -62,3 +62,7 @@ Desktop.ini
 /.hallmark/
 /KiyiDongusu/Assets/_LocalValidation/
 /KiyiDongusu/Assets/_LocalValidation.meta
+
+# Local Python verification caches.
+**/__pycache__/
+*.py[cod]

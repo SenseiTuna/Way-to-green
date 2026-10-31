@@ -7,18 +7,20 @@ namespace KiyiDongusu
         GameBootstrap host;GameView view;RectTransform rect,artwork;int material,generation,heldGeneration;Vector2 home;float suppressedUntil,visualTime;
         public bool Dragging {get;private set;}
         int homeSibling;
+        public int Material=>material;
+        int openingSlot=-1;
         public bool AllowClick=>!Dragging&&Time.unscaledTime>suppressedUntil;
         public float DisplayedScale=>artwork==null?1:artwork.localScale.x;
-        public void Initialize(GameBootstrap game,GameView gameView,int index,RectTransform visual){host=game;view=gameView;material=index;artwork=visual;rect=(RectTransform)transform;}
+        public void Initialize(GameBootstrap game,GameView gameView,int index,RectTransform visual,int introSlot=-1){host=game;view=gameView;material=index;artwork=visual;rect=(RectTransform)transform;openingSlot=introSlot;}
         public void SetGeneration(int value)
         {
             generation=value;if(Dragging)return;
             // Placement is derived from the saved identity, not unsaved randomness.
-            var m=host.Game.State.materials[material];home=new Vector2(m.scatterX-960,540-m.scatterY);rect.anchoredPosition=home;
+            var m=host.Game.State.materials[material];int x=m.scatterX,y=m.scatterY;if(openingSlot>=0)OpeningProgress.Position(host.Game.State,openingSlot,out x,out y);home=new Vector2(x-960,540-Mathf.Min(y,680));rect.anchoredPosition=home;
         }
         public void OnBeginDrag(PointerEventData e)
         {
-            if(!host.CanInteract||host.Game.State.materials[material].visible==0)return;
+            if(!host.CanInteract||(openingSlot>=0?!OpeningProgress.Visible(host.Game.State,openingSlot):host.Game.State.materials[material].visible==0))return;
             Dragging=true;heldGeneration=generation;homeSibling=transform.GetSiblingIndex();rect.pivot=Vector2.one*.5f;transform.SetAsLastSibling();OnDrag(e);
         }
         public void OnDrag(PointerEventData e){if(Dragging)rect.position=e.position;}
@@ -33,7 +35,7 @@ namespace KiyiDongusu
         public void OnEndDrag(PointerEventData e)
         {
             if(!Dragging)return;Dragging=false;suppressedUntil=Time.unscaledTime+.25f;
-            if(!host.Paused&&RectTransformUtility.RectangleContainsScreenPoint(view.NetRect,e.position,e.pressEventCamera))host.NetAction(material,heldGeneration);
+            int target=view.BinAt(e.position,e.pressEventCamera);if(!host.Paused&&target>=0)host.BinAction(material,heldGeneration,target,openingSlot);
             transform.SetSiblingIndex(homeSibling);rect.pivot=new Vector2(0,1);rect.anchoredPosition=home;view.MarkDirty();
         }
         void OnDisable(){Dragging=false;if(rect!=null){rect.pivot=new Vector2(0,1);rect.anchoredPosition=home;}}

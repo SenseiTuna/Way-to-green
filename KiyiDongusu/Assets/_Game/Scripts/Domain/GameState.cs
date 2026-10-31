@@ -29,5 +29,7 @@ namespace KiyiDongusu
         public bool fullscreen;
         public int litterSeed;
         public NarrativeState story;
+        public OpeningState opening;
+        public int purchasedBinsMask;
     }
 }

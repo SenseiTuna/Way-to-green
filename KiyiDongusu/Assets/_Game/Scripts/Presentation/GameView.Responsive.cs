@@ -21,9 +21,9 @@ namespace KiyiDongusu
             Anchor("Pause",Vector2.one,-270,-43);Anchor("QuestLog",Vector2.one,-480,-43);Anchor("Credits",Vector2.one,-940,-40);
             Anchor("Processed",new Vector2(.5f,1),-400,-36);Anchor("WorldProgressTrack",new Vector2(.5f,1),-400,-102);Anchor("WorldProgress",new Vector2(.5f,1),-400,-102);
             Anchor("FacilityPanel",Vector2.one,-470,-150);Anchor("SaveSign",new Vector2(1,0),-470,130);Anchor("SaveStatus",new Vector2(1,0),-454,122);
-            Anchor("CenterRole",Vector2.one*.5f,-480,278);Anchor("CenterAction",Vector2.one*.5f,-510,202);Anchor("PileRemaining",Vector2.one*.5f,-400,-210);
+            Anchor("CenterRole",Vector2.one*.5f,-480,278);Anchor("CenterAction",Vector2.one*.5f,-510,202);Anchor("PileRemaining",Vector2.one*.5f,-400,-132);
             Anchor("Collector_0",new Vector2(.5f,0),-490,146);Anchor("Manual_0",new Vector2(.5f,0),-30,146);
-            Anchor("GoalSign",new Vector2(.5f,0),-494,74);Anchor("NextGoal",new Vector2(.5f,0),-478,74);Anchor("FeedbackText",new Vector2(.5f,0),-560,262);
+            Anchor("GoalSign",new Vector2(.5f,0),-494,74);Anchor("NextGoal",new Vector2(.5f,0),-478,74);Anchor("FeedbackText",new Vector2(.5f,1),-560,-130);
             Anchor("SortingNet",Vector2.zero,90,340);Anchor("NetSign",Vector2.zero,62,131);Anchor("NetLabel",Vector2.zero,62,131);
             overlay.anchorMin=Vector2.zero;overlay.anchorMax=Vector2.one;overlay.offsetMin=overlay.offsetMax=Vector2.zero;
         }
