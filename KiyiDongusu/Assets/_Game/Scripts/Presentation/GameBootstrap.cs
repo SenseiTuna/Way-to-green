@@ -134,8 +134,9 @@ namespace KiyiDongusu
         }
         public bool NetAction(int material,int generation)
         {
-            return BinAction(material,generation,material);
+            return FreeNetAction(material,generation);
         }
+        public bool FreeNetAction(int material,int generation,int openingSlot=-1){if(!CanInteract||!Game.NetCollectAction(material,generation,openingSlot))return false;Feedback.Collection(material,1);return true;}
         public bool BinAction(int material,int generation,int target,int openingSlot=-1)
         {
             if(!CanInteract)return false;

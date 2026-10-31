@@ -46,7 +46,7 @@ namespace KiyiDongusu
             Test("Fullscreen UI returns to windowed mode",()=>Assert(Screen.fullScreenMode==FullScreenMode.Windowed&&!host.Game.State.fullscreen,"Windowed not restored"));
             Button("Resume").onClick.Invoke();yield return null;host.Paused=true;
             var token=GameObject.Find("WasteToken_0").GetComponent<BeachLitterDrag>();
-            Vector2 net=RectTransformUtility.WorldToScreenPoint(null,host.View.NetRect.TransformPoint(host.View.NetRect.rect.center));
+            Vector2 net=RectTransformUtility.WorldToScreenPoint(null,host.View.BinRect(0).TransformPoint(host.View.BinRect(0).rect.center));
             var e=new PointerEventData(EventSystem.current){position=Vector2.zero};
             Test("Drop outside net restores litter without changing finite source",()=>{
                 int collected=host.Game.Collected;host.Paused=false;token.OnBeginDrag(e);token.OnEndDrag(e);host.Paused=true;

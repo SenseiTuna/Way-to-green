@@ -26,7 +26,7 @@ Development ve hızlandırılmış test kodunu içermeyen aday için **Build Rel
 
 Sol tık / Space: merkez etkileşimi. Tab / Enter: düğmeler. Esc: duraklatma.
 Yeni oyunda önce sahildeki altı kâğıdı tıkla; ardından ilk yığın gelir. Malzemeler hatları açıldıkça görünür.
-Krediyle alınan uygun konteynere tekil atığı sürükle: işleme tamamlandığında ek kredi. Konteynerler isteğe bağlıdır. Ayarlardan İngilizce/Türkçe, dört ses kanalı, çözünürlük, tam ekran ve azaltılmış hareket seçilir. Varsayılan oyun dili İngilizcedir.
+Ücretsiz toplama ağı normal ham stok verir. Krediyle alınan uygun konteynere tekil atığı sürükle: işleme tamamlandığında ek +0,50 kredi. Konteynerler isteğe bağlıdır; Mira iki yöntemin farkını anlatır. Ayarlardan İngilizce/Türkçe, dört ses kanalı, çözünürlük, tam ekran ve azaltılmış hareket seçilir. Varsayılan oyun dili İngilizcedir.
 Yükseltmenin etkisini görmek için üzerine gel veya Tab ile odaklan. Tekil atıkların rastgele konumları kayıtta korunur; sürükleme sırasında derinliğe göre boyut değişir.
 Mira kısa konuşmalarla mekanikleri anlatır. Quest log sekiz sahil görevini ve kaynaklı bilgi notlarını gösterir; görevler ekstra para üretmez. Rehber ayarlardan kapatılabilir.
 Kayıt otomatik tutulur; Yeni Oyun mevcut ilerlemeyi değiştirmeden önce onay ister.

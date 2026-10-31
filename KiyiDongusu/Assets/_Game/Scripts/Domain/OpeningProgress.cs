@@ -22,7 +22,7 @@ namespace KiyiDongusu
         }
         public static void Position(GameState s,int slot,out int x,out int y)
         {
-            int[] xs={170,440,760,1080,260,1240},ys={150,150,150,150,480,510};
+            int[] xs={170,440,760,1080,350,1240},ys={150,150,150,150,450,510};
             uint n=unchecked((uint)s.litterSeed+(uint)slot*747796405u);n^=n>>16;n*=0x7feb352du;n^=n>>15;
             x=xs[slot]+(int)(n%61)-30;y=ys[slot]+(int)((n>>8)%41)-20;
         }

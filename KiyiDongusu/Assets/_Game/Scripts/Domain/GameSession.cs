@@ -77,6 +77,11 @@ namespace KiyiDongusu
         {
             return BinDropAction(i,generation,i);
         }
+        public bool NetCollectAction(int material,int generation,int openingSlot=-1)
+        {
+            if(openingSlot>=0)return material==0&&OpeningTokenAction(openingSlot);
+            return TokenAction(material,generation);
+        }
         public bool OwnsBin(int material)=>material>=0&&material<State.materials.Length&&(State.purchasedBinsMask&(1<<material))!=0;
         public bool OpeningTokenAction(int slot)
         {

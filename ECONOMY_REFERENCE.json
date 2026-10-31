@@ -1506,16 +1506,17 @@
   },
   "sorting_bins": {
     "purchase_cost_credits": [
-      15,
-      20,
-      30,
-      35,
-      40,
-      45
+      100,
+      100,
+      250,
+      500,
+      750,
+      1500
     ],
     "required_for_completion": false,
     "unlock_requires_material_line": true,
-    "bonus_uses_existing_sorting_ledger": true
+    "bonus_uses_existing_sorting_ledger": true,
+    "free_net_gives_sorting_bonus": false
   },
   "opening": {
     "paper_units": 6,

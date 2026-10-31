@@ -16,8 +16,8 @@
           "pose": 1
         },
         {
-          "en": "Start with the six paper pieces scattered on the shore. Click them to collect raw stock. The first pile appears when all six are picked up.",
-          "tr": "Önce sahile dağılmış altı kâğıt parçasını tıklayarak topla. Bunlar ham stok olur. Altısı da toplanınca ilk yığın gelecek.",
+          "en": "Start with the six paper pieces on the shore. Click them or drag them into the free collection net. The first pile appears once all six are collected.",
+          "tr": "Önce sahildeki altı kâğıdı topla. Tıkla veya ücretsiz toplama ağına sürükle. Altısı toplanınca ilk yığın gelir.",
           "fact": "loop",
           "pose": 1
         }
@@ -31,6 +31,12 @@
           "tr": "İlk işleme kredilerin geldi! Toplama ekibi, geliştirmeler veya malzemeye özel konteynerler alabilirsin. Konteyner almak isteğe bağlıdır.",
           "fact": "loop",
           "pose": 2
+        },
+        {
+          "en": "Clicking litter or using the free net gives normal raw stock and the standard recycling reward. Sorting matching litter into a purchased container adds an extra 0.50 when that piece finishes recycling.",
+          "tr": "Çöpe tıklamak veya ücretsiz ağı kullanmak normal ham stok ve standart işleme ödülü verir. Uygun çöpü satın alınmış konteynere atarsan o parça işlenince ek 0,50 kredi alırsın.",
+          "fact": "loop",
+          "pose": 1
         }
       ]
     },
@@ -176,8 +182,8 @@
       "id": 14,
       "pages": [
         {
-          "en": "Your first container is ready! Drag matching loose litter into it. Paper, cardboard, PET, HDPE, metal and glass each have their own container. A sorted piece earns an extra 0.50 only when recycled.",
-          "tr": "İlk konteynerin hazır! Uygun tekil atığı içine sürükle. Kâğıt, karton, PET, HDPE, metal ve camın ayrı konteyneri var. Ayrılan parça yalnız işlenince ek 0,50 kredi verir.",
+          "en": "Your container is ready! Clicking or using the free net gives the standard recycling reward. Drag matching litter into this container for an extra 0.50, paid when that piece finishes recycling.",
+          "tr": "Konteynerin hazır! Tıklama veya ücretsiz ağ standart işleme ödülü verir. Uygun çöpü buraya sürüklersen o parça işlenince ek 0,50 kredi alırsın.",
           "fact": "loop",
           "pose": 1
         }
