@@ -10,7 +10,8 @@ namespace KiyiDongusu
     public sealed class SaveService
     {
         public string Path { get; }
-        public string LastMessage { get; private set; } = "Otomatik kayıt her 10 sn. Çökmede son aralık kaybolabilir.";
+        string message = "Otomatik kayıt her 10 sn. Çökmede son aralık kaybolabilir.";
+        public string LastMessage { get=>GameText.SaveMessage(message); private set=>message=value; }
         public bool NeedsRecovery { get; private set; }
         public bool CanWrite { get; private set; }
         readonly GameDefinitions definitions;

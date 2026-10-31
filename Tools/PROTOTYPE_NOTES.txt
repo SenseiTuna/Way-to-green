@@ -1,22 +1,17 @@
-Kıyı Döngüsü / KiyiDongusu — V1.0.5.0 geliştirme prototipi
-
-Windows x64. KiyiDongusu.exe dosyasını bu klasördeki diğer dosyalarla birlikte tutun.
-Tıkla / Space: merkez. Tab / Enter: düğmeler. ESC: duraklatma.
-Toplamak ham stok verir; işlem tamamlanınca kredi ödenir. Ekip alındıktan sonra otomatik toplama sürer.
-Tek sahilde 6 malzeme / 4 tesis vardır. Ortak tesislerin hatları paraleldir.
-Kayıt otomatik; oyun kapalıyken üretim yok. Yeni Oyun mevcut ilerlemeyi değiştirmeden önce onay ister.
-Kayıt yazılamazsa yeniden denenir; çıkış sırasında hata varsa oyun açık kalır ve uyarı gösterir.
-
-Bu bir final teslim değildir. Normal tempolu 15–25 dakika oyuncu denemesi ve son görsel/UI düzeltmeleri sürmektedir.
-Toplama, işlem, satın alma ve açılım sesleri vardır. Duraklatma menüsünden ses kapatılabilir ve Az Hareket açılabilir.
+Coastal Loop / KiyiDongusu — V1.0.6.1 preview
+Windows x64. Keep KiyiDongusu.exe with all accompanying files.
+Click / Space: collect from the pile; help processing while it is empty.
+Drag loose litter into the sorting net for +0.50 credits after that piece is recycled.
+Collected litter is raw stock. Only finished processing pays credits.
+Tab / Enter: buttons. Arrow keys: selected volume slider. Esc: settings / pause.
+Settings: master, music, effects, ocean, mute, English/Turkish, resolution, fullscreen and reduced motion.
+Six materials share four facilities; each material processes independently in parallel.
+Buy a collection crew to continue collecting automatically.
+Autosave runs every ten seconds and on important changes/normal exit. No offline production.
+If a save fails, the game retries; an unsuccessful final save keeps the game open with a warning.
+New game requires confirmation and preserves previous files locally.
+Normal save: LocalLow/KiyiDongusuLocal/KiyiDongusu. Never run two normal copies at once.
+No player save or test currency is distributed in this folder.
+This preview is not final delivery. Normal human playtime and listening/balance checks remain.
 Development Build ibaresi beklenir. Normal açılışta test otomasyonu etkin değildir.
-
-Varsayılan kayıt Windows kullanıcısının LocalLow/KiyiDongusuLocal/KiyiDongusu alanındadır.
-Full ve görsel önizleme sürümleri aynı ilerlemeyi devam ettirir. İki normal oyun penceresini aynı anda çalıştırmayın.
-Eski sürüm açıkken yenisini başlatmak yerine eskisini normal kapatıp sonra yenisini açın.
-Bu prototip klasöründe oyuncu kaydı veya test bakiyesi dağıtılmaz.
-
-Bilinen sınır: tam deneyimin 15–25 dakika dengesi henüz insan oyuncuyla ölçülmedi.
-Otomatik hızlandırılmış doğrulama, normal tempolu oyuncu denemesinin yerine geçmez.
-Unity 6000.5.5f1 ile Windows kapanışındaki motor düzeltmesi kullanılır.
-Temiz kapanış, kayıt kontrolü ve final teslim kabulü ayrı doğrulanır.
+Unity 6000.5.5f1 includes the Windows UI Automation shutdown fix.

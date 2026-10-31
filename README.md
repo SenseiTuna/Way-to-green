@@ -25,6 +25,7 @@ Development ve hızlandırılmış test kodunu içermeyen aday için **Build Rel
 ## Kontroller
 
 Sol tık / Space: merkez etkileşimi. Tab / Enter: düğmeler. Esc: duraklatma.
+Tekil atığı ayırma ağına sürükle: işleme tamamlandığında ek kredi. Ayarlardan İngilizce/Türkçe, dört ses kanalı, çözünürlük, tam ekran ve azaltılmış hareket seçilir. Varsayılan oyun dili İngilizcedir.
 Kayıt otomatik tutulur; Yeni Oyun mevcut ilerlemeyi değiştirmeden önce onay ister.
 
 ## Depo kapsamı

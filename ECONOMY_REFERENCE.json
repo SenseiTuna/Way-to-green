@@ -1,5 +1,6 @@
 {
   "schema_version": 1,
+  "sorting_net": { "bonus_cents_per_unit": 50, "reward_after_processing": true, "source": "existing_scattered_reserve" },
   "balance_id": "beach_demo_v1_0_0_0",
   "status": "proposed_mathematically_simulated_not_playtested",
   "unit_note_tr": "Bütün atık miktarları kurmaca oyun birimidir; kg, ton veya CO2 değildir. Süreler oyun içi işlem süresidir, doğada çözünme süresi değildir.",

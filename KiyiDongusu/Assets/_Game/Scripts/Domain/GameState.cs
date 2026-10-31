@@ -8,6 +8,7 @@ namespace KiyiDongusu
         public int reserve, scatteredReserve, visible, raw, batch, processed, tokenGeneration;
         public double work;
         public bool unlocked;
+        public int netRaw, netBatch, netProcessed;
     }
     [Serializable] public sealed class FacilityState { public int speed, capacity; }
     [Serializable] public sealed class GameState
@@ -21,5 +22,9 @@ namespace KiyiDongusu
         public int pileMaterial = -1, pileRemaining, centerCursor, scatteredCursor;
         public int collectorRank, manualRank, collectorPreference, resultCount;
         public double pileWork, refillRemaining, collectorWork, actionCooldown, elapsed;
+        public int settingsVersion, displayWidth, displayHeight;
+        public string language;
+        public double masterVolume, musicVolume, effectsVolume, ambienceVolume;
+        public bool fullscreen;
     }
 }

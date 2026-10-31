@@ -28,7 +28,6 @@ namespace KiyiDongusu
         int collectionTotal, collectionMaterial = -1;
         float collectionTime = -10;
         bool completed;
-        readonly CultureInfo tr = CultureInfo.GetCultureInfo("tr-TR");
 
         public void Initialize(GameBootstrap bootstrap)
         {
@@ -77,6 +76,7 @@ namespace KiyiDongusu
         {
             bool mute = session.State.muted || host.ValidationRun;
             ActionSource.mute = mute; ProductionSource.mute = mute;
+            ActionSource.volume=ProductionSource.volume=(float)(session.State.masterVolume*session.State.effectsVolume)*.3f;
             if (mute) { ActionSource.Stop(); ProductionSource.Stop(); }
         }
         void Cue(FeedbackKind kind)
@@ -100,17 +100,17 @@ namespace KiyiDongusu
             collectionTotal = material == collectionMaterial && Time.unscaledTime - collectionTime < .45f ? collectionTotal + quantity : quantity;
             collectionMaterial = material; collectionTime = Time.unscaledTime;
             Cue(FeedbackKind.Collect);
-            Notice?.Invoke(new FeedbackNotice(FeedbackKind.Collect, "+" + collectionTotal + " " + session.Definitions.materials[material].display_name_tr + " → ham stok"));
+            Notice?.Invoke(new FeedbackNotice(FeedbackKind.Collect, "+" + collectionTotal + " " + GameText.Material(material) + GameText.T(" collected"," toplandı")));
         }
         public void Assist()
         {
-            Cue(FeedbackKind.Assist); Notice?.Invoke(new FeedbackNotice(FeedbackKind.Assist, "Çalışan hatlara işlem desteği"));
+            Cue(FeedbackKind.Assist); Notice?.Invoke(new FeedbackNotice(FeedbackKind.Assist, GameText.T("A little boost for the working lines","Çalışan hatlara işlem desteği")));
         }
         public void Purchase(PurchaseKind kind, int facility)
         {
-            string name = kind == PurchaseKind.Collector ? "Toplama ekibi" : kind == PurchaseKind.Manual ? "Toplama gücü" : kind == PurchaseKind.Speed ? "Tesis hızı" : "Tesis kapasitesi";
+            string name = kind == PurchaseKind.Collector ? GameText.T("Collection crew","Toplama ekibi") : kind == PurchaseKind.Manual ? GameText.T("Stronger hands","Toplama gücü") : kind == PurchaseKind.Speed ? GameText.T("Processing speed","Tesis hızı") : GameText.T("Batch capacity","Tesis kapasitesi");
             Cue(FeedbackKind.Purchase);
-            Notice?.Invoke(new FeedbackNotice(FeedbackKind.Purchase, name + " geliştirildi · Seviye " + session.Rank(kind, facility), kind == PurchaseKind.Speed || kind == PurchaseKind.Capacity ? facility : -1));
+            Notice?.Invoke(new FeedbackNotice(FeedbackKind.Purchase, name + GameText.T(" upgraded to "," geliştirildi: ") + session.Rank(kind, facility), kind == PurchaseKind.Speed || kind == PurchaseKind.Capacity ? facility : -1));
         }
         void OnReward(long value) { pendingReward += value; }
         void OnImportant()
@@ -120,10 +120,10 @@ namespace KiyiDongusu
             {
                 int newest = 0; for (int i = 0; i < session.State.materials.Length; i++) if (session.State.materials[i].unlocked) newest = i;
                 Cue(FeedbackKind.Unlock);
-                Notice?.Invoke(new FeedbackNotice(FeedbackKind.Unlock, "Yeni ücretsiz hat: " + session.Definitions.materials[newest].display_name_tr, session.Definitions.FacilityIndex(newest)));
+                Notice?.Invoke(new FeedbackNotice(FeedbackKind.Unlock, GameText.T("New free line: ","Yeni ücretsiz hat: ") + GameText.Material(newest), session.Definitions.FacilityIndex(newest)));
             }
             unlocked = current;
-            if (session.State.complete && !completed) { Cue(FeedbackKind.Complete); Notice?.Invoke(new FeedbackNotice(FeedbackKind.Complete, "Sahil tamamlandı")); }
+            if (session.State.complete && !completed) { Cue(FeedbackKind.Complete); Notice?.Invoke(new FeedbackNotice(FeedbackKind.Complete, GameText.T("The shore is clean","Sahil tamamlandı"))); }
             completed = session.State.complete;
         }
         void LateUpdate()
@@ -133,8 +133,10 @@ namespace KiyiDongusu
             long reward = pendingReward; pendingReward = 0; rewardWindow = 0;
             if (session.State.complete) return;
             Cue(FeedbackKind.Batch);
-            Notice?.Invoke(new FeedbackNotice(FeedbackKind.Batch, "+" + (reward / 100.0).ToString("N1", tr) + " kredi · işlem tamamlandı"));
+            Notice?.Invoke(new FeedbackNotice(FeedbackKind.Batch, "+" + (reward / 100.0).ToString("N1", GameText.Culture) + GameText.T(" credits recycled"," kredi işlendi")));
         }
+        public void Tap(){Cue(FeedbackKind.Collect);}
+        public void NetDelivery(){Cue(FeedbackKind.Purchase);Notice?.Invoke(new FeedbackNotice(FeedbackKind.Collect,GameText.T("Nice catch! +0.50 after recycling","Güzel yakaladın! İşlenince +0,50 kredi")));}
         void OnDestroy()
         {
             if (session != null) { session.BatchRewarded -= OnReward; session.ImportantChange -= OnImportant; }

@@ -9,7 +9,7 @@ using UnityEngine.UI;
 namespace KiyiDongusu
 {
     // Explicit development-only UI test. Never reads or replaces the normal player's files.
-    public sealed class RuntimeRecoveryChecks : MonoBehaviour
+    public sealed partial class RuntimeRecoveryChecks : MonoBehaviour
     {
         [Serializable] sealed class Check { public string name, status, detail; }
         [Serializable] sealed class Report
@@ -88,9 +88,15 @@ namespace KiyiDongusu
                 Assert(File.ReadAllText(host.Saves.Path + ".bak") == before, "Valid backup not rotated");
             });
             Test("exit preparation succeeds once storage recovers", () => Assert(host.TryPrepareQuit(), "Still blocking saved exit"));
+            if (Array.IndexOf(Environment.GetCommandLineArgs(), "--kiyi-feature-check") >= 0) yield return Features();
             report.status = report.checks.TrueForAll(c => c.status == "PASS") ? "PASS" : "FAIL";
             File.WriteAllText(Path.Combine(output, "recovery-report.json"), JsonUtility.ToJson(report, true));
             Debug.Log("KIYI_RECOVERY_CHECKS " + report.status + " path=" + output);
+            if (Array.IndexOf(Environment.GetCommandLineArgs(), "--kiyi-manual-check") >= 0)
+            {
+                if(host.Paused)host.View.TogglePause();
+                yield return new WaitForSecondsRealtime(600);
+            }
             yield return new WaitForSecondsRealtime(1);
             Application.Quit(report.status == "PASS" ? 0 : 1);
         }

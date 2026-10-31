@@ -24,6 +24,7 @@ namespace KiyiDongusu
             if (!m.unlocked || m.batch > 0 || m.raw == 0) return;
             m.batch = Math.Min(m.raw, Capacity(i));
             m.raw -= m.batch;
+            m.netBatch = Math.Min(m.netRaw, m.batch); m.netRaw -= m.netBatch;
             m.work = 0;
         }
         void Finish(int i)
@@ -32,6 +33,8 @@ namespace KiyiDongusu
             int quantity = m.batch;
             m.processed += quantity;
             long reward = (long)quantity * game.Definitions.materials[i].reward_cents_per_unit;
+            reward += (long)m.netBatch * game.NetBonusCents;
+            m.netProcessed += m.netBatch; m.netBatch = 0;
             game.State.money += reward;
             game.State.earned += reward;
             m.batch = 0;

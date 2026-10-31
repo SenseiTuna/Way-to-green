@@ -18,6 +18,8 @@ namespace KiyiDongusu
         public int Processed { get { int n = 0; foreach (var m in State.materials) n += m.processed; return n; } }
         public int WorldRemaining { get { int n = State.pileRemaining; foreach (var m in State.materials) n += m.reserve + m.scatteredReserve + m.visible; return n; } }
         public int Collected => TotalUnits - WorldRemaining;
+        public int NetBonusCents => Definitions.sorting_net == null ? 50 : Definitions.sorting_net.bonus_cents_per_unit;
+        public int NetDelivered { get { int n=0; foreach(var m in State.materials) n+=m.netRaw+m.netBatch+m.netProcessed; return n; } }
 
         public GameSession(GameDefinitions definitions, bool core, GameState restored = null)
         {
@@ -25,6 +27,11 @@ namespace KiyiDongusu
             int count = core ? 1 : definitions.materials.Length;
             for (int i = 0; i < count; i++) TotalUnits += definitions.materials[i].reserve_units;
             State = restored ?? new GameState { balanceId = definitions.balance_id, corePrototype = core, materials = new MaterialState[count], facilities = new FacilityState[definitions.facilities.Length] };
+            if (State.settingsVersion == 0)
+            {
+                State.settingsVersion = 1; State.language = "en";
+                State.masterVolume = .8; State.musicVolume = .45; State.effectsVolume = .75; State.ambienceVolume = .5;
+            }
             if (restored == null)
             {
                 for (int i = 0; i < count; i++) State.materials[i] = new MaterialState { id = definitions.materials[i].id, reserve = definitions.materials[i].center_reserve_units, scatteredReserve = definitions.materials[i].scattered_reserve_units };
@@ -59,6 +66,12 @@ namespace KiyiDongusu
             if (i < 0 || i >= State.materials.Length || State.materials[i].visible == 0 || State.materials[i].tokenGeneration != generation || !AcceptAction()) return false;
             bool collected = Supply.CollectToken(i, generation);
             UpdateProgress(); Changed?.Invoke(); return collected;
+        }
+        public bool NetDropAction(int i, int generation)
+        {
+            if (!TokenAction(i, generation)) return false;
+            State.materials[i].netRaw++;
+            Changed?.Invoke(); ImportantChange?.Invoke(); return true;
         }
         public void Tick(double seconds)
         {
@@ -117,6 +130,7 @@ namespace KiyiDongusu
         public void Validate()
         {
             var s = State;
+            if(s.settingsVersion!=1 || (s.language!="en"&&s.language!="tr") || !VolumeValid(s.masterVolume)||!VolumeValid(s.musicVolume)||!VolumeValid(s.effectsVolume)||!VolumeValid(s.ambienceVolume) || s.displayWidth<0||s.displayHeight<0 || (s.displayWidth==0)!=(s.displayHeight==0))throw new InvalidOperationException("Invalid preferences.");
             if (s.schemaVersion != 1 || s.balanceId != Definitions.balance_id || s.materials == null || s.materials.Length != (s.corePrototype ? 1 : Definitions.materials.Length) || s.facilities == null || s.facilities.Length != Definitions.facilities.Length) throw new InvalidOperationException("Kayıt şeması veya denge kimliği uyumsuz.");
             if (s.pileRemaining < 0 || s.pileRemaining > Definitions.sources.pile_units || s.pileMaterial < -1 || s.pileMaterial >= s.materials.Length || (s.pileRemaining > 0 && s.pileMaterial < 0) || s.money < 0 || s.earned < 0 || s.spent < 0 || s.earned - s.spent != s.money) throw new InvalidOperationException("Geçersiz kaynak veya cüzdan.");
             long earned = 0;
@@ -127,6 +141,8 @@ namespace KiyiDongusu
                 long sum = (long)m.reserve + m.scatteredReserve + m.visible + m.raw + m.batch + m.processed + (s.pileMaterial == i ? s.pileRemaining : 0);
                 if (sum != d.reserve_units) throw new InvalidOperationException("Kaynak korunumu ihlali: " + d.id);
                 earned += (long)m.processed * d.reward_cents_per_unit;
+                if (m.netRaw < 0 || m.netRaw > m.raw || m.netBatch < 0 || m.netBatch > m.batch || m.netProcessed < 0 || m.netProcessed > m.processed) throw new InvalidOperationException("Invalid sorting-net ledger.");
+                earned += (long)m.netProcessed * NetBonusCents;
             }
             if (earned != s.earned || s.collectorRank < 0 || s.collectorRank >= Definitions.collector.nominal_units_per_second_by_rank.Length || s.manualRank < 0 || s.manualRank >= Definitions.manual_collection_upgrade.work_per_click_by_rank.Length) throw new InvalidOperationException("Geçersiz ödül veya geliştirme.");
             foreach (var f in s.facilities) if (f == null || f.speed < 0 || f.speed > 4 || f.capacity < 0 || f.capacity > 3) throw new InvalidOperationException("Geçersiz tesis seviyesi.");
@@ -135,5 +151,6 @@ namespace KiyiDongusu
             for (int i = 0; i < s.materials.Length; i++) if (s.materials[i].unlocked != (Processed >= Definitions.materials[i].unlock_processed_total_units)) throw new InvalidOperationException("Geçersiz açılım durumu.");
         }
         static bool Finite(double n) => !double.IsNaN(n) && !double.IsInfinity(n);
+        static bool VolumeValid(double n)=>Finite(n)&&n>=0&&n<=1;
     }
 }

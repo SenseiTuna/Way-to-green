@@ -10,7 +10,7 @@ namespace KiyiDongusu.Editor
 {
     public static class BuildGame
     {
-        public const string ArtVersion = "1.0.5.0";
+        public const string ArtVersion = "1.0.6.1";
         [MenuItem("Kiyi Dongusu/Build Core Windows")]
         public static void Core() => Build(true);
         [MenuItem("Kiyi Dongusu/Build Full Windows")]
