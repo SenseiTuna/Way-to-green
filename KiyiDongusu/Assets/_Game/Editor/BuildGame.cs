@@ -10,7 +10,7 @@ namespace KiyiDongusu.Editor
 {
     public static class BuildGame
     {
-        public const string ArtVersion = "1.0.9.2";
+        public const string ArtVersion = "1.0.9.3";
         [MenuItem("Way to Green/Build Core Windows")]
         public static void Core() => Build(true);
         [MenuItem("Way to Green/Build Full Windows")]
@@ -22,6 +22,7 @@ namespace KiyiDongusu.Editor
         static void Build(bool core, bool artPreview = false, bool development = true)
         {
             CoastTypography.Prepare();
+            ApplicationBranding.Apply();
             string source = Path.GetFullPath("../ECONOMY_REFERENCE.json");
             const string resource = "Assets/_Game/Resources/Economy.json";
             if (File.ReadAllText(source) != File.ReadAllText(resource))

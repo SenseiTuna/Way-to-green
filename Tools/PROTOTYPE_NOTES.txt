@@ -1,4 +1,4 @@
-Way to Green — V1.0.9.2 — Windows x64
+Way to Green — V1.0.9.3 — Windows x64
 
 Extract the ZIP completely and launch Way to Green.exe.
 Keep the executable with all accompanying files and folders.
