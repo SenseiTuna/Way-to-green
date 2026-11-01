@@ -1,7 +1,7 @@
 param([ValidateSet('Core','Full','Art','Release')][string]$Profile = 'Art', [string]$EditorPath)
 $ErrorActionPreference = 'Stop'
 $workspacePath = Split-Path $PSScriptRoot -Parent
-$projectPath = Join-Path $workspacePath 'KiyiDongusu'
+$projectPath = Join-Path $workspacePath 'WayToGreen'
 if (-not $EditorPath) {
     $hubEditor = 'C:\Program Files\Unity\Hub\Editor\6000.5.5f1\Editor\Unity.exe'
     $localEditor = Join-Path $workspacePath 'Builds\Toolchain\6000.5.5f1\Editor\Unity.exe'

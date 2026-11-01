@@ -68,3 +68,9 @@ Desktop.ini
 *.py[cod]
 /Deliverables/
 /*.pptx
+
+# Current Unity project folder; retain legacy exclusions for old branches.
+/WayToGreen/[Bb]uild/
+/WayToGreen/[Bb]uilds/
+/WayToGreen/Assets/_LocalValidation/
+/WayToGreen/Assets/_LocalValidation.meta

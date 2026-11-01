@@ -2,7 +2,7 @@
 Renders a seamless 32-bar electric-piano/pad/bass composition and a separate surf SFX.
 """
 import math, wave, array, pathlib, random, json
-root=pathlib.Path(__file__).resolve().parents[1]/'KiyiDongusu/Assets/_Game/Resources/Audio'
+root=pathlib.Path(__file__).resolve().parents[1]/'WayToGreen/Assets/_Game/Resources/Audio'
 root.mkdir(parents=True,exist_ok=True)
 sr=22050; beat=60/76; duration=32*4*beat; n=round(duration*sr)
 left=array.array('f',[0])*n; right=array.array('f',[0])*n

@@ -8,8 +8,8 @@ function Assert-Paths([string[]]$Paths) {
         $_ -eq 'BASLANGIC_PROMPTU.txt' -or
         ($_ -match '^[^/]+\.md$' -and $_ -notin @('README.md', 'THIRD_PARTY_NOTICES.md')) -or
         $_ -match '(^|/)(\.env(?:\..*)?|\.codex|\.agents|\.aws)(/|$)' -or
-        $_ -match '^KiyiDongusu/(Library|Temp|UserSettings|Logs|Build|Builds)/' -or
-        $_ -match '^KiyiDongusu/Assets/_LocalValidation(?:/|\.meta$)'
+        $_ -match '^(KiyiDongusu|WayToGreen)/(Library|Temp|UserSettings|Logs|Build|Builds)/' -or
+        $_ -match '^(KiyiDongusu|WayToGreen)/Assets/_LocalValidation(?:/|\.meta$)'
     })
     if ($blocked.Count -gt 0) {
         $blocked | Sort-Object -Unique | ForEach-Object { Write-Output "BLOCKED: $_" }

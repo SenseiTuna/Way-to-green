@@ -1,6 +1,6 @@
 # Way to Green
 
-<img src="KiyiDongusu/Assets/_Game/Branding/WayToGreen-Icon.png" alt="Way to Green icon" width="96">
+<img src="WayToGreen/Assets/_Game/Branding/WayToGreen-Icon.png" alt="Way to Green icon" width="96">
 
 Unity 2D Windows çevre ve geri dönüşüm oyunu.
 
@@ -9,7 +9,7 @@ Güncel sürüm: **V1.0.9.3**. Windows uygulama ikonu build sırasında otomatik
 ## Projeyi açma
 
 - Unity Hub ve **Unity 6000.5.5f1** kullanılır. Windows kapanışındaki UUM-146676 düzeltmesi nedeniyle bu sürüm doğrulandı.
-- Unity Hub'dan deponun içindeki **KiyiDongusu/** klasörünü ekle.
+- Unity Hub'dan deponun içindeki **WayToGreen/** klasörünü ekle.
 - İlk import işlemleri bitince **Assets/_Game/Scenes/Game.unity** sahnesini açıp Play'e bas.
 - Aynı projeyi iki Editor örneğiyle açma; paketleri veya Editor sürümünü kendiliğinden yükseltme.
 
